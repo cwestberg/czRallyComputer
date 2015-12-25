@@ -1,0 +1,524 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A5AA6281C2D0482002105AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5AA6271C2D0482002105AB /* AppDelegate.swift */; };
+		2A5AA62A1C2D0482002105AB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5AA6291C2D0482002105AB /* ViewController.swift */; };
+		2A5AA62D1C2D0482002105AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A5AA62B1C2D0482002105AB /* Main.storyboard */; };
+		2A5AA6301C2D0482002105AB /* CZRallyComputer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2A5AA62E1C2D0482002105AB /* CZRallyComputer.xcdatamodeld */; };
+		2A5AA6321C2D0482002105AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A5AA6311C2D0482002105AB /* Assets.xcassets */; };
+		2A5AA6351C2D0482002105AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A5AA6331C2D0482002105AB /* LaunchScreen.storyboard */; };
+		2A5AA6401C2D0482002105AB /* CZRallyComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5AA63F1C2D0482002105AB /* CZRallyComputerTests.swift */; };
+		2A5AA64B1C2D0482002105AB /* CZRallyComputerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5AA64A1C2D0482002105AB /* CZRallyComputerUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2A5AA63C1C2D0482002105AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A5AA61C1C2D0481002105AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A5AA6231C2D0482002105AB;
+			remoteInfo = CZRallyComputer;
+		};
+		2A5AA6471C2D0482002105AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A5AA61C1C2D0481002105AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A5AA6231C2D0482002105AB;
+			remoteInfo = CZRallyComputer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2A5AA6241C2D0482002105AB /* CZRallyComputer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZRallyComputer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A5AA6271C2D0482002105AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2A5AA6291C2D0482002105AB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2A5AA62C1C2D0482002105AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2A5AA62F1C2D0482002105AB /* CZRallyComputer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CZRallyComputer.xcdatamodel; sourceTree = "<group>"; };
+		2A5AA6311C2D0482002105AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2A5AA6341C2D0482002105AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2A5AA6361C2D0482002105AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A5AA63B1C2D0482002105AB /* CZRallyComputerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CZRallyComputerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A5AA63F1C2D0482002105AB /* CZRallyComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZRallyComputerTests.swift; sourceTree = "<group>"; };
+		2A5AA6411C2D0482002105AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A5AA6461C2D0482002105AB /* CZRallyComputerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CZRallyComputerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A5AA64A1C2D0482002105AB /* CZRallyComputerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZRallyComputerUITests.swift; sourceTree = "<group>"; };
+		2A5AA64C1C2D0482002105AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A5AA6211C2D0482002105AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A5AA6381C2D0482002105AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A5AA6431C2D0482002105AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2A5AA61B1C2D0481002105AB = {
+			isa = PBXGroup;
+			children = (
+				2A5AA6261C2D0482002105AB /* CZRallyComputer */,
+				2A5AA63E1C2D0482002105AB /* CZRallyComputerTests */,
+				2A5AA6491C2D0482002105AB /* CZRallyComputerUITests */,
+				2A5AA6251C2D0482002105AB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2A5AA6251C2D0482002105AB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2A5AA6241C2D0482002105AB /* CZRallyComputer.app */,
+				2A5AA63B1C2D0482002105AB /* CZRallyComputerTests.xctest */,
+				2A5AA6461C2D0482002105AB /* CZRallyComputerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2A5AA6261C2D0482002105AB /* CZRallyComputer */ = {
+			isa = PBXGroup;
+			children = (
+				2A5AA6271C2D0482002105AB /* AppDelegate.swift */,
+				2A5AA6291C2D0482002105AB /* ViewController.swift */,
+				2A5AA62B1C2D0482002105AB /* Main.storyboard */,
+				2A5AA6311C2D0482002105AB /* Assets.xcassets */,
+				2A5AA6331C2D0482002105AB /* LaunchScreen.storyboard */,
+				2A5AA6361C2D0482002105AB /* Info.plist */,
+				2A5AA62E1C2D0482002105AB /* CZRallyComputer.xcdatamodeld */,
+			);
+			path = CZRallyComputer;
+			sourceTree = "<group>";
+		};
+		2A5AA63E1C2D0482002105AB /* CZRallyComputerTests */ = {
+			isa = PBXGroup;
+			children = (
+				2A5AA63F1C2D0482002105AB /* CZRallyComputerTests.swift */,
+				2A5AA6411C2D0482002105AB /* Info.plist */,
+			);
+			path = CZRallyComputerTests;
+			sourceTree = "<group>";
+		};
+		2A5AA6491C2D0482002105AB /* CZRallyComputerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2A5AA64A1C2D0482002105AB /* CZRallyComputerUITests.swift */,
+				2A5AA64C1C2D0482002105AB /* Info.plist */,
+			);
+			path = CZRallyComputerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2A5AA6231C2D0482002105AB /* CZRallyComputer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A5AA64F1C2D0482002105AB /* Build configuration list for PBXNativeTarget "CZRallyComputer" */;
+			buildPhases = (
+				2A5AA6201C2D0482002105AB /* Sources */,
+				2A5AA6211C2D0482002105AB /* Frameworks */,
+				2A5AA6221C2D0482002105AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CZRallyComputer;
+			productName = CZRallyComputer;
+			productReference = 2A5AA6241C2D0482002105AB /* CZRallyComputer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2A5AA63A1C2D0482002105AB /* CZRallyComputerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A5AA6521C2D0482002105AB /* Build configuration list for PBXNativeTarget "CZRallyComputerTests" */;
+			buildPhases = (
+				2A5AA6371C2D0482002105AB /* Sources */,
+				2A5AA6381C2D0482002105AB /* Frameworks */,
+				2A5AA6391C2D0482002105AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2A5AA63D1C2D0482002105AB /* PBXTargetDependency */,
+			);
+			name = CZRallyComputerTests;
+			productName = CZRallyComputerTests;
+			productReference = 2A5AA63B1C2D0482002105AB /* CZRallyComputerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2A5AA6451C2D0482002105AB /* CZRallyComputerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A5AA6551C2D0482002105AB /* Build configuration list for PBXNativeTarget "CZRallyComputerUITests" */;
+			buildPhases = (
+				2A5AA6421C2D0482002105AB /* Sources */,
+				2A5AA6431C2D0482002105AB /* Frameworks */,
+				2A5AA6441C2D0482002105AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2A5AA6481C2D0482002105AB /* PBXTargetDependency */,
+			);
+			name = CZRallyComputerUITests;
+			productName = CZRallyComputerUITests;
+			productReference = 2A5AA6461C2D0482002105AB /* CZRallyComputerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A5AA61C1C2D0481002105AB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Clarence Westberg";
+				TargetAttributes = {
+					2A5AA6231C2D0482002105AB = {
+						CreatedOnToolsVersion = 7.2;
+					};
+					2A5AA63A1C2D0482002105AB = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 2A5AA6231C2D0482002105AB;
+					};
+					2A5AA6451C2D0482002105AB = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 2A5AA6231C2D0482002105AB;
+					};
+				};
+			};
+			buildConfigurationList = 2A5AA61F1C2D0481002105AB /* Build configuration list for PBXProject "CZRallyComputer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2A5AA61B1C2D0481002105AB;
+			productRefGroup = 2A5AA6251C2D0482002105AB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2A5AA6231C2D0482002105AB /* CZRallyComputer */,
+				2A5AA63A1C2D0482002105AB /* CZRallyComputerTests */,
+				2A5AA6451C2D0482002105AB /* CZRallyComputerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2A5AA6221C2D0482002105AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A5AA6351C2D0482002105AB /* LaunchScreen.storyboard in Resources */,
+				2A5AA6321C2D0482002105AB /* Assets.xcassets in Resources */,
+				2A5AA62D1C2D0482002105AB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A5AA6391C2D0482002105AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A5AA6441C2D0482002105AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2A5AA6201C2D0482002105AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A5AA62A1C2D0482002105AB /* ViewController.swift in Sources */,
+				2A5AA6301C2D0482002105AB /* CZRallyComputer.xcdatamodeld in Sources */,
+				2A5AA6281C2D0482002105AB /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A5AA6371C2D0482002105AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A5AA6401C2D0482002105AB /* CZRallyComputerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A5AA6421C2D0482002105AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A5AA64B1C2D0482002105AB /* CZRallyComputerUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2A5AA63D1C2D0482002105AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A5AA6231C2D0482002105AB /* CZRallyComputer */;
+			targetProxy = 2A5AA63C1C2D0482002105AB /* PBXContainerItemProxy */;
+		};
+		2A5AA6481C2D0482002105AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A5AA6231C2D0482002105AB /* CZRallyComputer */;
+			targetProxy = 2A5AA6471C2D0482002105AB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2A5AA62B1C2D0482002105AB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A5AA62C1C2D0482002105AB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2A5AA6331C2D0482002105AB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A5AA6341C2D0482002105AB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2A5AA64D1C2D0482002105AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2A5AA64E1C2D0482002105AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2A5AA6501C2D0482002105AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = CZRallyComputer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyComputer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2A5AA6511C2D0482002105AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = CZRallyComputer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyComputer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		2A5AA6531C2D0482002105AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = CZRallyComputerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyComputerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CZRallyComputer.app/CZRallyComputer";
+			};
+			name = Debug;
+		};
+		2A5AA6541C2D0482002105AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = CZRallyComputerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyComputerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CZRallyComputer.app/CZRallyComputer";
+			};
+			name = Release;
+		};
+		2A5AA6561C2D0482002105AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = CZRallyComputerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyComputerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = CZRallyComputer;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		2A5AA6571C2D0482002105AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = CZRallyComputerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyComputerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = CZRallyComputer;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2A5AA61F1C2D0481002105AB /* Build configuration list for PBXProject "CZRallyComputer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A5AA64D1C2D0482002105AB /* Debug */,
+				2A5AA64E1C2D0482002105AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A5AA64F1C2D0482002105AB /* Build configuration list for PBXNativeTarget "CZRallyComputer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A5AA6501C2D0482002105AB /* Debug */,
+				2A5AA6511C2D0482002105AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2A5AA6521C2D0482002105AB /* Build configuration list for PBXNativeTarget "CZRallyComputerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A5AA6531C2D0482002105AB /* Debug */,
+				2A5AA6541C2D0482002105AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2A5AA6551C2D0482002105AB /* Build configuration list for PBXNativeTarget "CZRallyComputerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A5AA6561C2D0482002105AB /* Debug */,
+				2A5AA6571C2D0482002105AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2A5AA62E1C2D0482002105AB /* CZRallyComputer.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2A5AA62F1C2D0482002105AB /* CZRallyComputer.xcdatamodel */,
+			);
+			currentVersion = 2A5AA62F1C2D0482002105AB /* CZRallyComputer.xcdatamodel */;
+			path = CZRallyComputer.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 2A5AA61C1C2D0481002105AB /* Project object */;
+}
