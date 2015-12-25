@@ -2,9 +2,11 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Automatic">
     <entity name="ControlZone" syncable="YES">
         <attribute name="controlNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="speedd" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ControlZone" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="ControlZone" positionX="-63" positionY="-18" width="128" height="105"/>
     </elements>
 </model>

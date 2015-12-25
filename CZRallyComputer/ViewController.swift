@@ -159,6 +159,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             insertIntoManagedObjectContext: managedContext)
         
         //3
+        print("speed \(speed)")
         controlZone.setValue(controlNumber, forKey: "controlNumber")
         controlZone.setValue(speed, forKey: "speed")
         controlZone.setValue(startTime, forKey: "startTime")
