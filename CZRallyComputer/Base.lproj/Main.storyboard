@@ -25,7 +25,7 @@
                                 <rect key="frame" x="20" y="83" width="70" height="30"/>
                                 <state key="normal" title="Create CZ"/>
                                 <connections>
-                                    <segue destination="pII-O6-1WN" kind="show" identifier="DataSeques" id="XD9-Fh-ids"/>
+                                    <segue destination="pII-O6-1WN" kind="show" identifier="DataSegue" id="8c3-GH-cg6"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TOD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTc-W2-sp8">
@@ -135,7 +135,8 @@
                                 <rect key="frame" x="171" y="309" width="37" height="30"/>
                                 <state key="normal" title="Done"/>
                                 <connections>
-                                    <segue destination="hVF-En-nnv" kind="unwind" unwindAction="unwindToViewController:" id="V6d-Ii-vmx"/>
+                                    <action selector="doneBtn:" destination="pII-O6-1WN" eventType="touchUpInside" id="Glc-Qu-SRI"/>
+                                    <segue destination="hVF-En-nnv" kind="unwind" unwindAction="unwindToViewController:" id="LAg-H3-LpB"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Control Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQZ-lN-rRD">

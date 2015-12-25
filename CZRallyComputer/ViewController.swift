@@ -22,8 +22,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     @IBOutlet weak var tableView: UITableView!
     
-    var speedd = 45.0
-    var speed = 45
+    var speedd = 36.0
+    var speed = 36
     var controlNumber = 1
     var controlZones = [NSManagedObject]()
     var startTime: NSDate?
@@ -71,7 +71,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         {if let destinationVC = segue.destinationViewController as? CZDataViewController{
             destinationVC.controlNumber = self.controlNumber
             destinationVC.speedd = self.speedd
-            destinationVC.speed = 36
+            destinationVC.speed = self.speed
             }
         }
     }
