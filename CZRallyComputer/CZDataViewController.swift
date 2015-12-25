@@ -32,6 +32,7 @@ class CZDataViewController: UIViewController {
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: currentDate)
+        
         controlNumberField.text = "\(self.controlNumber)"
         self.speedTextField.text = "\(self.speed)"
         self.hourField.text = "\(dateComponents.hour)"
