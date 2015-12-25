@@ -28,6 +28,10 @@ class CZDataViewController: UIViewController {
     
     
     override func viewWillAppear(animated: Bool) {
+        controlNumberField.keyboardType = UIKeyboardType.NumberPad
+        speedTextField.keyboardType = UIKeyboardType.NumberPad
+        hourField.keyboardType = UIKeyboardType.NumberPad
+        minuteField.keyboardType = UIKeyboardType.NumberPad
         super.viewWillAppear(animated)
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
@@ -36,7 +40,11 @@ class CZDataViewController: UIViewController {
         controlNumberField.text = "\(self.controlNumber)"
         self.speedTextField.text = "\(self.speed)"
         self.hourField.text = "\(dateComponents.hour)"
-        self.minuteField.text = "\(dateComponents.minute)"
+//        self.minuteField.text = "\(dateComponents.minute)"
+        let minStr = String(format: "%02d", dateComponents.minute)
+        self.minuteField.text = "\(minStr)"
+
+
         //        self.secondField.text = "\(dateComponents.second)"
         self.timeUnitsField.text = "00"
         
