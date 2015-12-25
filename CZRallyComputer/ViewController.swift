@@ -60,8 +60,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             print("\(dvc!.minute)")
             print("\(dvc!.second)")
             print("\(dvc!.startTime)")
-//            self.saveCZ(dvc!.controlNumber,speed: dvc!.speed,startTime: dvc!.startTime!)
-//            self.tableView.reloadData()
+            self.saveCZ(dvc!.controlNumber,speed: dvc!.speed,startTime: dvc!.startTime!)
+            self.tableView.reloadData()
         }
         
     }
