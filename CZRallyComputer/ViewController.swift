@@ -97,9 +97,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             print("cn \(cn!)")
             let spd = cz.valueForKey("speed")
             print("spd \(spd!)")
-            //            let st = cz.valueForKey("startTime")
-            //            print("st \(st!)")
-            //            print("\(cn) \(spd) \(st)")
             let st = self.strippedNSDate(cz.valueForKey("startTime") as! NSDate)
             
             cell.textLabel!.text = "\(cn!) \(spd!) \(st)"
@@ -118,6 +115,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: (selectedCZ.valueForKey("startTime") as? NSDate)!)
+        
         let minStr = String(format: "%02d", dateComponents.minute)
         let secStr = String(format: "%02d", dateComponents.second)
         self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
