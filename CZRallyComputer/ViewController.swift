@@ -13,6 +13,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 
     @IBOutlet weak var mileageLbl: UILabel!
     @IBOutlet weak var controlNumberLbl: UILabel!
+   
     
     @IBOutlet weak var currentSpeed: UILabel!
     
@@ -108,8 +109,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print("You selected cell #\(indexPath.row)!")
         let selectedCZ = controlZones[indexPath.row]
         print("selectedCZ \(selectedCZ)")
-        
-        self.controlNumberLbl.text = "Control Number \(selectedCZ.valueForKey("controlNumber")!)"
+        print("cn \(selectedCZ.valueForKey("controlNumber")!)")
+        let cn = "Control \(selectedCZ.valueForKey("controlNumber")!)"
+        self.controlNumberLbl.text = cn
         self.speed = selectedCZ.valueForKey("speed") as! Int
         self.currentSpeed.text = String(self.speed)
         

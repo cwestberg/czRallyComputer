@@ -21,13 +21,6 @@
                                 <rect key="frame" x="20" y="28" width="70" height="30"/>
                                 <state key="normal" title="Create CZ"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfW-o6-oje">
-                                <rect key="frame" x="20" y="83" width="70" height="30"/>
-                                <state key="normal" title="Create CZ"/>
-                                <connections>
-                                    <segue destination="pII-O6-1WN" kind="show" identifier="DataSegue" id="8c3-GH-cg6"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TOD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTc-W2-sp8">
                                 <rect key="frame" x="13" y="196" width="277" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -47,7 +40,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Control Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cD7-mn-Klu">
-                                <rect key="frame" x="13" y="120" width="129" height="21"/>
+                                <rect key="frame" x="13" y="120" width="162" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -70,7 +63,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L3a-iG-vTO">
-                                <rect key="frame" x="107" y="176" width="42" height="21"/>
+                                <rect key="frame" x="101" y="176" width="168" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -81,12 +74,19 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfW-o6-oje">
+                                <rect key="frame" x="13" y="82" width="70" height="30"/>
+                                <state key="normal" title="Create CZ"/>
+                                <connections>
+                                    <segue destination="pII-O6-1WN" kind="show" identifier="DataSegue" id="8c3-GH-cg6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="XPf-SK-NsU"/>
                     <connections>
-                        <outlet property="controlNumberLbl" destination="13y-1n-zg5" id="mqE-b9-Jda"/>
+                        <outlet property="controlNumberLbl" destination="cD7-mn-Klu" id="ONA-uw-H6Y"/>
                         <outlet property="currentSpeed" destination="H0O-hM-gqm" id="lRI-fL-wbt"/>
                         <outlet property="mileageLbl" destination="tEq-H3-CCd" id="QDW-Gf-59M"/>
                         <outlet property="startTimeLbl" destination="L3a-iG-vTO" id="1Ks-66-3X2"/>
