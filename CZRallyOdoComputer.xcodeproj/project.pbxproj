@@ -16,6 +16,7 @@
 		2AC4D23A1C2F1DF400B2D76B /* CZRallyOdoComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4D2391C2F1DF400B2D76B /* CZRallyOdoComputerTests.swift */; };
 		2AC4D2451C2F1DF400B2D76B /* CZRallyOdoComputerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4D2441C2F1DF400B2D76B /* CZRallyOdoComputerUITests.swift */; };
 		2AC4D2531C2F2D1D00B2D76B /* czsegueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4D2521C2F2D1D00B2D76B /* czsegueViewController.swift */; };
+		2AC4D2551C2F392200B2D76B /* CoreLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4D2541C2F392200B2D76B /* CoreLocationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		2AC4D2441C2F1DF400B2D76B /* CZRallyOdoComputerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZRallyOdoComputerUITests.swift; sourceTree = "<group>"; };
 		2AC4D2461C2F1DF400B2D76B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AC4D2521C2F2D1D00B2D76B /* czsegueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = czsegueViewController.swift; sourceTree = "<group>"; };
+		2AC4D2541C2F392200B2D76B /* CoreLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreLocationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			children = (
 				2AC4D2211C2F1DF400B2D76B /* AppDelegate.swift */,
 				2AC4D2231C2F1DF400B2D76B /* ViewController.swift */,
+				2AC4D2541C2F392200B2D76B /* CoreLocationController.swift */,
 				2AC4D2521C2F2D1D00B2D76B /* czsegueViewController.swift */,
 				2AC4D2251C2F1DF400B2D76B /* Main.storyboard */,
 				2AC4D22B1C2F1DF400B2D76B /* Assets.xcassets */,
@@ -265,6 +268,7 @@
 				2AC4D2241C2F1DF400B2D76B /* ViewController.swift in Sources */,
 				2AC4D22A1C2F1DF400B2D76B /* CZRallyOdoComputer.xcdatamodeld in Sources */,
 				2AC4D2221C2F1DF400B2D76B /* AppDelegate.swift in Sources */,
+				2AC4D2551C2F392200B2D76B /* CoreLocationController.swift in Sources */,
 				2AC4D2531C2F2D1D00B2D76B /* czsegueViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
