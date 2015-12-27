@@ -43,12 +43,12 @@ class CZSegueViewController: UIViewController {
     
     
     override func viewWillAppear(animated: Bool) {
-        controlNumberField.keyboardType = UIKeyboardType.NumberPad
-        speedField.keyboardType = UIKeyboardType.NumberPad
-        hourField.keyboardType = UIKeyboardType.NumberPad
-        minuteField.keyboardType = UIKeyboardType.NumberPad
-        timeUnitField.keyboardType = UIKeyboardType.NumberPad
-        startDistanceField.keyboardType = UIKeyboardType.NumberPad
+//        controlNumberField.keyboardType = UIKeyboardType.NumberPad
+//        speedField.keyboardType = UIKeyboardType.NumberPad
+//        hourField.keyboardType = UIKeyboardType.NumberPad
+//        minuteField.keyboardType = UIKeyboardType.NumberPad
+//        timeUnitField.keyboardType = UIKeyboardType.NumberPad
+//        startDistanceField.keyboardType = UIKeyboardType.NumberPad
         super.viewWillAppear(animated)
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()

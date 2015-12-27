@@ -83,13 +83,15 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             let cz = controlZones[indexPath.row]
             print("cz \(cz)")
             let sm = cz.valueForKey("startDistance")
+            let smStr = String(format: "%.2f", sm as! Float64)
+            
             let cn = cz.valueForKey("controlNumber")
             print("cn \(cn!)")
             let spd = cz.valueForKey("speed")
             print("spd \(spd!)")
             let st = self.strippedNSDate(cz.valueForKey("startTime") as! NSDate)
             print("st \(st)")
-            cell.textLabel!.text = "\(cn!) \(spd!) \(st) \(sm!)"
+            cell.textLabel!.text = "\(cn!) \(spd!) \(st) \(smStr)"
             return cell
     }
     
@@ -102,8 +104,13 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 //        self.controlNumberLbl.text = cn
         self.speed = selectedCZ.valueForKey("speed")! as? Int
         self.speedLbl.text = "\(selectedCZ.valueForKey("speed")!)"
-        self.startDistanceLbl.text = "\(selectedCZ.valueForKey("startDistance")!)"
         
+        let sm = selectedCZ.valueForKey("startDistance")!
+        let smStr = String(format: "%.2f", sm as! Float64)
+        self.startDistanceLbl.text = "\(smStr)"
+//        self.startDistanceLbl.text = "\(selectedCZ.valueForKey("startDistance")!)"
+        
+
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: (selectedCZ.valueForKey("startTime") as? NSDate)!)
         
@@ -112,6 +119,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
         self.startTime = selectedCZ.valueForKey("startTime") as? NSDate
         self.selectedStartDistance = (selectedCZ.valueForKey("startDistance")! as? Double)!
+        self.deltaLbl.text = "--"
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
