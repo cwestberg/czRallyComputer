@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     
     var speed: Int?
     var speedd: Double?
+    var ctc: Double?
     var controlNumber: Int?
     var startTime: NSDate?
     var todTimer = NSTimer()
@@ -27,7 +28,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        controlNumber = 0
+        speed = 36
         self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
         self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"cell")
@@ -39,8 +41,12 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+//    Actions
     
-    //    Segue Stuff
+    @IBAction func startBtn(sender: AnyObject) {
+    }
+    
+//    Segue Stuff
     @IBAction func unwindToViewController(sender: UIStoryboardSegue){
         print("unwindSegue \(sender)")
         
@@ -54,7 +60,8 @@ class ViewController: UIViewController {
             print("\(dvc!.minute)")
             print("\(dvc!.second)")
             print("\(dvc!.startTime)")
-//            self.saveCZ(dvc!.controlNumber,speed: dvc!.speed,startTime: dvc!.startTime!)
+            print("\(dvc!.startDistance)")
+//            self.saveCZ(dvc!.controlNumber,speed: dvc!.speed,startTime: dvc!.startTime!, dvc!.startDistance)
 //            self.tableView.reloadData()
         }
         
@@ -67,6 +74,7 @@ class ViewController: UIViewController {
             destinationVC.speedd = self.speedd
             destinationVC.speed = self.speed
             destinationVC.second = 0
+            destinationVC.startDistance = 0.0
             }
         }
     }
@@ -74,7 +82,7 @@ class ViewController: UIViewController {
 //    Distance
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
-        print("Odometer UserInfo: \(userInfo)")
+//        print("Odometer UserInfo: \(userInfo)")
         //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
         self.distanceLbl.text = (String(format: "%.2f", m as! Float64))

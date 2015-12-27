@@ -9,19 +9,33 @@
 import UIKit
 
 class CZSegueViewController: UIViewController {
-    
+
     @IBOutlet weak var controlNumberField: UITextField!
+    
     @IBOutlet weak var speedField: UITextField!
     
-    @IBOutlet weak var hourField: UITextField!
-    @IBOutlet weak var minuteField: UITextField!
-    @IBOutlet weak var timeUnitField: UITextField!
-    @IBOutlet weak var distanceField: UITextField!
+    @IBOutlet weak var startDistanceField: UITextField!
     
+    @IBOutlet weak var hourField: UITextField!
+    
+    
+    @IBOutlet weak var minuteField: UITextField!
+    
+    @IBOutlet weak var timeUnitField: UITextField!
+    
+//    @IBOutlet weak var controlNumberField: UITextField!
+//    @IBOutlet weak var speedField: UITextField!
+//    
+//    @IBOutlet weak var hourField: UITextField!
+//    @IBOutlet weak var minuteField: UITextField!
+//    @IBOutlet weak var timeUnitField: UITextField!
+//    
+//    @IBOutlet weak var startDistanceField: UITextField!
+//    
     var controlNumber: Int!
     var speed: Int!
     var speedd: Double!
-    var distance: Double!
+    var startDistance: Double!
     var hour: Int!
     var minute: Int!
     var second: Int!
@@ -34,15 +48,17 @@ class CZSegueViewController: UIViewController {
         hourField.keyboardType = UIKeyboardType.NumberPad
         minuteField.keyboardType = UIKeyboardType.NumberPad
         timeUnitField.keyboardType = UIKeyboardType.NumberPad
+        startDistanceField.keyboardType = UIKeyboardType.NumberPad
         super.viewWillAppear(animated)
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: currentDate)
         
-        controlNumberField.text = "\(self.controlNumber)"
+        self.controlNumberField.text = "\(self.controlNumber)"
+        self.startDistanceField.text = "\(self.startDistance)"
         self.speedField.text = "\(self.speed)"
         self.hourField.text = "\(dateComponents.hour)"
-        //        self.minuteField.text = "\(dateComponents.minute)"
+//        self.minuteField.text = "\(dateComponents.minute)"
         let minStr = String(format: "%02d", dateComponents.minute)
         self.minuteField.text = "\(minStr)"
         
@@ -51,7 +67,6 @@ class CZSegueViewController: UIViewController {
         self.timeUnitField.text = "00"
         
     }
-    
     
     @IBAction func doneBtn(sender: AnyObject) {
         let dateFormatter = NSDateFormatter()
@@ -72,7 +87,7 @@ class CZSegueViewController: UIViewController {
         self.controlNumber = Int(self.controlNumberField.text!)
         self.speed = Int(self.speedField.text!)
         self.speedd = Double(self.speedField.text!)
-        self.distance = Double(self.distanceField.text!)
+        self.startDistance = Double(self.startDistanceField.text!)
         self.hour = Int(self.hourField.text!)
         self.minute = Int(self.minuteField.text!)
         self.second = Int(self.timeUnitField.text!)

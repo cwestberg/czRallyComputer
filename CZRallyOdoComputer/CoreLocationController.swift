@@ -97,7 +97,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             if addDistance == true {
                 //let distance = location.distanceFromLocation(self.fromLocation.last!) * self.factor
                 let distance = location.distanceFromLocation(self.fromLocation.last!)
-                print("meters = \(self.meters) distance moved =  \(distance)")
+//                print("meters = \(self.meters) distance moved =  \(distance)")
                 
                 let updateChoices = (self.direction, self.selectedCounters)
                 switch updateChoices
@@ -157,7 +157,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func splitOM(notification:NSNotification) -> Void {
-        print("splitOM")
+//        print("splitOM")
         let userInfo = [
             "miles": self.miles,
             "imMiles":self.imMiles,
@@ -172,14 +172,14 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
     
     func selectedCountersChanged(notification:NSNotification) -> Void {
-        print("selectedCountersChanged")
+//        print("selectedCountersChanged")
         let userInfo = notification.userInfo
         let ctrs = userInfo!["action"]!
         self.selectedCounters = ctrs as! String
     }
     
     func directionChanged(notification:NSNotification) -> Void {
-        print("change direction")
+//        print("change direction")
         let userInfo = notification.userInfo
         let newDirection = userInfo!["action"]!
         self.direction = newDirection as! String
@@ -212,7 +212,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     func factorChanged(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
         let newFactor = userInfo!["factor"]!
-        print("ChangeFactor Notification: \(newFactor) \(self.meters)")
+//        print("ChangeFactor Notification: \(newFactor) \(self.meters)")
         self.factor = newFactor as! Float64
         let distanceInMiles:Float64 = ((self.meters * 0.000621371) * self.factor)
         self.miles = distanceInMiles
@@ -225,7 +225,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     func plusOne(notification:NSNotification) -> Void {
         
         let updateChoices = self.selectedCounters
-        print("plusOne \(updateChoices)")
+//        print("plusOne \(updateChoices)")
         
         switch updateChoices
         {
@@ -262,7 +262,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     func minusOne(notification:NSNotification) -> Void {
         
         let updateChoices = self.selectedCounters
-        print("plusOne /(updateChoices)")
+//        print("plusOne /(updateChoices)")
         
         switch updateChoices
         {
@@ -306,7 +306,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
     func setMileage(notification:NSNotification) -> Void {
         var userInfo = notification.userInfo
-        print("setMileage notification: \(userInfo))")
+//        print("setMileage notification: \(userInfo))")
         let newMileage = userInfo!["newMileage"] as! Float64
         let newMilesAsKM = newMileage * 1.60934
         self.meters = newMilesAsKM * 1000
@@ -335,7 +335,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "latitude":self.currentLocations.last!.coordinate.latitude,
             "longitude":self.currentLocations.last!.coordinate.longitude,
             "horizontalAccuracy":self.currentLocations.last!.horizontalAccuracy]
-        print("makeLocationNotification \(userInfo))")
+//        print("makeLocationNotification \(userInfo))")
         
         NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
