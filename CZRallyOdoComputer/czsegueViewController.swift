@@ -43,12 +43,16 @@ class CZSegueViewController: UIViewController {
     
     
     override func viewWillAppear(animated: Bool) {
-//        controlNumberField.keyboardType = UIKeyboardType.NumberPad
-//        speedField.keyboardType = UIKeyboardType.NumberPad
-//        hourField.keyboardType = UIKeyboardType.NumberPad
-//        minuteField.keyboardType = UIKeyboardType.NumberPad
-//        timeUnitField.keyboardType = UIKeyboardType.NumberPad
-//        startDistanceField.keyboardType = UIKeyboardType.NumberPad
+        //Looks for single or multiple taps.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        view.addGestureRecognizer(tap)
+        
+        controlNumberField.keyboardType = UIKeyboardType.DecimalPad
+        speedField.keyboardType = UIKeyboardType.DecimalPad
+        hourField.keyboardType = UIKeyboardType.DecimalPad
+        minuteField.keyboardType = UIKeyboardType.DecimalPad
+        timeUnitField.keyboardType = UIKeyboardType.DecimalPad
+        startDistanceField.keyboardType = UIKeyboardType.DecimalPad
         super.viewWillAppear(animated)
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
@@ -66,6 +70,11 @@ class CZSegueViewController: UIViewController {
         //        self.timeUnitsField.text = "\(dateComponents.second)"
         self.timeUnitField.text = "00"
         
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     @IBAction func doneBtn(sender: AnyObject) {
