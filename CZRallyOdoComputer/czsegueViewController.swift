@@ -78,8 +78,8 @@ class CZSegueViewController: UIViewController {
         //        let date: NSDate? = dateFormatter.dateFromString(dateString)
         //        print("date \(date)")
         
-        //        self.startTime = dateFormatter.dateFromString(dateString)
-        print("st \(self.startTime)")
+//        self.startTime = dateFormatter.dateFromString(dateString)
+//        print("st \(self.startTime)")
         self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourField.text!):\(self.minuteField.text!):\(self.timeUnitField.text!)")!
         
         
