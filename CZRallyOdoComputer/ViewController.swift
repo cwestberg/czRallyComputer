@@ -199,6 +199,14 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             self.saveCZ(dvc!.controlNumber,speed: dvc!.speed,startTime: dvc!.startTime!, startDistance: dvc!.startDistance)
             self.tableView.reloadData()
         }
+        if(sender.sourceViewController.isKindOfClass(ConfigSegueViewController))
+        {
+            let dvc = sender.sourceViewController as? ConfigSegueViewController
+            print("\(dvc!.factor)")
+            print("\(dvc!.distanceType)")
+            print("\(dvc!.timeUnit)")
+            self.timeUnit = dvc!.timeUnit
+        }
         
     }
     
@@ -215,6 +223,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             }
         case "configSegue":
             print("config segue")
+            if let configVC = segue.destinationViewController as? ConfigSegueViewController{
+                configVC.factor = self.factor
+                configVC.timeUnit = self.timeUnit
+            }
         default:
             break;
         }
@@ -266,6 +278,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         let cent = Int((unit * (1.6667)))
         let centString = String(format: "%02d", cent)
         let minuteString = String(format: "%02d", dateComponents.minute)
+        
         switch timeUnit {
         case "seconds":
             todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString)"
@@ -276,6 +289,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
         
         if startTime != nil {
+            if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
+                print("start time?")
+                self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
+            }
             if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
                 let elapsedTime = NSDate().timeIntervalSinceDate(startTime!)
 //                print("et \(elapsedTime)")
@@ -284,7 +301,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 let dist = Double(distanceLbl.text!)
                 
                 let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
-                print("calc dist \(calcDistance) \(selectedStartDistance)")
+//                print("calc dist \(calcDistance) \(selectedStartDistance)")
                 ctc = calcDistance * factor
                 let ctcSecs = (calcDistance * factor) * 60
                 let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
@@ -296,8 +313,18 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 //                self.ctcLbl.text = "\(String(format: "%.2f", ctc!))"
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
 //                let delta = ctc! - (elapsedTime * 0.0166667)
-                let delta = ctcDate!.timeIntervalSinceDate(NSDate())
-                self.deltaLbl.text = "\(String(format: "%.1f",(delta)))"
+                var delta = 0.0
+                switch timeUnit {
+                case "seconds":
+                    delta = ctcDate!.timeIntervalSinceDate(NSDate())
+                case "cents":
+                    delta = (ctcDate!.timeIntervalSinceDate(NSDate())) * 1.66667
+                default:
+                    break;
+                }
+//                let delta = ctcDate!.timeIntervalSinceDate(NSDate())
+                
+                self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
             }
             else {
 //                self.mileageLbl.text = "NA"
