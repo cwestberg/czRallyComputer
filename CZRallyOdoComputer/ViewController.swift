@@ -31,6 +31,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var distanceType = "miles"
     var controlZones = [NSManagedObject]()
     var selectedStartDistance = 0.00
+    var factor = 1.0000
 
     
     override func viewDidLoad() {
@@ -48,6 +49,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         self.tableView.registerClass(UITableViewCell.self,forCellReuseIdentifier:"Cell")
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
+        
 
     }
 
@@ -56,7 +60,11 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         // Dispose of any resources that can be recreated.
     }
 //    Actions
-    
+    func factorChanged(notification:NSNotification) -> Void{
+        let userInfo = notification.userInfo
+        let newFactor = userInfo!["factor"]!
+        self.factor = Double(newFactor as! NSNumber)
+    }
     @IBAction func startBtn(sender: AnyObject) {
         let nm = selectedStartDistance
         let userInfo = [
@@ -195,15 +203,30 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "czsegue"
-        {if let destinationVC = segue.destinationViewController as? CZSegueViewController{
-            destinationVC.controlNumber = self.controlNumber
-            destinationVC.speedd = self.speedd
-            destinationVC.speed = self.speed
-            destinationVC.second = 0
-            destinationVC.startDistance = 0.0
+        switch segue.identifier!
+        {
+        case "czsegue":
+            if let destinationVC = segue.destinationViewController as? CZSegueViewController{
+                destinationVC.controlNumber = self.controlNumber
+                destinationVC.speedd = self.speedd
+                destinationVC.speed = self.speed
+                destinationVC.second = 0
+                destinationVC.startDistance = 0.0
             }
+        case "configSegue":
+            print("config segue")
+        default:
+            break;
         }
+//        if segue.identifier == "czsegue"
+//        {if let destinationVC = segue.destinationViewController as? CZSegueViewController{
+//            destinationVC.controlNumber = self.controlNumber
+//            destinationVC.speedd = self.speedd
+//            destinationVC.speed = self.speed
+//            destinationVC.second = 0
+//            destinationVC.startDistance = 0.0
+//            }
+//        }
     }
 
 //    Distance
