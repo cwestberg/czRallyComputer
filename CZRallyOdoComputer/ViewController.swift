@@ -226,6 +226,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             if let configVC = segue.destinationViewController as? ConfigSegueViewController{
                 configVC.factor = self.factor
                 configVC.timeUnit = self.timeUnit
+                configVC.distanceType = self.distanceType
             }
         default:
             break;
@@ -292,27 +293,25 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
                 print("start time?")
                 self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
+//                delta = startTime!.timeIntervalSinceDate(NSDate())
+                self.deltaLbl.text = ">\(String(format: "%.0f",(startTime!.timeIntervalSinceDate(NSDate()))))"
+
+
             }
             if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-                let elapsedTime = NSDate().timeIntervalSinceDate(startTime!)
+//                let elapsedTime = NSDate().timeIntervalSinceDate(startTime!)
 //                print("et \(elapsedTime)")
                 let factor = 60.0/Double(speed!)
 //                print("distance \(Double(distanceLbl.text!))")
-                let dist = Double(distanceLbl.text!)
+//                let dist = Double(distanceLbl.text!)
                 
                 let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
-//                print("calc dist \(calcDistance) \(selectedStartDistance)")
                 ctc = calcDistance * factor
                 let ctcSecs = (calcDistance * factor) * 60
                 let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
 
 
-//                print("ctcDate -> \(self.strippedNSDate(ctcDate!))")
-//                print("ctc \(ctc!) for dist \(dist!) \(elapsedTime * 0.0166667)")
-//                print("delta \(ctc! - (elapsedTime * 0.0166667))")
-//                self.ctcLbl.text = "\(String(format: "%.2f", ctc!))"
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
-//                let delta = ctc! - (elapsedTime * 0.0166667)
                 var delta = 0.0
                 switch timeUnit {
                 case "seconds":
@@ -322,7 +321,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 default:
                     break;
                 }
-//                let delta = ctcDate!.timeIntervalSinceDate(NSDate())
                 
                 self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
             }

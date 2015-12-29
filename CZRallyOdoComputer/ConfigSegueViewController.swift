@@ -11,6 +11,8 @@ import UIKit
 class ConfigSegueViewController: UIViewController {
     
     @IBOutlet weak var factorField: UITextField!
+    
+    @IBOutlet weak var timeUnitControl: UISegmentedControl!
     var distanceType = "miles"
     var timeUnit = "seconds"
     var factor = 1.0000
@@ -21,6 +23,16 @@ class ConfigSegueViewController: UIViewController {
         
         factorField.keyboardType = UIKeyboardType.DecimalPad
         self.factorField.text = "\(self.factor)"
+        switch timeUnit
+        {
+        case "seconds":
+            self.timeUnitControl.selectedSegmentIndex=0
+        case "cents":
+            self.timeUnitControl.selectedSegmentIndex=1
+        default:
+            break;
+        }
+
         
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
