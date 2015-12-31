@@ -47,12 +47,12 @@ class CZSegueViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         view.addGestureRecognizer(tap)
         
-        controlNumberField.keyboardType = UIKeyboardType.DecimalPad
-        speedField.keyboardType = UIKeyboardType.DecimalPad
-        hourField.keyboardType = UIKeyboardType.DecimalPad
-        minuteField.keyboardType = UIKeyboardType.DecimalPad
-        timeUnitField.keyboardType = UIKeyboardType.DecimalPad
-        startDistanceField.keyboardType = UIKeyboardType.DecimalPad
+//        controlNumberField.keyboardType = UIKeyboardType.DecimalPad
+//        speedField.keyboardType = UIKeyboardType.DecimalPad
+//        hourField.keyboardType = UIKeyboardType.DecimalPad
+//        minuteField.keyboardType = UIKeyboardType.DecimalPad
+//        timeUnitField.keyboardType = UIKeyboardType.DecimalPad
+//        startDistanceField.keyboardType = UIKeyboardType.DecimalPad
         super.viewWillAppear(animated)
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()

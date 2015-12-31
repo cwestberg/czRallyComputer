@@ -296,14 +296,6 @@
                                     <rect key="frame" x="382" y="71" width="70" height="30"/>
                                 </variation>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mql-E4-icS">
-                                <rect key="frame" x="37" y="144" width="37" height="30"/>
-                                <state key="normal" title="Done"/>
-                                <connections>
-                                    <action selector="doneBtn:" destination="Nxh-Zj-WtI" eventType="touchUpInside" id="H1k-Iz-uD5"/>
-                                    <segue destination="7tv-aB-9ms" kind="unwind" unwindAction="unwindToViewController:" id="Rat-pc-w4p"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bHc-aX-b4q">
                                 <rect key="frame" x="82" y="107" width="55" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -320,6 +312,17 @@
                                     <rect key="frame" x="344" y="112" width="55" height="30"/>
                                 </variation>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mql-E4-icS">
+                                <rect key="frame" x="486" y="73" width="37" height="30"/>
+                                <state key="normal" title="Save"/>
+                                <variation key="heightClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="427" y="113" width="37" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="doneBtn:" destination="Nxh-Zj-WtI" eventType="touchUpInside" id="H1k-Iz-uD5"/>
+                                    <segue destination="7tv-aB-9ms" kind="unwind" unwindAction="unwindToViewController:" id="Rat-pc-w4p"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
