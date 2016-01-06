@@ -200,6 +200,27 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
     }
     
+    func deleteAllData(entity: String)
+    {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: entity)
+        fetchRequest.returnsObjectsAsFaults = false
+        
+        do
+        {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            for managedObject in results
+            {
+                let managedObjectData:NSManagedObject = managedObject as! NSManagedObject
+                managedContext.deleteObject(managedObjectData)
+            }
+        } catch let error as NSError {
+            print("Detele all data in \(entity) error : \(error) \(error.userInfo)")
+        }
+    }
+
+    
 //    Segue Stuff
     @IBAction func unwindToViewController(sender: UIStoryboardSegue){
         print("unwindSegue \(sender)")
@@ -227,6 +248,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             print("\(dvc!.distanceType)")
             print("\(dvc!.timeUnit)")
             self.timeUnit = dvc!.timeUnit
+            if dvc!.clearAllSwitch.on == true {
+                print("Delete!")
+                self.deleteAllData("ControlZone")
+            }
         }
         
     }

@@ -297,10 +297,30 @@
                                     <segue destination="N2E-2M-s9l" kind="unwind" unwindAction="unwindToViewController:" id="jFk-5D-zAW"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CZb-3Y-b8D">
+                                <rect key="frame" x="-25" y="-15" width="51" height="31"/>
+                                <variation key="heightClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="311" y="149" width="51" height="31"/>
+                                </variation>
+                                <connections>
+                                    <action selector="clearCZSwitchValueChanged:" destination="St1-sA-WER" eventType="valueChanged" id="WKE-XN-W5j"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="CZb-3Y-b8D"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="subviews">
+                                <include reference="CZb-3Y-b8D"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
+                        <outlet property="clearAllSwitch" destination="CZb-3Y-b8D" id="Eaq-KV-srB"/>
                         <outlet property="factorField" destination="YjN-3r-K5I" id="Qs6-iL-z1i"/>
                         <outlet property="timeUnitControl" destination="Hq2-N8-5gA" id="ppF-bi-0rv"/>
                     </connections>

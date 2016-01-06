@@ -12,6 +12,8 @@ class ConfigSegueViewController: UIViewController {
     
     @IBOutlet weak var factorField: UITextField!
     
+    @IBOutlet weak var clearAllSwitch: UISwitch!
+    
     @IBOutlet weak var timeUnitControl: UISegmentedControl!
     var distanceType = "miles"
     var timeUnit = "seconds"
@@ -32,7 +34,7 @@ class ConfigSegueViewController: UIViewController {
         default:
             break;
         }
-
+        self.clearAllSwitch.on = false
         
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
@@ -41,6 +43,11 @@ class ConfigSegueViewController: UIViewController {
 
     }
     
+   
+    @IBAction func clearCZSwitchValueChanged(sender: AnyObject) {
+//        print("sender \(sender)")
+//        print("state \(clearAllSwitch.on)")
+    }
     
     @IBAction func setButton(sender: AnyObject) {
         self.factor = Double(self.factorField.text!)!
