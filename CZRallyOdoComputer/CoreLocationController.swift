@@ -139,6 +139,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 averageSpeed = 100
             }
             let userInfo = [
+                "timestamp":location.timestamp,
                 "miles":self.miles,
                 "imMiles":self.imMiles,
                 "imKM":self.imKM,
@@ -317,6 +318,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.imMiles = distanceInMeters
         self.imKM = (self.imMeters/1000)
         
+        userInfo!["timestamp"] = NSDate()
+        userInfo!["latitude"] = 45.0
+        userInfo!["longitude"] = 93.0
+
         userInfo!["km"] = self.meters
         userInfo!["miles"] = self.miles
         userInfo!["imMiles"] = self.imMiles
@@ -328,6 +333,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     func makeLocationNotification() -> Void {
         
         let userInfo = [
+            "timestamp":self.currentLocations.last!.timestamp,
             "km":self.meters,
             "miles":self.miles,
             "imMiles":self.imMiles,

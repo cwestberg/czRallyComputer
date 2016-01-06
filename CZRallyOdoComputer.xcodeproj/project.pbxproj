@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A2AD9F41C3D637F0053B02F /* SplitsSequeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2AD9F31C3D637F0053B02F /* SplitsSequeViewController.swift */; };
 		2A749F101C318E60001F8C13 /* ConfigSegueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */; };
 		2AC4D2221C2F1DF400B2D76B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4D2211C2F1DF400B2D76B /* AppDelegate.swift */; };
 		2AC4D2241C2F1DF400B2D76B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4D2231C2F1DF400B2D76B /* ViewController.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A2AD9F31C3D637F0053B02F /* SplitsSequeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitsSequeViewController.swift; sourceTree = "<group>"; };
 		2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigSegueViewController.swift; sourceTree = "<group>"; };
 		2AC4D21E1C2F1DF400B2D76B /* CZRallyOdoComputer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZRallyOdoComputer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AC4D2211C2F1DF400B2D76B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				2AC4D2231C2F1DF400B2D76B /* ViewController.swift */,
 				2AC4D2541C2F392200B2D76B /* CoreLocationController.swift */,
 				2AC4D2521C2F2D1D00B2D76B /* czsegueViewController.swift */,
+				2A2AD9F31C3D637F0053B02F /* SplitsSequeViewController.swift */,
 				2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */,
 				2AC4D2251C2F1DF400B2D76B /* Main.storyboard */,
 				2AC4D22B1C2F1DF400B2D76B /* Assets.xcassets */,
@@ -273,6 +276,7 @@
 				2AC4D22A1C2F1DF400B2D76B /* CZRallyOdoComputer.xcdatamodeld in Sources */,
 				2AC4D2221C2F1DF400B2D76B /* AppDelegate.swift in Sources */,
 				2AC4D2551C2F392200B2D76B /* CoreLocationController.swift in Sources */,
+				2A2AD9F41C3D637F0053B02F /* SplitsSequeViewController.swift in Sources */,
 				2A749F101C318E60001F8C13 /* ConfigSegueViewController.swift in Sources */,
 				2AC4D2531C2F2D1D00B2D76B /* czsegueViewController.swift in Sources */,
 			);

@@ -32,13 +32,20 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var controlZones = [NSManagedObject]()
     var selectedStartDistance = 0.00
     var factor = 1.0000
+    var locationTimestamp = NSDate()
+    var locationLatitude = ""
+    var locationLongitude = ""
+    var splits = [String]()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         controlNumber = 0
-        speed = 36
+//        speed = 7
+        speedd = 36.0
+        self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
+
         startTime = NSDate()
         startDistance = 0.00
         self.distanceLbl.text = "0.00"
@@ -60,6 +67,15 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         // Dispose of any resources that can be recreated.
     }
 //    Actions
+
+
+    @IBAction func splitBtn(sender: AnyObject) {
+        print("split btn")
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude)"
+        self.splits.insert(splitString, atIndex: 0)
+        
+    }
+    
     func factorChanged(notification:NSNotification) -> Void{
         let userInfo = notification.userInfo
         let newFactor = userInfo!["factor"]!
@@ -95,7 +111,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             
             let cn = cz.valueForKey("controlNumber")
             print("cn \(cn!)")
-            let spd = cz.valueForKey("speed")
+            let spd = cz.valueForKey("speedd")
             print("spd \(spd!)")
             let st = self.strippedNSDate(cz.valueForKey("startTime") as! NSDate)
             print("st \(st)")
@@ -110,8 +126,11 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print("cn \(selectedCZ.valueForKey("controlNumber")!)")
 //        var cn = "Control \(selectedCZ.valueForKey("controlNumber")!)"
 //        self.controlNumberLbl.text = cn
-        self.speed = selectedCZ.valueForKey("speed")! as? Int
-        self.speedLbl.text = "\(selectedCZ.valueForKey("speed")!)"
+        self.speedd = selectedCZ.valueForKey("speedd")! as? Double
+        let selectedSpeed = selectedCZ.valueForKey("speedd")!
+        self.speedLbl.text = String(format: "%.1f",selectedSpeed as! Float64)
+//        self.speed = selectedCZ.valueForKey("speed")! as? Int
+//        self.speedLbl.text = "\(selectedCZ.valueForKey("speed")!)"
         
         let sm = selectedCZ.valueForKey("startDistance")!
         let smStr = String(format: "%.2f", sm as! Float64)
@@ -148,7 +167,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         }
     }
 //    Persistence
-    func saveCZ(controlNumber: Int,speed: Int, startTime: NSDate, startDistance: Double) {
+    func saveCZ(controlNumber: Int, speedd: Double, startTime: NSDate, startDistance: Double) {
         
         //1
         let appDelegate =
@@ -164,10 +183,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             insertIntoManagedObjectContext: managedContext)
         
         //3
-        print("save  \(speed) \(controlNumber) \(startTime) \(startDistance)")
+        print("save  \(speedd) \(speed) \(controlNumber) \(startTime) \(startDistance)")
         controlZone.setValue(controlNumber, forKey: "controlNumber")
-        controlZone.setValue(speed, forKey: "speed")
-        controlZone.setValue(Double(speed), forKey: "speedd")
+//        controlZone.setValue(speed, forKey: "speed")
+        controlZone.setValue(speedd, forKey: "speedd")
         controlZone.setValue(startTime, forKey: "startTime")
         controlZone.setValue(startDistance, forKey: "startDistance")
         
@@ -196,7 +215,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             print("\(dvc!.second)")
             print("\(dvc!.startTime)")
             print("\(dvc!.startDistance)")
-            self.saveCZ(dvc!.controlNumber,speed: dvc!.speed,startTime: dvc!.startTime!, startDistance: dvc!.startDistance)
+            
+            self.saveCZ(dvc!.controlNumber,speedd: dvc!.speedd,startTime: dvc!.startTime!, startDistance: dvc!.startDistance)
+//            self.saveCZ(dvc!.controlNumber,speedd: dvc!.speedd ,speed: dvc!.speed,startTime: dvc!.startTime!, startDistance: dvc!.startDistance)
             self.tableView.reloadData()
         }
         if(sender.sourceViewController.isKindOfClass(ConfigSegueViewController))
@@ -228,6 +249,11 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
                 configVC.timeUnit = self.timeUnit
                 configVC.distanceType = self.distanceType
             }
+        case "SplitsSegue":
+            print("SplitsSegue")
+            if let splitsVC = segue.destinationViewController as? SplitsSegueViewController{
+                splitsVC.splits = self.splits
+            }
         default:
             break;
         }
@@ -249,6 +275,11 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         //print(userInfo!["miles"]!)
         let m = userInfo!["miles"]!
         self.distanceLbl.text = (String(format: "%.2f", m as! Float64))
+        let lat = String(format: "%.6f", userInfo!["latitude"]! as! Float64)
+        let lon = String(format: "%.6f", userInfo!["longitude"]! as! Float64)
+        locationTimestamp = userInfo!["timestamp"]! as! NSDate
+        locationLatitude = lat
+        locationLongitude = lon
         
         switch distanceType
         {
@@ -291,7 +322,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         
         if startTime != nil {
             if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
-                print("start time?")
                 self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
 //                delta = startTime!.timeIntervalSinceDate(NSDate())
                 self.deltaLbl.text = ">\(String(format: "%.0f",(startTime!.timeIntervalSinceDate(NSDate()))))"
@@ -301,7 +331,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
 //                let elapsedTime = NSDate().timeIntervalSinceDate(startTime!)
 //                print("et \(elapsedTime)")
-                let factor = 60.0/Double(speed!)
+//                let factor = 60.0/Double(speed!)
+                let factor = 60.0/Double(speedd!)
 //                print("distance \(Double(distanceLbl.text!))")
 //                let dist = Double(distanceLbl.text!)
                 
