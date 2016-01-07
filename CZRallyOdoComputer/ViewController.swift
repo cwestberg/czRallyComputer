@@ -91,39 +91,39 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
 //    Table Stuff
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("count \(controlZones.count)")
+//        print("count \(controlZones.count)")
         return controlZones.count
     }
     
     func tableView(tableView: UITableView,
         cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-            print("index \(indexPath.row)")
+//            print("index \(indexPath.row)")
             let selectedCZ = controlZones[indexPath.row]
-            print("selectedCZ \(selectedCZ)")
+//            print("selectedCZ \(selectedCZ)")
             let cell = tableView.dequeueReusableCellWithIdentifier("Cell")!
-            print("\(cell)")
-            print("\(indexPath.row)")
+//            print("\(cell)")
+//            print("\(indexPath.row)")
             
             let cz = controlZones[indexPath.row]
-            print("cz \(cz)")
+//            print("cz \(cz)")
             let sm = cz.valueForKey("startDistance")
             let smStr = String(format: "%.2f", sm as! Float64)
             
             let cn = cz.valueForKey("controlNumber")
-            print("cn \(cn!)")
+//            print("cn \(cn!)")
             let spd = cz.valueForKey("speedd")
-            print("spd \(spd!)")
+//            print("spd \(spd!)")
             let st = self.strippedNSDate(cz.valueForKey("startTime") as! NSDate)
-            print("st \(st)")
+//            print("st \(st)")
             cell.textLabel!.text = "\(cn!) \(spd!) \(st) \(smStr)"
             return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("You selected cell #\(indexPath.row)!")
+//        print("You selected cell #\(indexPath.row)!")
         let selectedCZ = controlZones[indexPath.row]
-        print("selectedCZ \(selectedCZ)")
-        print("cn \(selectedCZ.valueForKey("controlNumber")!)")
+//        print("selectedCZ \(selectedCZ)")
+//        print("cn \(selectedCZ.valueForKey("controlNumber")!)")
 //        var cn = "Control \(selectedCZ.valueForKey("controlNumber")!)"
 //        self.controlNumberLbl.text = cn
         self.speedd = selectedCZ.valueForKey("speedd")! as? Double
@@ -210,11 +210,15 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         do
         {
             let results = try managedContext.executeFetchRequest(fetchRequest)
+            print("results \(results.count)")
             for managedObject in results
             {
                 let managedObjectData:NSManagedObject = managedObject as! NSManagedObject
                 managedContext.deleteObject(managedObjectData)
+                appDelegate.saveContext()
+
             }
+            controlZones = []
         } catch let error as NSError {
             print("Detele all data in \(entity) error : \(error) \(error.userInfo)")
         }
@@ -223,7 +227,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
 //    Segue Stuff
     @IBAction func unwindToViewController(sender: UIStoryboardSegue){
-        print("unwindSegue \(sender)")
+//        print("unwindSegue \(sender)")
         
         if(sender.sourceViewController.isKindOfClass(CZSegueViewController))
         {
@@ -251,6 +255,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             if dvc!.clearAllSwitch.on == true {
                 print("Delete!")
                 self.deleteAllData("ControlZone")
+                self.tableView.reloadData()
+
             }
         }
         
