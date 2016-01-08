@@ -277,7 +277,9 @@ class ViewController: UIViewController {
             print("\(dvc!.factor)")
             print("\(dvc!.distanceType)")
             print("\(dvc!.timeUnit)")
+            self.distanceType = dvc!.distanceType
             self.timeUnit = dvc!.timeUnit
+
 //            if dvc!.clearAllSwitch.on == true {
 //                print("Delete!")
 //                self.deleteAllData("ControlZone")

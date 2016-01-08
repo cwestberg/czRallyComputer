@@ -149,7 +149,7 @@ class CZSegueViewController: UIViewController {
     @IBAction func timeUnitsButton(sender: AnyObject) {
         
         //Create the AlertController
-        let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Minute", preferredStyle: .Alert)
+        let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Cent or Second", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -173,7 +173,7 @@ class CZSegueViewController: UIViewController {
     }
     @IBAction func distanceButton(sender: AnyObject) {
         //Create the AlertController
-        let actionSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Seconds or Cents", preferredStyle: .Alert)
+        let actionSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Distance", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
