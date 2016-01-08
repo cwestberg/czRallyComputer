@@ -283,6 +283,16 @@
                                     <rect key="frame" x="26" y="79" width="249" height="48"/>
                                 </variation>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vox-LS-Lyd">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Reset"/>
+                                <variation key="heightClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="213" y="275" width="39" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="Reset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tUC-OR-1AY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.97651182036327977" blue="0.98327189614098987" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -323,6 +333,9 @@
                             <constraint firstItem="aIz-AA-XRu" firstAttribute="leading" secondItem="XJJ-FH-8dI" secondAttribute="leading" id="ync-NJ-o31"/>
                         </constraints>
                         <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="vox-LS-Lyd"/>
+                            </mask>
                             <mask key="constraints">
                                 <exclude reference="KUq-4r-QTZ"/>
                                 <exclude reference="dLR-Fm-Dwg"/>
@@ -362,6 +375,9 @@
                             </mask>
                         </variation>
                         <variation key="heightClass=compact">
+                            <mask key="subviews">
+                                <include reference="vox-LS-Lyd"/>
+                            </mask>
                             <mask key="constraints">
                                 <include reference="KUq-4r-QTZ"/>
                                 <include reference="dLR-Fm-Dwg"/>

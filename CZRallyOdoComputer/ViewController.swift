@@ -73,6 +73,12 @@ class ViewController: UIViewController {
     }
 //    Actions
 
+    @IBAction func Reset(sender: AnyObject) {
+        self.deleteAllData("ControlZone")
+        let userInfo = [
+            "action":"reset"]
+        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+    }
 
     @IBAction func splitBtn(sender: AnyObject) {
         print("split btn")
