@@ -181,6 +181,7 @@
                         <outlet property="deltaLbl" destination="cCM-d7-167" id="Uu7-xy-acu"/>
                         <outlet property="distanceLbl" destination="eZD-au-7aB" id="88r-2c-uHQ"/>
                         <outlet property="speedLbl" destination="aIz-AA-XRu" id="tbZ-qt-d22"/>
+                        <outlet property="splitBbl" destination="yzR-HN-tuF" id="xbi-Tp-gHs"/>
                         <outlet property="startDistanceLbl" destination="bMu-wT-zlk" id="y0r-kH-vqV"/>
                         <outlet property="startTimeLbl" destination="XJJ-FH-8dI" id="jST-Wa-U5L"/>
                         <outlet property="todLbl" destination="OUd-N3-qIu" id="cou-fe-oQX"/>
@@ -272,10 +273,6 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bie-NT-j07">
-                                <rect key="frame" x="225" y="150" width="68" height="30"/>
-                                <state key="normal" title="Clear CZs"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="owS-Mi-uBz">
                                 <rect key="frame" x="20" y="150" width="81" height="30"/>
                                 <state key="normal" title="Set"/>
@@ -284,30 +281,10 @@
                                     <segue destination="N2E-2M-s9l" kind="unwind" unwindAction="unwindToViewController:" id="jFk-5D-zAW"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CZb-3Y-b8D">
-                                <rect key="frame" x="-25" y="-15" width="51" height="31"/>
-                                <variation key="heightClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="311" y="149" width="51" height="31"/>
-                                </variation>
-                                <connections>
-                                    <action selector="clearCZSwitchValueChanged:" destination="St1-sA-WER" eventType="valueChanged" id="WKE-XN-W5j"/>
-                                </connections>
-                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="CZb-3Y-b8D"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=compact">
-                            <mask key="subviews">
-                                <include reference="CZb-3Y-b8D"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="clearAllSwitch" destination="CZb-3Y-b8D" id="Eaq-KV-srB"/>
                         <outlet property="factorField" destination="YjN-3r-K5I" id="Qs6-iL-z1i"/>
                         <outlet property="timeUnitControl" destination="Hq2-N8-5gA" id="ppF-bi-0rv"/>
                     </connections>

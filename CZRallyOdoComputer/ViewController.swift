@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import CoreLocation
+
 
 class ViewController: UIViewController {
 
@@ -19,6 +21,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var deltaLbl: UILabel!
     @IBOutlet weak var startDistanceLbl: UILabel!
     
+    @IBOutlet weak var splitBbl: UILabel!
+    
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
@@ -29,12 +33,15 @@ class ViewController: UIViewController {
     var timeUnit = "seconds"
     var distanceType = "miles"
     var controlZones = [NSManagedObject]()
+    var czIndex = 0
     var selectedStartDistance = 0.00
     var factor = 1.0000
     var locationTimestamp = NSDate()
     var locationLatitude = ""
     var locationLongitude = ""
+    var course: Double?
     var splits = [String]()
+    
 
     
     override func viewDidLoad() {
@@ -69,8 +76,9 @@ class ViewController: UIViewController {
 
     @IBAction func splitBtn(sender: AnyObject) {
         print("split btn")
-        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude)"
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!)"
         self.splits.insert(splitString, atIndex: 0)
+        self.splitBbl.text = "\(self.todLbl.text!)"
         
     }
     
@@ -193,10 +201,11 @@ class ViewController: UIViewController {
             try managedContext.save()
             //5
             controlZones.append(controlZone)
-            return controlZone
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
+        return controlZone
+
     }
     
     func deleteAllData(entity: String)
@@ -241,8 +250,7 @@ class ViewController: UIViewController {
             print("\(dvc!.startDistance)")
             
             let selectedCZ = self.saveCZ(dvc!.controlNumber,speedd: dvc!.speedd,startTime: dvc!.startTime!, startDistance: dvc!.startDistance)
-
-//            let selectedCZ = controlZones[indexPath.row]
+            self.controlZones.insert(selectedCZ, atIndex: 0)
             self.speedd = selectedCZ.valueForKey("speedd")! as? Double
             let selectedSpeed = selectedCZ.valueForKey("speedd")!
             self.speedLbl.text = String(format: "%.1f",selectedSpeed as! Float64)
@@ -270,12 +278,12 @@ class ViewController: UIViewController {
             print("\(dvc!.distanceType)")
             print("\(dvc!.timeUnit)")
             self.timeUnit = dvc!.timeUnit
-            if dvc!.clearAllSwitch.on == true {
-                print("Delete!")
-                self.deleteAllData("ControlZone")
+//            if dvc!.clearAllSwitch.on == true {
+//                print("Delete!")
+//                self.deleteAllData("ControlZone")
 //                self.tableView.reloadData()
 
-            }
+//            }
         }
         
     }
@@ -321,7 +329,7 @@ class ViewController: UIViewController {
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
 //        print("Odometer UserInfo: \(userInfo)")
-        //print(userInfo!["miles"]!)
+//        print(userInfo!)
         let m = userInfo!["miles"]!
         self.distanceLbl.text = (String(format: "%.2f", m as! Float64))
         let lat = String(format: "%.6f", userInfo!["latitude"]! as! Float64)
@@ -329,6 +337,8 @@ class ViewController: UIViewController {
         locationTimestamp = userInfo!["timestamp"]! as! NSDate
         locationLatitude = lat
         locationLongitude = lon
+        
+        self.course = userInfo!["course"]! as? Double
         
         switch distanceType
         {

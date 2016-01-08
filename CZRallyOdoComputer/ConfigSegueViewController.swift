@@ -34,19 +34,12 @@ class ConfigSegueViewController: UIViewController {
         default:
             break;
         }
-        self.clearAllSwitch.on = false
         
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         view.addGestureRecognizer(tap)
 
 
-    }
-    
-   
-    @IBAction func clearCZSwitchValueChanged(sender: AnyObject) {
-//        print("sender \(sender)")
-//        print("state \(clearAllSwitch.on)")
     }
     
     @IBAction func setButton(sender: AnyObject) {
