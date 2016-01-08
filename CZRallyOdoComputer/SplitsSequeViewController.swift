@@ -37,11 +37,20 @@ class SplitsSegueViewController: UIViewController,UITableViewDelegate, UITableVi
     }
     
     @IBAction func shareBtn(sender: AnyObject) {
-        print("Splits contents \(self.splits)")
-        let firstActivityItem = "Splits contents \(self.splits)"
-        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [firstActivityItem], applicationActivities: nil)
+        
+        print("\(self.splits)")
+        var firstActivityItem = [String]()
+        _ = self.splits
+        for split in splits {
+            firstActivityItem.append(split)
+        }
+        
+//        let firstActivityItem = "\(self.splits)"
+        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: firstActivityItem, applicationActivities: nil)
         presentViewController(activityViewController, animated:true, completion: nil)
+        
     }
+
     
     //    Table Stuff
     

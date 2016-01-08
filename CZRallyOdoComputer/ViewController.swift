@@ -33,6 +33,8 @@ class ViewController: UIViewController {
     var timeUnit = "seconds"
     var distanceType = "miles"
     var controlZones = [NSManagedObject]()
+    var destinations = [CLLocation]()
+    var destinationsIndex = 0
     var czIndex = 0
     var selectedStartDistance = 0.00
     var factor = 1.0000
@@ -41,7 +43,10 @@ class ViewController: UIViewController {
     var locationLongitude = ""
     var course: Double?
     var splits = [String]()
-    
+    var controlSplits = [NSManagedObject]()
+    var approachState = "decreasing"
+    var previousDestinationDistance = 0.0
+    var previousDestinationDistanceGPS = CLLocation()
 
     
     override func viewDidLoad() {
@@ -64,7 +69,7 @@ class ViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
         
-
+        self.loadTestData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,19 +78,28 @@ class ViewController: UIViewController {
     }
 //    Actions
 
-    @IBAction func Reset(sender: AnyObject) {
+    @IBAction func resetBtn(sender: AnyObject) {
         self.deleteAllData("ControlZone")
         let userInfo = [
             "action":"reset"]
+        self.splits = []
         NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
     }
+   
 
     @IBAction func splitBtn(sender: AnyObject) {
         print("split btn")
-        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!)"
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaLbl.text!)"
         self.splits.insert(splitString, atIndex: 0)
         self.splitBbl.text = "\(self.todLbl.text!)"
         
+    }
+    
+    func splitActions() {
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaLbl.text!)"
+        self.splits.insert(splitString, atIndex: 0)
+        self.splitBbl.text = "\(self.todLbl.text!)"
+
     }
     
     func factorChanged(notification:NSNotification) -> Void{
@@ -100,84 +114,6 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
     }
     
-//    Table Stuff
-    
-//    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-////        print("count \(controlZones.count)")
-//        return controlZones.count
-//    }
-//    
-//    func tableView(tableView: UITableView,
-//        cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-////            print("index \(indexPath.row)")
-//            let selectedCZ = controlZones[indexPath.row]
-////            print("selectedCZ \(selectedCZ)")
-////            let cell = tableView.dequeueReusableCellWithIdentifier("Cell")!
-////            print("\(cell)")
-////            print("\(indexPath.row)")
-//            
-//            let cz = controlZones[indexPath.row]
-////            print("cz \(cz)")
-//            let sm = cz.valueForKey("startDistance")
-//            let smStr = String(format: "%.2f", sm as! Float64)
-//            
-//            let cn = cz.valueForKey("controlNumber")
-////            print("cn \(cn!)")
-//            let spd = cz.valueForKey("speedd")
-////            print("spd \(spd!)")
-//            let st = self.strippedNSDate(cz.valueForKey("startTime") as! NSDate)
-////            print("st \(st)")
-//            cell.textLabel!.text = "\(cn!) \(spd!) \(st) \(smStr)"
-//            return cell
-//    }
-//    
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-////        print("You selected cell #\(indexPath.row)!")
-//        let selectedCZ = controlZones[indexPath.row]
-////        print("selectedCZ \(selectedCZ)")
-////        print("cn \(selectedCZ.valueForKey("controlNumber")!)")
-////        var cn = "Control \(selectedCZ.valueForKey("controlNumber")!)"
-////        self.controlNumberLbl.text = cn
-//        self.speedd = selectedCZ.valueForKey("speedd")! as? Double
-//        let selectedSpeed = selectedCZ.valueForKey("speedd")!
-//        self.speedLbl.text = String(format: "%.1f",selectedSpeed as! Float64)
-////        self.speed = selectedCZ.valueForKey("speed")! as? Int
-////        self.speedLbl.text = "\(selectedCZ.valueForKey("speed")!)"
-//        
-//        let sm = selectedCZ.valueForKey("startDistance")!
-//        let smStr = String(format: "%.2f", sm as! Float64)
-//        self.startDistanceLbl.text = "\(smStr)"
-////        self.startDistanceLbl.text = "\(selectedCZ.valueForKey("startDistance")!)"
-//        
-//
-//        let calendar = NSCalendar.currentCalendar()
-//        let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: (selectedCZ.valueForKey("startTime") as? NSDate)!)
-//        
-//        let minStr = String(format: "%02d", dateComponents.minute)
-//        let secStr = String(format: "%02d", dateComponents.second)
-//        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
-//        self.startTime = selectedCZ.valueForKey("startTime") as? NSDate
-//        self.selectedStartDistance = (selectedCZ.valueForKey("startDistance")! as? Double)!
-//        self.deltaLbl.text = "--"
-//    }
-//    
-//    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-//        // 1
-//        if editingStyle == .Delete {
-//            
-//            // 2
-//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//            let moc = appDelegate.managedObjectContext
-//            
-//            // 3
-//            moc.deleteObject(controlZones[indexPath.row])
-//            appDelegate.saveContext()
-//            
-//            // 4
-//            controlZones.removeAtIndex(indexPath.row)
-//            tableView.reloadData()
-//        }
-//    }
 //    Persistence
     func saveCZ(controlNumber: Int, speedd: Double, startTime: NSDate, startDistance: Double) -> NSManagedObject {
         
@@ -212,6 +148,41 @@ class ViewController: UIViewController {
         }
         return controlZone
 
+    }
+    
+    func saveControlSplit() -> NSManagedObject {
+        
+        //1
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext
+        
+        //2
+        let entity =  NSEntityDescription.entityForName("ControlSplit",
+            inManagedObjectContext:managedContext)
+        
+        let controlSplit = NSManagedObject(entity: entity!,
+            insertIntoManagedObjectContext: managedContext)
+        
+        //3
+        controlSplit.setValue(self.speedLbl.text!, forKey: "speed")
+        controlSplit.setValue(self.locationTimestamp, forKey: "tod")
+        controlSplit.setValue(self.locationLatitude, forKey: "latitude")
+        controlSplit.setValue(self.locationLongitude, forKey: "longitude")
+        controlSplit.setValue(self.distanceLbl.text, forKey: "odo")
+        controlSplit.setValue(self.deltaLbl.text!, forKey: "delta")
+        
+        //4
+        do {
+            try managedContext.save()
+            //5
+            controlSplits.append(controlSplit)
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+        return controlSplit
+        
     }
     
     func deleteAllData(entity: String)
@@ -322,15 +293,7 @@ class ViewController: UIViewController {
         default:
             break;
         }
-//        if segue.identifier == "czsegue"
-//        {if let destinationVC = segue.destinationViewController as? CZSegueViewController{
-//            destinationVC.controlNumber = self.controlNumber
-//            destinationVC.speedd = self.speedd
-//            destinationVC.speed = self.speed
-//            destinationVC.second = 0
-//            destinationVC.startDistance = 0.0
-//            }
-//        }
+
     }
 
 //    Distance
@@ -359,7 +322,48 @@ class ViewController: UIViewController {
         default:
             break;
         }
+        
+        self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
+    }
+    
+    func workerlessControl(notification:NSNotification) {
+        let userInfo = notification.userInfo
+        let curentLocation = userInfo!["currentLocation"]! as! CLLocation
+        let destinationGPS = destinations[destinationsIndex]
+        let destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
+        var zone = 10.0
+        if curentLocation.speed > 40.0 {
+            zone = 20.0
+        }
+        
+        if fabs(destinationDistance) < zone && approachState == "decreasing" {
+//            let timestamp = userInfo!["timestamp"]! as! NSDate
+//            let pTime = strippedNSDate(timestamp)
+//            let destinationDistanceString = (String(format: "%.1f",destinationDistance))
+            self.splitActions()
+            approachState = "increasing"
+            destinationsIndex += 1
+        }
+        else if previousDestinationDistance > destinationDistance {
+            approachState = "decreasing"
+            previousDestinationDistanceGPS = curentLocation
+        }
+        else if previousDestinationDistance < destinationDistance {
+            if approachState == "decreasing" {
+                if destinationDistance < 60.0 {
+                    //                    let pTS = previousDestinationDistanceGPS.timestamp
+                    //                    let pTSS = strippedNSDate(pTS)
+                    //                    self.splits.insert("prev \(pTSS)", atIndex:0)
+                    //                    self.splits.insert("clock \(self.todLbl.text!)", atIndex: 0)
+                    //                    self.splitTable.reloadData()
+                }
+            }
+            approachState = "increasing"
+        }
+        previousDestinationDistance = destinationDistance
+        //        previousDestinationDistanceGPS = self.curentLocation
+        
     }
 
     //    utilities
@@ -471,6 +475,30 @@ class ViewController: UIViewController {
         
         return NSString(format: "%02d:%02d:%02d",hours,minutes,seconds)
         //        return NSString(format: "%0.2d:%0.2d:%0.2d.%0.3d",hours,minutes,seconds,ms)
+    }
+    
+    func loadTestData() {
+        var destinations = [CLLocation]()
+        destinations.append(CLLocation.init(latitude: 44.851665,longitude: -93.379417))
+        destinations.append(CLLocation.init(latitude: 44.849608,longitude: -93.376230))
+        destinations.append(CLLocation.init(latitude: 44.854725,longitude: -93.381925))
+        destinations.append(CLLocation.init(latitude: 44.853218,longitude: -93.388265))
+        destinations.append(CLLocation.init(latitude: 44.843490,longitude: -93.389915))
+        destinations.append(CLLocation.init(latitude: 44.837996,longitude: -93.388539))
+        destinations.append(CLLocation.init(latitude: 44.834268,longitude: -93.385819))
+        destinations.append(CLLocation.init(latitude: 44.828991,longitude: -93.383468))
+        destinations.append(CLLocation.init(latitude: 44.850577,longitude: -93.373782))
+        
+//        44.851665,-93.379417
+//        44.849608,-93.376230
+//        44.854725,-93.381925
+//        44.853218,-93.388265
+//        44.843490,-93.389915
+//        44.837996,-93.388539
+//        44.834268,-93.385819
+//        44.828991,-93.383468
+//        44.850577,-93.373782
+//        dest = CLLocation.init(latitude: latitude!,longitude: longitude!)
     }
 
 }

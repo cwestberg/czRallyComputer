@@ -11,9 +11,7 @@ import UIKit
 class ConfigSegueViewController: UIViewController {
     
     @IBOutlet weak var factorField: UITextField!
-    
-    @IBOutlet weak var clearAllSwitch: UISwitch!
-    
+        
     @IBOutlet weak var timeUnitControl: UISegmentedControl!
     var distanceType = "miles"
     var timeUnit = "seconds"
@@ -42,6 +40,10 @@ class ConfigSegueViewController: UIViewController {
 
     }
     
+    @IBAction func importBtn(sender: AnyObject) {
+    }
+    @IBAction func exportBtn(sender: AnyObject) {
+    }
     @IBAction func setButton(sender: AnyObject) {
         self.factor = Double(self.factorField.text!)!
 
