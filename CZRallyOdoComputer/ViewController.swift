@@ -352,53 +352,57 @@ class ViewController: UIViewController {
     
     func workerlessControl(notification:NSNotification) {
         let userInfo = notification.userInfo
-        let curentLocation = userInfo!["currentLocation"]! as! CLLocation
-        let destinationGPS = destinations[destinationsIndex]
-        let destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
-        var zone = 10.0
-        if curentLocation.speed > 40.0 {
-            zone = 20.0
+        if destinationsIndex >= destinations.count {
+            self.splitBbl.text = "Done!"
         }
-        
-        if fabs(destinationDistance) < zone && approachState == "decreasing" {
-//            let timestamp = userInfo!["timestamp"]! as! NSDate
-//            let pTime = strippedNSDate(timestamp)
-//            let destinationDistanceString = (String(format: "%.1f",destinationDistance))
-            self.splitActions()
-            self.splitBbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
-            approachState = "increasing"
-            if destinationsIndex < destinations.count - 1 {
-                destinationsIndex += 1
+        else {
+            let curentLocation = userInfo!["currentLocation"]! as! CLLocation
+            let destinationGPS = destinations[destinationsIndex]
+            let destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
+            var zone = 10.0
+            if curentLocation.speed > 40.0 {
+                zone = 30.0
             }
             
-        }
-        else if approachState == "decreasing" && userInfo!["miles"]! as! Double > destinationMileages[destinationsIndex]{
-            self.splitActions()
-            self.splitBbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
-            approachState = "increasing"
-            if destinationsIndex < destinations.count - 1 {
+            let currentOM = userInfo!["miles"]! as! Double
+            
+            if userInfo!["miles"]! as! Double >= destinationMileages[destinationsIndex]{
+                self.splitActions()
+                self.splitBbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
+                approachState = "increasing"
                 destinationsIndex += 1
             }
-        }
-        else if previousDestinationDistance > destinationDistance {
-            approachState = "decreasing"
-            previousDestinationDistanceGPS = curentLocation
-        }
-        else if previousDestinationDistance < destinationDistance {
-            if approachState == "decreasing" {
-                if destinationDistance < 60.0 {
-                    //                    let pTS = previousDestinationDistanceGPS.timestamp
-                    //                    let pTSS = strippedNSDate(pTS)
-                    //                    self.splits.insert("prev \(pTSS)", atIndex:0)
-                    //                    self.splits.insert("clock \(self.todLbl.text!)", atIndex: 0)
-                    //                    self.splitTable.reloadData()
-                }
+            else if fabs(destinationDistance) < zone && approachState == "decreasing" {
+
+                self.splitActions()
+                self.splitBbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
+                approachState = "increasing"
+                destinationsIndex += 1
+
             }
-            approachState = "increasing"
+
+            else if previousDestinationDistance > destinationDistance {
+                approachState = "decreasing"
+                previousDestinationDistanceGPS = curentLocation
+            }
+            else if previousDestinationDistance < destinationDistance {
+                if approachState == "decreasing" {
+                    if destinationDistance < 60.0 {
+                        //                    let pTS = previousDestinationDistanceGPS.timestamp
+                        //                    let pTSS = strippedNSDate(pTS)
+                        //                    self.splits.insert("prev \(pTSS)", atIndex:0)
+                        //                    self.splits.insert("clock \(self.todLbl.text!)", atIndex: 0)
+                        //                    self.splitTable.reloadData()
+                    }
+                }
+                approachState = "increasing"
+            }
+            else {
+                
+            }
+            previousDestinationDistance = destinationDistance
+            //        previousDestinationDistanceGPS = self.curentLocation
         }
-        previousDestinationDistance = destinationDistance
-        //        previousDestinationDistanceGPS = self.curentLocation
-        
     }
 
     //    utilities
@@ -461,8 +465,12 @@ class ViewController: UIViewController {
                 default:
                     break;
                 }
-                
-                self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
+                if delta < 4.0 {
+                    self.deltaLbl.text = "\(String(format: "%.1f",(delta)))"
+                }
+                else {
+                    self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
+                }
             }
             else {
 //                self.mileageLbl.text = "NA"
