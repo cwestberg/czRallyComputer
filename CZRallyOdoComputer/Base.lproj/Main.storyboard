@@ -28,9 +28,6 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="237" y="190" width="81" height="21"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="283" y="177" width="81" height="21"/>
-                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start OM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bMu-wT-zlk">
                                 <rect key="frame" x="424" y="220" width="80" height="21"/>
@@ -50,9 +47,6 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="238" y="226" width="80" height="21"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="283" y="99" width="80" height="21"/>
-                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delta" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cCM-d7-167">
                                 <rect key="frame" x="414" y="72" width="161" height="48"/>
@@ -69,9 +63,6 @@
                                 </variation>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="200" y="72" width="200" height="48"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="499" y="83" width="200" height="48"/>
                                 </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOD Clock" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OUd-N3-qIu">
@@ -95,16 +86,10 @@
                                         <include reference="ju9-LR-hbJ"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="229" width="249" height="49"/>
-                                </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b9D-jz-iun">
                                 <rect key="frame" x="26" y="308" width="75" height="30"/>
                                 <state key="normal" title="View Splits"/>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="26" y="377" width="75" height="30"/>
-                                </variation>
                                 <connections>
                                     <segue destination="uli-bu-tEW" kind="show" identifier="SplitsSegue" id="e6e-qV-aMI"/>
                                 </connections>
@@ -136,9 +121,6 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="161" y="274" width="71" height="30"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="283" y="316" width="71" height="30"/>
-                                </variation>
                                 <connections>
                                     <action selector="splitBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uFt-O0-6L0"/>
                                 </connections>
@@ -163,9 +145,6 @@
                                         <include reference="snr-Wy-WRL"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="26" y="79" width="249" height="48"/>
-                                </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRW-qJ-1xO">
                                 <rect key="frame" x="26" y="271" width="127" height="33"/>
@@ -181,9 +160,6 @@
                                 </variation>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="26" y="272" width="127" height="33"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="499" y="242" width="127" height="33"/>
                                 </variation>
                                 <connections>
                                     <segue destination="Nxh-Zj-WtI" kind="show" identifier="czsegue" id="z2W-Jb-5Rn"/>
@@ -213,28 +189,12 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="235" y="138" width="87" height="29"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="507" y="155" width="77" height="70"/>
-                                </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZF-3L-CEB">
-                                <rect key="frame" x="237" y="308" width="39" height="30"/>
-                                <state key="normal" title="Reset"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="181" y="308" width="39" height="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="resetBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xzA-Ny-ClL"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pfi-9r-mV5">
                                 <rect key="frame" x="26" y="335" width="46" height="30"/>
                                 <state key="normal" title="Config"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="119" y="308" width="46" height="30"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="295" y="377" width="46" height="30"/>
                                 </variation>
                                 <connections>
                                     <segue destination="St1-sA-WER" kind="show" identifier="configSegue" id="hWN-9b-tdv"/>
@@ -260,18 +220,12 @@
                                         <exclude reference="crn-kr-kFi"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="155" width="249" height="48"/>
-                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Split Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yzR-HN-tuF">
                                 <rect key="frame" x="26" y="226" width="196" height="48"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="26" y="307" width="249" height="48"/>
-                                </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chX-Mi-t6F">
                                 <rect key="frame" x="421" y="271" width="54" height="34"/>
@@ -295,11 +249,18 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="237" y="270" width="54" height="34"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="518" y="371" width="54" height="34"/>
-                                </variation>
                                 <connections>
                                     <action selector="startBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DOq-70-zXE"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZF-3L-CEB">
+                                <rect key="frame" x="237" y="308" width="39" height="30"/>
+                                <state key="normal" title="Reset"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="181" y="308" width="39" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="resetBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xzA-Ny-ClL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -355,13 +316,19 @@
                             <constraint firstItem="0eH-33-wWT" firstAttribute="leading" secondItem="yzR-HN-tuF" secondAttribute="leading" id="Saa-Wk-cv8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aIz-AA-XRu" secondAttribute="trailing" constant="72" id="SyH-yh-plS"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aIz-AA-XRu" secondAttribute="trailing" constant="72" id="UHR-ne-Hl3"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Pfi-9r-mV5" secondAttribute="bottom" constant="235" id="VDy-oS-RzF"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Pfi-9r-mV5" secondAttribute="bottom" constant="235" id="VDy-oS-RzF">
+                                <variation key="heightClass=regular-widthClass=regular" constant="323"/>
+                            </constraint>
                             <constraint firstItem="XJJ-FH-8dI" firstAttribute="top" secondItem="aIz-AA-XRu" secondAttribute="bottom" constant="11" id="VW7-vq-pR3"/>
                             <constraint firstItem="eZD-au-7aB" firstAttribute="leading" secondItem="OUd-N3-qIu" secondAttribute="leading" id="VXD-vN-e6t"/>
-                            <constraint firstItem="b9D-jz-iun" firstAttribute="baseline" secondItem="WZF-3L-CEB" secondAttribute="baseline" id="Ve0-Fd-s1b"/>
+                            <constraint firstItem="b9D-jz-iun" firstAttribute="baseline" secondItem="WZF-3L-CEB" secondAttribute="baseline" id="Ve0-Fd-s1b">
+                                <variation key="heightClass=regular-widthClass=regular" constant="-26"/>
+                            </constraint>
                             <constraint firstItem="0eH-33-wWT" firstAttribute="trailing" secondItem="yzR-HN-tuF" secondAttribute="trailing" id="XZ7-jk-6df"/>
                             <constraint firstItem="PMO-7S-TcV" firstAttribute="top" secondItem="OUd-N3-qIu" secondAttribute="bottom" constant="96" id="YM4-Nt-iX3"/>
-                            <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="yzR-HN-tuF" secondAttribute="bottom" constant="34" id="Yum-IS-f1K"/>
+                            <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="yzR-HN-tuF" secondAttribute="bottom" constant="34" id="Yum-IS-f1K">
+                                <variation key="heightClass=regular-widthClass=regular" constant="-53"/>
+                            </constraint>
                             <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="HRW-qJ-1xO" secondAttribute="bottom" constant="15" id="ZAI-FD-r94"/>
                             <constraint firstItem="HRW-qJ-1xO" firstAttribute="leading" secondItem="yzR-HN-tuF" secondAttribute="leading" id="ZuY-G8-BD3"/>
                             <constraint firstItem="bMu-wT-zlk" firstAttribute="baseline" secondItem="yzR-HN-tuF" secondAttribute="firstBaseline" id="cXu-ul-g61"/>
@@ -372,13 +339,19 @@
                             <constraint firstItem="yzR-HN-tuF" firstAttribute="leading" secondItem="0eH-33-wWT" secondAttribute="leading" id="gQ5-jR-sFm"/>
                             <constraint firstItem="eZD-au-7aB" firstAttribute="top" secondItem="cCM-d7-167" secondAttribute="top" id="gZu-GF-buy"/>
                             <constraint firstItem="chX-Mi-t6F" firstAttribute="leading" secondItem="PMO-7S-TcV" secondAttribute="trailing" constant="15" id="gdG-Ct-VAj"/>
-                            <constraint firstItem="WZF-3L-CEB" firstAttribute="centerX" secondItem="PMO-7S-TcV" secondAttribute="centerX" id="gda-p7-TlS"/>
+                            <constraint firstItem="WZF-3L-CEB" firstAttribute="centerX" secondItem="PMO-7S-TcV" secondAttribute="centerX" id="gda-p7-TlS">
+                                <variation key="heightClass=regular-widthClass=regular" constant="-81"/>
+                            </constraint>
                             <constraint firstItem="WZF-3L-CEB" firstAttribute="leading" secondItem="Pfi-9r-mV5" secondAttribute="trailing" constant="61" id="iO1-zM-YUF"/>
                             <constraint firstItem="PMO-7S-TcV" firstAttribute="leading" secondItem="HRW-qJ-1xO" secondAttribute="trailing" constant="68" id="jAf-NX-had"/>
                             <constraint firstItem="0eH-33-wWT" firstAttribute="top" secondItem="OUd-N3-qIu" secondAttribute="bottom" id="k18-z4-5ma"/>
-                            <constraint firstItem="yzR-HN-tuF" firstAttribute="trailing" secondItem="0eH-33-wWT" secondAttribute="trailing" id="laM-uo-1m5"/>
+                            <constraint firstItem="yzR-HN-tuF" firstAttribute="trailing" secondItem="0eH-33-wWT" secondAttribute="trailing" id="laM-uo-1m5">
+                                <variation key="heightClass=compact" constant="79"/>
+                            </constraint>
                             <constraint firstItem="bMu-wT-zlk" firstAttribute="top" secondItem="XJJ-FH-8dI" secondAttribute="bottom" constant="5" id="lcI-a2-Jvo"/>
-                            <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="HRW-qJ-1xO" secondAttribute="bottom" constant="4" id="leg-wE-6OS"/>
+                            <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="HRW-qJ-1xO" secondAttribute="bottom" constant="4" id="leg-wE-6OS">
+                                <variation key="heightClass=regular-widthClass=regular" constant="-83"/>
+                            </constraint>
                             <constraint firstItem="bMu-wT-zlk" firstAttribute="centerX" secondItem="aIz-AA-XRu" secondAttribute="centerX" id="lte-Iv-YVD"/>
                             <constraint firstItem="HRW-qJ-1xO" firstAttribute="baseline" secondItem="PMO-7S-TcV" secondAttribute="firstBaseline" id="lwD-ci-Gex">
                                 <variation key="heightClass=compact" constant="-1"/>
@@ -388,19 +361,27 @@
                             <constraint firstItem="b9D-jz-iun" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="nAj-Gh-kwb"/>
                             <constraint firstItem="Pfi-9r-mV5" firstAttribute="leading" secondItem="b9D-jz-iun" secondAttribute="trailing" constant="29" id="py3-cx-4LL"/>
                             <constraint firstItem="Pfi-9r-mV5" firstAttribute="top" secondItem="WZF-3L-CEB" secondAttribute="top" id="qn6-ba-uBs"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="b9D-jz-iun" secondAttribute="bottom" constant="262" id="rbp-dS-adw"/>
-                            <constraint firstItem="Pfi-9r-mV5" firstAttribute="top" secondItem="HRW-qJ-1xO" secondAttribute="bottom" constant="31" id="t1g-84-fdh"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="b9D-jz-iun" secondAttribute="bottom" constant="262" id="rbp-dS-adw">
+                                <variation key="heightClass=regular-widthClass=regular" constant="349"/>
+                            </constraint>
+                            <constraint firstItem="Pfi-9r-mV5" firstAttribute="top" secondItem="HRW-qJ-1xO" secondAttribute="bottom" constant="31" id="t1g-84-fdh">
+                                <variation key="heightClass=regular-widthClass=regular" constant="-57"/>
+                            </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="XJJ-FH-8dI" secondAttribute="trailing" constant="86" id="tiW-Zb-4a0"/>
                             <constraint firstItem="PMO-7S-TcV" firstAttribute="baseline" secondItem="HRW-qJ-1xO" secondAttribute="firstBaseline" id="vrJ-3X-Pcr">
                                 <variation key="heightClass=compact" constant="1"/>
                             </constraint>
                             <constraint firstItem="chX-Mi-t6F" firstAttribute="top" secondItem="PMO-7S-TcV" secondAttribute="top" id="w0l-aw-I18"/>
-                            <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="WZF-3L-CEB" secondAttribute="top" id="w5S-Yk-fXv"/>
+                            <constraint firstItem="b9D-jz-iun" firstAttribute="top" secondItem="WZF-3L-CEB" secondAttribute="top" id="w5S-Yk-fXv">
+                                <variation key="heightClass=regular-widthClass=regular" constant="-112"/>
+                            </constraint>
                             <constraint firstItem="eZD-au-7aB" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="x3R-yR-vXN"/>
                             <constraint firstItem="bMu-wT-zlk" firstAttribute="centerX" secondItem="XJJ-FH-8dI" secondAttribute="centerX" id="xIp-9n-sYE"/>
                             <constraint firstItem="Pfi-9r-mV5" firstAttribute="leading" secondItem="b9D-jz-iun" secondAttribute="leading" id="xpN-i0-UDb"/>
                             <constraint firstItem="XJJ-FH-8dI" firstAttribute="trailing" secondItem="bMu-wT-zlk" secondAttribute="trailing" id="y84-zf-gfp"/>
-                            <constraint firstItem="WZF-3L-CEB" firstAttribute="top" secondItem="PMO-7S-TcV" secondAttribute="bottom" constant="5" id="y8J-33-Zvk"/>
+                            <constraint firstItem="WZF-3L-CEB" firstAttribute="top" secondItem="PMO-7S-TcV" secondAttribute="bottom" constant="5" id="y8J-33-Zvk">
+                                <variation key="heightClass=regular-widthClass=regular" constant="30"/>
+                            </constraint>
                             <constraint firstItem="bMu-wT-zlk" firstAttribute="top" secondItem="XJJ-FH-8dI" secondAttribute="bottom" constant="8" symbolic="YES" id="zLU-F7-kdN"/>
                         </constraints>
                         <variation key="default">

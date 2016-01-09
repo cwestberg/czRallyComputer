@@ -47,6 +47,7 @@ class ViewController: UIViewController {
     var approachState = "decreasing"
     var previousDestinationDistance = 0.0
     var previousDestinationDistanceGPS = CLLocation()
+    var destinationMileages = [Double]()
 
     
     override func viewDidLoad() {
@@ -70,6 +71,7 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
         
         self.loadTestData()
+        self.loadMileages()
     }
 
     override func didReceiveMemoryWarning() {
@@ -79,11 +81,32 @@ class ViewController: UIViewController {
 //    Actions
 
     @IBAction func resetBtn(sender: AnyObject) {
-        self.deleteAllData("ControlZone")
-        let userInfo = [
-            "action":"reset"]
-        self.splits = []
-        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        
+        //print("Set Factor Btn pushed")
+        //Create the AlertController
+        let alert: UIAlertController = UIAlertController(title: "Reset", message: "Are You sure", preferredStyle: .Alert)
+        
+        //Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+            //Do some stuff
+        }
+        alert.addAction(cancelAction)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
+            
+            self.deleteAllData("ControlZone")
+            let userInfo = ["action":"reset"]
+            self.splits = []
+            NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)        })
+        alert.addAction(saveAction)
+        
+        //Present the AlertController
+        self.presentViewController(alert, animated: true, completion: nil)
+//        self.deleteAllData("ControlZone")
+//        let userInfo = [
+//            "action":"reset"]
+//        self.splits = []
+//        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
     }
    
 
@@ -342,8 +365,20 @@ class ViewController: UIViewController {
 //            let pTime = strippedNSDate(timestamp)
 //            let destinationDistanceString = (String(format: "%.1f",destinationDistance))
             self.splitActions()
+            self.splitBbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
             approachState = "increasing"
-            destinationsIndex += 1
+            if destinationsIndex < destinations.count - 1 {
+                destinationsIndex += 1
+            }
+            
+        }
+        else if approachState == "decreasing" && userInfo!["miles"]! as! Double > destinationMileages[destinationsIndex]{
+            self.splitActions()
+            self.splitBbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
+            approachState = "increasing"
+            if destinationsIndex < destinations.count - 1 {
+                destinationsIndex += 1
+            }
         }
         else if previousDestinationDistance > destinationDistance {
             approachState = "decreasing"
@@ -377,14 +412,17 @@ class ViewController: UIViewController {
         let unit = Double(dateComponents.second)
         let second = Int(unit)
         let secondString = String(format: "%02d", second)
-        
+        let nanoString = String(format: "%01ld", dateComponents.nanosecond/100000000)
+
         let cent = Int((unit * (1.6667)))
         let centString = String(format: "%02d", cent)
         let minuteString = String(format: "%02d", dateComponents.minute)
         
         switch timeUnit {
         case "seconds":
-            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString)"
+//            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString)"
+            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString).\(nanoString)"
+
         case "cents":
             todLbl.text = "\(dateComponents.hour):\(minuteString).\(centString)"
         default:
@@ -478,16 +516,15 @@ class ViewController: UIViewController {
     }
     
     func loadTestData() {
-        var destinations = [CLLocation]()
-        destinations.append(CLLocation.init(latitude: 44.851665,longitude: -93.379417))
-        destinations.append(CLLocation.init(latitude: 44.849608,longitude: -93.376230))
-        destinations.append(CLLocation.init(latitude: 44.854725,longitude: -93.381925))
-        destinations.append(CLLocation.init(latitude: 44.853218,longitude: -93.388265))
-        destinations.append(CLLocation.init(latitude: 44.843490,longitude: -93.389915))
+        destinations.append(CLLocation.init(latitude: 44.850577,longitude: -93.373782))
+        destinations.append(CLLocation.init(latitude: 44.828991,longitude: -93.383468))
         destinations.append(CLLocation.init(latitude: 44.837996,longitude: -93.388539))
         destinations.append(CLLocation.init(latitude: 44.834268,longitude: -93.385819))
-        destinations.append(CLLocation.init(latitude: 44.828991,longitude: -93.383468))
+        destinations.append(CLLocation.init(latitude: 44.843490,longitude: -93.389915))
+        destinations.append(CLLocation.init(latitude: 44.853218,longitude: -93.388265))
+        destinations.append(CLLocation.init(latitude: 44.854725,longitude: -93.381925))
         destinations.append(CLLocation.init(latitude: 44.850577,longitude: -93.373782))
+        destinations.append(CLLocation.init(latitude: 44.851665,longitude: -93.379417))
         
 //        44.851665,-93.379417
 //        44.849608,-93.376230
@@ -499,6 +536,19 @@ class ViewController: UIViewController {
 //        44.828991,-93.383468
 //        44.850577,-93.373782
 //        dest = CLLocation.init(latitude: latitude!,longitude: longitude!)
+    }
+    
+    func loadMileages() {
+        self.destinationMileages = [0.74,2.74,3.12,3.43,3.90,4.61,4.98,5.84,6.09]
+//        10:00:04,6.09,44.851665,-93.379417,355.78125,30.0
+//        9:59:30,5.84,44.849608,-93.376230,230.9765625,30.0
+//        9:57:51,4.98,44.854725,-93.381925,86.1328125,30.0
+//        9:57:05,4.61,44.853218,-93.388265,27.7734375,30.0
+//        9:55:47,3.90,44.843490,-93.389915,25.3125,30.0
+//        9:54:46,3.43,44.837996,-93.388539,0.3515625,30.0
+//        9:54:04,3.12,44.834268,-93.385819,346.2890625,30.0
+//        9:53:16,2.74,44.828991,-93.383468,329.765625,30.0
+//        9:50:00,0.74,44.850577,-93.373782,91.0546875,30.0
     }
 
 }
