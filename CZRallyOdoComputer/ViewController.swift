@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var splitBbl: UILabel!
     
+    @IBOutlet weak var destinationDistanceLbl: UILabel!
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
@@ -48,6 +49,10 @@ class ViewController: UIViewController {
     var previousDestinationDistance = 0.0
     var previousDestinationDistanceGPS = CLLocation()
     var destinationMileages = [Double]()
+    var offCourse = false
+    
+    let testSpeeds = [40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
+
 
     
     override func viewDidLoad() {
@@ -80,6 +85,10 @@ class ViewController: UIViewController {
     }
 //    Actions
 
+    @IBAction func testBtn(sender: AnyObject) {
+        let userInfo = ["newMileage":self.destinationMileages[destinationsIndex] - 0.02]
+        NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+    }
     @IBAction func resetBtn(sender: AnyObject) {
         
         //print("Set Factor Btn pushed")
@@ -92,8 +101,9 @@ class ViewController: UIViewController {
         }
         alert.addAction(cancelAction)
         
-        let saveAction = UIAlertAction(title: "Save", style: .Default, handler: { (action: UIAlertAction!) in
-            
+        let saveAction = UIAlertAction(title: "Do It", style: .Default, handler: { (action: UIAlertAction!) in
+            self.destinationsIndex = 0
+            self.factor = 1.000
             self.deleteAllData("ControlZone")
             let userInfo = ["action":"reset"]
             self.splits = []
@@ -122,6 +132,7 @@ class ViewController: UIViewController {
         let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaLbl.text!)"
         self.splits.insert(splitString, atIndex: 0)
         self.splitBbl.text = "\(self.todLbl.text!)"
+        print(splitString)
 
     }
     
@@ -132,8 +143,7 @@ class ViewController: UIViewController {
     }
     @IBAction func startBtn(sender: AnyObject) {
         let nm = selectedStartDistance
-        let userInfo = [
-            "newMileage":nm]
+        let userInfo = ["newMileage":nm]
         NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
     }
     
@@ -251,8 +261,11 @@ class ViewController: UIViewController {
             
             let selectedCZ = self.saveCZ(dvc!.controlNumber,speedd: dvc!.speedd,startTime: dvc!.startTime!, startDistance: dvc!.startDistance)
             self.controlZones.insert(selectedCZ, atIndex: 0)
-            self.speedd = selectedCZ.valueForKey("speedd")! as? Double
+//            self.speedd = selectedCZ.valueForKey("speedd")! as? Double
+            //            let selectedSpeed = selectedCZ.valueForKey("speedd")!
+            self.speedd = dvc!.speedd
             let selectedSpeed = selectedCZ.valueForKey("speedd")!
+            
             self.speedLbl.text = String(format: "%.1f",selectedSpeed as! Float64)
             
             let sm = selectedCZ.valueForKey("startDistance")!
@@ -349,41 +362,72 @@ class ViewController: UIViewController {
         self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
-    
+//    ---------------------------------------
     func workerlessControl(notification:NSNotification) {
         let userInfo = notification.userInfo
+//        if let locs = userInfo?["locations"] {
+//            print("locations: \(locs)")
+//        }
+        
         if destinationsIndex >= destinations.count {
-            self.splitBbl.text = "Done!"
+//            Done
+            self.splitBbl.text = "\(destinations.count) CPs"
         }
         else {
             let curentLocation = userInfo!["currentLocation"]! as! CLLocation
             let destinationGPS = destinations[destinationsIndex]
             let destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
-            var zone = 10.0
-            if curentLocation.speed > 40.0 {
-                zone = 30.0
-            }
+            
+            let destinationDistanceString = String(format: "%.2f", destinationDistance)
+            self.destinationDistanceLbl.text = destinationDistanceString
+            
+            let zone = 20.0
+//            if curentLocation.speed > 40.0 {
+//                zone = 30.0
+//            }
             
             let currentOM = userInfo!["miles"]! as! Double
+            let destOM = destinationMileages[destinationsIndex] - 0.005
             
-            if userInfo!["miles"]! as! Double >= destinationMileages[destinationsIndex]{
+            if currentOM < destOM {
+                approachState = "decreasing"
+            }
+//            && destinationDistance < 200.0
+            if currentOM >= destOM  {
                 self.splitActions()
                 self.splitBbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
                 approachState = "increasing"
+//                
+//                self.speedd = testSpeeds[destinationsIndex]
+//                self.speedLbl.text = String(format: "%0.1f", self.speedd!)
+                print("\(self.speedd) \(testSpeeds[destinationsIndex])")
+                    
+                if currentOM + 0.20 > destOM && offCourse == true {
+                    let nm = self.destinationMileages[destinationsIndex] - 0.02
+                    let userInfo = ["newMileage":nm]
+                    NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+                }
                 destinationsIndex += 1
             }
-            else if fabs(destinationDistance) < zone && approachState == "decreasing" {
-
-                self.splitActions()
-                self.splitBbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
-                approachState = "increasing"
-                destinationsIndex += 1
-
+            else if destinationDistance < zone && approachState == "decreasing" {
+//                Found control via GPS proximity and decreasing
+                if currentOM < destOM {
+//                    ignore, wait for mileage to come up
+                }
+                else if currentOM >= destOM {
+                    self.splitActions()
+                    self.splitBbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
+                    approachState = "increasing"
+                    destinationsIndex += 1
+                }
+            }
+            else if currentOM < destOM {
+                approachState = "decreasing"
             }
 
             else if previousDestinationDistance > destinationDistance {
                 approachState = "decreasing"
-                previousDestinationDistanceGPS = curentLocation
+//                previousDestinationDistanceGPS = curentLocation
             }
             else if previousDestinationDistance < destinationDistance {
                 if approachState == "decreasing" {
@@ -401,7 +445,7 @@ class ViewController: UIViewController {
                 
             }
             previousDestinationDistance = destinationDistance
-            //        previousDestinationDistanceGPS = self.curentLocation
+            previousDestinationDistanceGPS = curentLocation
         }
     }
 
@@ -526,14 +570,17 @@ class ViewController: UIViewController {
     func loadTestData() {
         destinations.append(CLLocation.init(latitude: 44.850577,longitude: -93.373782))
         destinations.append(CLLocation.init(latitude: 44.828991,longitude: -93.383468))
-        destinations.append(CLLocation.init(latitude: 44.837996,longitude: -93.388539))
+        destinations.append(CLLocation.init(latitude: 44.834211,longitude: -93.385792))
+//        destinations.append(CLLocation.init(latitude: 44.837996,longitude: -93.388539))
         destinations.append(CLLocation.init(latitude: 44.834268,longitude: -93.385819))
         destinations.append(CLLocation.init(latitude: 44.843490,longitude: -93.389915))
         destinations.append(CLLocation.init(latitude: 44.853218,longitude: -93.388265))
         destinations.append(CLLocation.init(latitude: 44.854725,longitude: -93.381925))
         destinations.append(CLLocation.init(latitude: 44.850577,longitude: -93.373782))
         destinations.append(CLLocation.init(latitude: 44.851665,longitude: -93.379417))
-        
+
+//        44.843546,-93.389845 google 4
+//        44.834211,-93.385792
 //        44.851665,-93.379417
 //        44.849608,-93.376230
 //        44.854725,-93.381925
@@ -558,6 +605,7 @@ class ViewController: UIViewController {
 //        9:53:16,2.74,44.828991,-93.383468,329.765625,30.0
 //        9:50:00,0.74,44.850577,-93.373782,91.0546875,30.0
     }
+    
 
 }
 

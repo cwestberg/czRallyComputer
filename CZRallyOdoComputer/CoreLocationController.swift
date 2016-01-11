@@ -139,6 +139,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 averageSpeed = 100
             }
             let userInfo = [
+                "locations":locations,
                 "currentLocation":location,
                 "course":location.course,
                 "timestamp":location.timestamp,
