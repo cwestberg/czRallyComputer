@@ -50,6 +50,7 @@ class ViewController: UIViewController {
     var previousDestinationDistanceGPS = CLLocation()
     var destinationMileages = [Double]()
     var offCourse = false
+    var deltaFixup = 0.0
     
     let testSpeeds = [40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
 
@@ -67,7 +68,7 @@ class ViewController: UIViewController {
         startDistance = 0.00
         self.distanceLbl.text = "0.00"
         
-        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self,
+        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
         
         
@@ -85,10 +86,13 @@ class ViewController: UIViewController {
     }
 //    Actions
 
-    @IBAction func testBtn(sender: AnyObject) {
-        let userInfo = ["newMileage":self.destinationMileages[destinationsIndex] - 0.02]
-        NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+    @IBAction func nextBtn(sender: AnyObject) {
+        destinationsIndex += 1
     }
+//    @IBAction func testBtn(sender: AnyObject) {
+//        let userInfo = ["newMileage":self.destinationMileages[destinationsIndex] - 0.02]
+//        NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+//    }
     @IBAction func resetBtn(sender: AnyObject) {
         
         //print("Set Factor Btn pushed")
@@ -102,6 +106,7 @@ class ViewController: UIViewController {
         alert.addAction(cancelAction)
         
         let saveAction = UIAlertAction(title: "Do It", style: .Default, handler: { (action: UIAlertAction!) in
+            self.splitBbl.text = "Reset"
             self.destinationsIndex = 0
             self.factor = 1.000
             self.deleteAllData("ControlZone")
@@ -112,11 +117,7 @@ class ViewController: UIViewController {
         
         //Present the AlertController
         self.presentViewController(alert, animated: true, completion: nil)
-//        self.deleteAllData("ControlZone")
-//        let userInfo = [
-//            "action":"reset"]
-//        self.splits = []
-//        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+
     }
    
 
@@ -332,7 +333,8 @@ class ViewController: UIViewController {
 
     }
 
-//    Distance
+//    Updating Distance & Time
+    
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
 //        print("Odometer UserInfo: \(userInfo)")
@@ -393,7 +395,7 @@ class ViewController: UIViewController {
                 approachState = "decreasing"
             }
 //            && destinationDistance < 200.0
-            if currentOM >= destOM  {
+            if currentOM >= destOM && destinationDistance < 80.0 {
                 self.splitActions()
                 self.splitBbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
                 approachState = "increasing"
@@ -402,10 +404,12 @@ class ViewController: UIViewController {
 //                self.speedLbl.text = String(format: "%0.1f", self.speedd!)
                 print("\(self.speedd) \(testSpeeds[destinationsIndex])")
                     
+//                off course
                 if currentOM + 0.20 > destOM && offCourse == true {
-                    let nm = self.destinationMileages[destinationsIndex] - 0.02
+                    let nm = self.destinationMileages[destinationsIndex]
                     let userInfo = ["newMileage":nm]
                     NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+                    deltaFixup = Double(deltaLbl.text!)!
                 }
                 destinationsIndex += 1
             }
@@ -449,7 +453,6 @@ class ViewController: UIViewController {
         }
     }
 
-    //    utilities
     
     func updateTimeLabel() {
         let currentDate = NSDate()
@@ -482,22 +485,18 @@ class ViewController: UIViewController {
                 self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
 //                delta = startTime!.timeIntervalSinceDate(NSDate())
                 self.deltaLbl.text = ">\(String(format: "%.0f",(startTime!.timeIntervalSinceDate(NSDate()))))"
-
-
             }
             if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-//                let elapsedTime = NSDate().timeIntervalSinceDate(startTime!)
-//                print("et \(elapsedTime)")
-//                let factor = 60.0/Double(speed!)
+
                 let factor = 60.0/Double(speedd!)
-//                print("distance \(Double(distanceLbl.text!))")
-//                let dist = Double(distanceLbl.text!)
                 
                 let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
+
+                //              Simple Accumulator
                 ctc = calcDistance * factor
+                
                 let ctcSecs = (calcDistance * factor) * 60
                 let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
-
 
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
                 var delta = 0.0
@@ -509,6 +508,7 @@ class ViewController: UIViewController {
                 default:
                     break;
                 }
+                delta += deltaFixup
                 if delta < 4.0 {
                     self.deltaLbl.text = "\(String(format: "%.1f",(delta)))"
                 }
@@ -522,6 +522,8 @@ class ViewController: UIViewController {
         }
         
     }
+    //    utilities
+
     func strippedNSDate(date: NSDate) -> String {
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: date)
@@ -572,13 +574,13 @@ class ViewController: UIViewController {
         destinations.append(CLLocation.init(latitude: 44.828991,longitude: -93.383468))
         destinations.append(CLLocation.init(latitude: 44.834211,longitude: -93.385792))
 //        destinations.append(CLLocation.init(latitude: 44.837996,longitude: -93.388539))
-        destinations.append(CLLocation.init(latitude: 44.834268,longitude: -93.385819))
+        destinations.append(CLLocation.init(latitude: 44.837922,longitude: -93.388561))
         destinations.append(CLLocation.init(latitude: 44.843490,longitude: -93.389915))
         destinations.append(CLLocation.init(latitude: 44.853218,longitude: -93.388265))
         destinations.append(CLLocation.init(latitude: 44.854725,longitude: -93.381925))
-        destinations.append(CLLocation.init(latitude: 44.850577,longitude: -93.373782))
+        destinations.append(CLLocation.init(latitude: 44.850304,longitude: -93.375656))
         destinations.append(CLLocation.init(latitude: 44.851665,longitude: -93.379417))
-
+//44.837922, -93.388561
 //        44.843546,-93.389845 google 4
 //        44.834211,-93.385792
 //        44.851665,-93.379417
@@ -594,7 +596,8 @@ class ViewController: UIViewController {
     }
     
     func loadMileages() {
-        self.destinationMileages = [0.74,2.74,3.12,3.43,3.90,4.61,4.98,5.84,6.09]
+//        self.destinationMileages = [0.74,2.74,3.12,3.43,3.90,4.61,4.98,6.09]
+        self.destinationMileages = [0.74,2.74,3.12,3.43,3.90,4.61,4.98,5.79,6.09]
 //        10:00:04,6.09,44.851665,-93.379417,355.78125,30.0
 //        9:59:30,5.84,44.849608,-93.376230,230.9765625,30.0
 //        9:57:51,4.98,44.854725,-93.381925,86.1328125,30.0

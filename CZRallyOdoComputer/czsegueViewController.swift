@@ -12,14 +12,14 @@ class CZSegueViewController: UIViewController {
 
     @IBOutlet weak var controlNumberField: UITextField!
     
-    @IBOutlet weak var speedField: UITextField!
-    
-    @IBOutlet weak var startDistanceField: UITextField!
-    
-    @IBOutlet weak var hourField: UITextField!
+    @IBOutlet weak var startDistanceLbl: UILabel!
+    @IBOutlet weak var speedLbl: UILabel!
     
     
-    @IBOutlet weak var minuteField: UITextField!
+    @IBOutlet weak var hourLbl: UILabel!
+    
+    @IBOutlet weak var minuteLbl: UILabel!
+    
     
     @IBOutlet weak var timeUnitField: UITextField!
     
@@ -47,24 +47,17 @@ class CZSegueViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         view.addGestureRecognizer(tap)
         
-//        controlNumberField.keyboardType = UIKeyboardType.DecimalPad
-//        speedField.keyboardType = UIKeyboardType.DecimalPad
-//        hourField.keyboardType = UIKeyboardType.DecimalPad
-//        minuteField.keyboardType = UIKeyboardType.DecimalPad
-//        timeUnitField.keyboardType = UIKeyboardType.DecimalPad
-//        startDistanceField.keyboardType = UIKeyboardType.DecimalPad
         super.viewWillAppear(animated)
         let currentDate = NSDate().dateByAddingTimeInterval(60)
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: currentDate)
         
         self.controlNumberField.text = "\(self.controlNumber)"
-        self.startDistanceField.text = "\(self.startDistance)"
-        self.speedField.text = "\(self.speedd)"
-        self.hourField.text = "\(dateComponents.hour)"
-//        self.minuteField.text = "\(dateComponents.minute)"
+        self.startDistanceLbl.text = "\(self.startDistance)"
+        self.speedLbl.text = "\(self.speedd)"
+        self.hourLbl.text = "\(dateComponents.hour)"
         let minStr = String(format: "%02d", dateComponents.minute)
-        self.minuteField.text = "\(minStr)"
+        self.minuteLbl.text = "\(minStr)"
         
         
         //        self.timeUnitsField.text = "\(dateComponents.second)"
@@ -75,57 +68,78 @@ class CZSegueViewController: UIViewController {
     @IBAction func hourButton(sender: AnyObject) {
         
         //Create the AlertController
-        let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Hour", preferredStyle: .Alert)
+        let hourSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Hour", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
         }
-        speedSheetController.addAction(cancelAction)
+        hourSheetController.addAction(cancelAction)
         
         //Create and add the Set action
         let setAction: UIAlertAction = UIAlertAction(title: "Set", style: .Default) { action -> Void in
-            self.hourField.text = speedSheetController.textFields![0].text!
+//            self.hourLbl.text = hourSheetController.textFields![0].text!
+            let hourString = hourSheetController.textFields![0].text!
+            print(Int(hourString))
+            if Int(hourString) > 23 {
+                self.hourLbl.text! = "23"
+            }
+            else {
+                self.hourLbl.text = hourString
+            }
+            self.hour = Int(self.hourLbl.text!)
         }
-        speedSheetController.addAction(setAction)
+        hourSheetController.addAction(setAction)
         
         //Add a text field
-        speedSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
+        hourSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
+            textField.keyboardType = UIKeyboardType.NumberPad
         }
         
         //Present the AlertController
-        self.presentViewController(speedSheetController, animated: true, completion: nil)
+        self.presentViewController(hourSheetController, animated: true, completion: nil)
         
     }
     
     @IBAction func minuteButton(sender: AnyObject) {
         //Create the AlertController
-        let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Minute", preferredStyle: .Alert)
+        let minuteSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Minute", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
         }
-        speedSheetController.addAction(cancelAction)
+        minuteSheetController.addAction(cancelAction)
         
         //Create and add the Set action
         let setAction: UIAlertAction = UIAlertAction(title: "Set", style: .Default) { action -> Void in
-            self.minuteField.text = speedSheetController.textFields![0].text!
+//            self.minuteLbl.text = minuteSheetController.textFields![0].text!
+            let minString = minuteSheetController.textFields![0].text!
+            print(Int(minString))
+            if Int(minString) > 59 {
+                self.minuteLbl.text! = "59"
+            }
+            else {
+                self.minuteLbl.text = minString
+            }
+            self.minute = Int(self.minuteLbl.text!)
+            
         }
-        speedSheetController.addAction(setAction)
+        minuteSheetController.addAction(setAction)
         
         //Add a text field
-        speedSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
+        minuteSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
+            textField.keyboardType = UIKeyboardType.NumberPad
         }
         
         //Present the AlertController
-        self.presentViewController(speedSheetController, animated: true, completion: nil)
+        self.presentViewController(minuteSheetController, animated: true, completion: nil)
     }
     @IBAction func speedButton(sender: AnyObject) {
         
         //Create the AlertController
         let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Speed", preferredStyle: .Alert)
-        
+
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
         }
@@ -133,13 +147,23 @@ class CZSegueViewController: UIViewController {
         
         //Create and add the Set action
         let setAction: UIAlertAction = UIAlertAction(title: "Set", style: .Default) { action -> Void in
-            self.speedField.text = speedSheetController.textFields![0].text!
+            let scanner = NSScanner(string: speedSheetController.textFields![0].text!)
+            scanner.locale = NSLocale.currentLocale()
+            if scanner.scanDecimal(nil) && scanner.atEnd{
+                self.speedLbl.text = speedSheetController.textFields![0].text!
+                self.speedd = Double(self.speedLbl.text!)
+            }
+            else {
+                self.speedLbl.text = "invalid entry"
+            }
         }
         speedSheetController.addAction(setAction)
         
         //Add a text field
         speedSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
+            textField.keyboardType = UIKeyboardType.DecimalPad
+
         }
         
         //Present the AlertController
@@ -182,13 +206,26 @@ class CZSegueViewController: UIViewController {
         
         //Create and add the Set action
         let setAction: UIAlertAction = UIAlertAction(title: "Set", style: .Default) { action -> Void in
-            self.startDistanceField.text = actionSheetController.textFields![0].text!
+            self.startDistanceLbl.text = actionSheetController.textFields![0].text!
+            
+            let scanner = NSScanner(string: actionSheetController.textFields![0].text!)
+            scanner.locale = NSLocale.currentLocale()
+            if scanner.scanDecimal(nil) && scanner.atEnd{
+                print("scan")
+                self.startDistanceLbl.text = actionSheetController.textFields![0].text!
+                self.startDistance = Double(self.startDistanceLbl.text!)
+            }
+            else {
+                self.startDistanceLbl.text = "invalid entry"
+            }
+
         }
         actionSheetController.addAction(setAction)
         
         //Add a text field
         actionSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
+            textField.keyboardType = UIKeyboardType.DecimalPad
         }
         
         //Present the AlertController
@@ -238,18 +275,29 @@ class CZSegueViewController: UIViewController {
         
 //        self.startTime = dateFormatter.dateFromString(dateString)
 //        print("st \(self.startTime)")
-        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourField.text!):\(self.minuteField.text!):\(self.timeUnitField.text!)")!
-        
+        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourLbl.text!):\(self.minuteLbl.text!):\(self.timeUnitField.text!)")!
+//         self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourField.text!):\(self.minuteLbl.text!):\(self.timeUnitField.text!)")!       
         
         
         self.controlNumber = Int(self.controlNumberField.text!)
 //        self.speed = Int(self.speedField.text!)
-        self.speedd = Double(self.speedField.text!)
-        self.startDistance = Double(self.startDistanceField.text!)
-        self.hour = Int(self.hourField.text!)
-        self.minute = Int(self.minuteField.text!)
+//        self.speedd = Double(self.speedField.text!)
+//        self.startDistance = Double(self.startDistanceLbl.text!)
+//        self.hour = Int(self.hourLbl.text!)
+//        self.minute = Int(self.minuteLbl.text!)
         self.second = Int(self.timeUnitField.text!)
         
+    }
+    
+    func validatNumericInput(text: String) -> String {
+        let scanner = NSScanner(string: text)
+        scanner.locale = NSLocale.currentLocale()
+        if scanner.scanDecimal(nil) && scanner.atEnd{
+            return text
+        }
+        else {
+            return "invalid entry"
+        }
     }
     
 }
