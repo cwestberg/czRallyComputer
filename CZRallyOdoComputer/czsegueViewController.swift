@@ -10,7 +10,7 @@ import UIKit
 
 class CZSegueViewController: UIViewController {
 
-    @IBOutlet weak var controlNumberField: UITextField!
+    @IBOutlet weak var controlNumberLbl: UILabel!
     
     @IBOutlet weak var startDistanceLbl: UILabel!
     @IBOutlet weak var speedLbl: UILabel!
@@ -20,8 +20,8 @@ class CZSegueViewController: UIViewController {
     
     @IBOutlet weak var minuteLbl: UILabel!
     
+    @IBOutlet weak var timeUnitLbl: UILabel!
     
-    @IBOutlet weak var timeUnitField: UITextField!
     
 //    @IBOutlet weak var controlNumberField: UITextField!
 //    @IBOutlet weak var speedField: UITextField!
@@ -40,6 +40,7 @@ class CZSegueViewController: UIViewController {
     var minute: Int!
     var second: Int!
     var startTime: NSDate?
+    var timeUnit: String?
     
     
     override func viewWillAppear(animated: Bool) {
@@ -52,7 +53,7 @@ class CZSegueViewController: UIViewController {
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: currentDate)
         
-        self.controlNumberField.text = "\(self.controlNumber)"
+        self.controlNumberLbl.text = "\(self.controlNumber)"
         self.startDistanceLbl.text = "\(self.startDistance)"
         self.speedLbl.text = "\(self.speedd)"
         self.hourLbl.text = "\(dateComponents.hour)"
@@ -61,7 +62,9 @@ class CZSegueViewController: UIViewController {
         
         
         //        self.timeUnitsField.text = "\(dateComponents.second)"
-        self.timeUnitField.text = "00"
+        self.timeUnitLbl.text = "00"
+        print(self.timeUnit!)
+
         
     }
     
@@ -173,26 +176,49 @@ class CZSegueViewController: UIViewController {
     @IBAction func timeUnitsButton(sender: AnyObject) {
         
         //Create the AlertController
-        let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Cent or Second", preferredStyle: .Alert)
+        let timeUnitsSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Cent or Second", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
         }
-        speedSheetController.addAction(cancelAction)
+        timeUnitsSheetController.addAction(cancelAction)
+
+        //        Need to test for cents or seconds then limt to 59 or 99
         
         //Create and add the Set action
         let setAction: UIAlertAction = UIAlertAction(title: "Set", style: .Default) { action -> Void in
-            self.timeUnitField.text = speedSheetController.textFields![0].text!
+            self.timeUnitLbl.text = timeUnitsSheetController.textFields![0].text!
+//            self.unit = Int(self.timeUnitLbl.text!)
+            
+            var unitString = timeUnitsSheetController.textFields![0].text!
+            print(Int(unitString))
+            if self.timeUnit == "seconds"{
+                if Int(unitString) > 59 {
+                    unitString = "59"
+                }
+            }
+            else {
+                if Int(unitString) > 99 {
+                    unitString = "99"
+                }
+            }
+            self.timeUnitLbl.text = unitString
+ 
+            self.second = Int(unitString)
+
+
         }
-        speedSheetController.addAction(setAction)
+        timeUnitsSheetController.addAction(setAction)
         
         //Add a text field
-        speedSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
+        timeUnitsSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
+            textField.keyboardType = UIKeyboardType.NumberPad
+
         }
         
         //Present the AlertController
-        self.presentViewController(speedSheetController, animated: true, completion: nil)
+        self.presentViewController(timeUnitsSheetController, animated: true, completion: nil)
         
     }
     @IBAction func distanceButton(sender: AnyObject) {
@@ -244,13 +270,17 @@ class CZSegueViewController: UIViewController {
         
         //Create and add the Set action
         let setAction: UIAlertAction = UIAlertAction(title: "Set", style: .Default) { action -> Void in
-            self.controlNumberField.text = actionSheetController.textFields![0].text!
+            self.controlNumberLbl.text = actionSheetController.textFields![0].text!
+            self.controlNumber = Int(self.controlNumberLbl.text!)
+
         }
         actionSheetController.addAction(setAction)
         
         //Add a text field
         actionSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
+            textField.keyboardType = UIKeyboardType.NumberPad
+
         }
         
         //Present the AlertController
@@ -275,17 +305,23 @@ class CZSegueViewController: UIViewController {
         
 //        self.startTime = dateFormatter.dateFromString(dateString)
 //        print("st \(self.startTime)")
-        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourLbl.text!):\(self.minuteLbl.text!):\(self.timeUnitField.text!)")!
+        
+//        if cents, convert to seconds
+        if timeUnit == "cents" {
+            self.timeUnitLbl.text = "\(Int(Double(self.second) * 0.6))"
+        }
+        
+        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourLbl.text!):\(self.minuteLbl.text!):\(self.timeUnitLbl.text!)")!
 //         self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourField.text!):\(self.minuteLbl.text!):\(self.timeUnitField.text!)")!       
         
         
-        self.controlNumber = Int(self.controlNumberField.text!)
+//        self.controlNumber = Int(self.controlNumberLbl.text!)
 //        self.speed = Int(self.speedField.text!)
 //        self.speedd = Double(self.speedField.text!)
 //        self.startDistance = Double(self.startDistanceLbl.text!)
 //        self.hour = Int(self.hourLbl.text!)
 //        self.minute = Int(self.minuteLbl.text!)
-        self.second = Int(self.timeUnitField.text!)
+//        self.second = Int(self.timeUnitLbl.text!)
         
     }
     

@@ -52,7 +52,7 @@ class ViewController: UIViewController {
     var offCourse = false
     var deltaFixup = 0.0
     
-    let testSpeeds = [40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
+    let testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
 
 
     
@@ -86,6 +86,9 @@ class ViewController: UIViewController {
     }
 //    Actions
 
+    @IBAction func goNowBtn(sender: AnyObject) {
+        self.goNow()
+    }
     @IBAction func nextBtn(sender: AnyObject) {
         destinationsIndex += 1
     }
@@ -112,7 +115,8 @@ class ViewController: UIViewController {
             self.deleteAllData("ControlZone")
             let userInfo = ["action":"reset"]
             self.splits = []
-            NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)        })
+            NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        })
         alert.addAction(saveAction)
         
         //Present the AlertController
@@ -293,13 +297,6 @@ class ViewController: UIViewController {
             print("\(dvc!.timeUnit)")
             self.distanceType = dvc!.distanceType
             self.timeUnit = dvc!.timeUnit
-
-//            if dvc!.clearAllSwitch.on == true {
-//                print("Delete!")
-//                self.deleteAllData("ControlZone")
-//                self.tableView.reloadData()
-
-//            }
         }
         
     }
@@ -314,6 +311,7 @@ class ViewController: UIViewController {
                 destinationVC.speed = self.speed
                 destinationVC.second = 0
                 destinationVC.startDistance = 0.0
+                destinationVC.timeUnit = self.timeUnit
             }
         case "configSegue":
             print("config segue")
@@ -412,6 +410,9 @@ class ViewController: UIViewController {
                     deltaFixup = Double(deltaLbl.text!)!
                 }
                 destinationsIndex += 1
+            }
+            else if currentOM > destOM && destinationDistance > 80.0 {
+                self.splitBbl.text = "Off Course!"
             }
             else if destinationDistance < zone && approachState == "decreasing" {
 //                Found control via GPS proximity and decreasing
@@ -608,6 +609,81 @@ class ViewController: UIViewController {
 //        9:53:16,2.74,44.828991,-93.383468,329.765625,30.0
 //        9:50:00,0.74,44.850577,-93.373782,91.0546875,30.0
     }
+    
+    func goNow() {
+        
+        
+        let calendar = NSCalendar.currentCalendar()
+        let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        let secStr = String(format: "%02d", dateComponents.second)
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        self.startTime = NSDate()
+        self.deltaLbl.text = "--"
+        let userInfo = ["action":"reset"]
+        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        self.speedd = testSpeeds[destinationsIndex]
+        self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
+        let smStr = String(format: "%.2f", 0.00)
+        self.startDistanceLbl.text = "\(smStr)"
+
+    }
+//    
+//    func httpGet(request: NSURLRequest!, callback: (String, String?) -> Void) {
+//        let session = NSURLSession.sharedSession()
+//        let task = session.dataTaskWithRequest(request){
+//            (data, response, error) -> Void in
+//            if error != nil {
+//                callback("", error!.localizedDescription)
+//            }
+//            else {
+//                let result = NSString(data: data!, encoding:
+//                    NSASCIIStringEncoding)!
+//                callback(result as String, nil)
+//            }
+//        }
+//        task.resume()
+//    }
+//    
+//    func loadSinatra(){
+//        let request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:4567/")!)
+//        httpGet(request){
+//            (data, error) -> Void in
+//            if error != nil {
+//                print(error)
+//            } else {
+//                self.parse(data)
+//            }
+//        }
+//
+//    }
+//    
+//    func parse(content: String) {
+//        print(content)
+//        var gpsLocations = [CLLocation]()
+//        var omLocations = [Double]()
+//        let delimiter = ","
+//        //    var items:[(time:String, om:String, latitude: String,longitude: String,course: String,speed: String)]?
+//        let lines:[String] = content.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet()) as [String]
+//        print("lines count \(lines.count)")
+//        print("lines  \(lines)")
+//        for line in lines {
+//            print("line \(line)")
+//            var values:[String] = []
+//            if line != "" {
+//                values = line.componentsSeparatedByString(delimiter)
+//                // Put the values into the tuple and add it to the items array
+//                let item = (time: values[0], om: values[1], latitude: values[2],longitude:values[3],course:values[4],speed:values[5])
+//                print("\(item)")
+//                let location = CLLocation.init(latitude: Double(item.latitude)!, longitude: Double(item.longitude)!)
+//                gpsLocations.insert(location, atIndex: 0)
+//                print(gpsLocations)
+//                omLocations.insert(Double(item.om)!, atIndex: 0)
+//                print(omLocations)
+//            }
+//        }
+//    }
     
 
 }

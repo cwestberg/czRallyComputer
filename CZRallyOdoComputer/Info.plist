@@ -24,6 +24,10 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>SwiftOdo requires location information to update mileage</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
