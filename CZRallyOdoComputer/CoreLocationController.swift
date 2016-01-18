@@ -44,6 +44,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "splitOM:", name: "SplitOM", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setMileage:", name: "SetMileage", object: nil)
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: "milesFixForOc:", name: "MilesFixForOc", object: nil)
+        
         
     }
     
@@ -307,10 +309,22 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
     }
     
+    func milesFixForOc(notification:NSNotification) {
+        var userInfo = notification.userInfo
+        
+        let newMileage = userInfo!["newMileage"] as! Float64
+        let newMilesAsKM = newMileage * 1.60934
+        self.meters = newMilesAsKM * 1000
+        let distanceInMiles:Float64 = ((self.meters * 0.000621371))
+        self.miles = distanceInMiles
+        let distanceInMeters:Float64 = ((self.imMeters * 0.000621371))
+        self.imMiles = distanceInMeters
+        self.imKM = (self.imMeters/1000)
+    }
     
     func setMileage(notification:NSNotification) -> Void {
         var userInfo = notification.userInfo
-        print("setMileage notification: \(userInfo!)")
+//        print("setMileage notification: \(userInfo!)")
         
         let newMileage = userInfo!["newMileage"] as! Float64
         let newMilesAsKM = newMileage * 1.60934

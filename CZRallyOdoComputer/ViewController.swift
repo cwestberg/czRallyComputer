@@ -21,13 +21,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var deltaLbl: UILabel!
     @IBOutlet weak var startDistanceLbl: UILabel!
     
-    @IBOutlet weak var splitBbl: UILabel!
+ 
     
     @IBOutlet weak var destinationDistanceLbl: UILabel!
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
     var startDistance: Double?
+    @IBOutlet weak var splitLbl: UILabel!
     var controlNumber: Int?
     var startTime: NSDate?
     var todTimer = NSTimer()
@@ -50,9 +51,12 @@ class ViewController: UIViewController {
     var previousDestinationDistanceGPS = CLLocation()
     var destinationMileages = [Double]()
     var offCourse = false
-    var deltaFixup = 0.0
+    var lateness = 0.0
+    var latenessInCents = 0.0
+    var carNumber = 0
+    var delta = 0.0
     
-    let testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
+    var testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
 
 
     
@@ -109,7 +113,7 @@ class ViewController: UIViewController {
         alert.addAction(cancelAction)
         
         let saveAction = UIAlertAction(title: "Do It", style: .Default, handler: { (action: UIAlertAction!) in
-            self.splitBbl.text = "Reset"
+            self.splitLbl.text = "Reset"
             self.destinationsIndex = 0
             self.factor = 1.000
             self.deleteAllData("ControlZone")
@@ -126,18 +130,35 @@ class ViewController: UIViewController {
    
 
     @IBAction func splitBtn(sender: AnyObject) {
-        print("split btn")
-        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaLbl.text!)"
+//        print("split btn")
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaString())"
         self.splits.insert(splitString, atIndex: 0)
-        self.splitBbl.text = "\(self.todLbl.text!)"
-        
+        self.splitLbl.text = "\(self.todLbl.text!)"
+    }
+    
+    func deltaString() -> String {
+        return String(format: "%.0f",self.delta)
     }
     
     func splitActions() {
-        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaLbl.text!)"
+//        called when checkpoint found
+//        self.deltaLbl.text!
+        let courseString = String(format: "%.0f",self.course!)
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(courseString),\(self.speedd!),\(self.deltaString())"
         self.splits.insert(splitString, atIndex: 0)
-        self.splitBbl.text = "\(self.todLbl.text!)"
-        print(splitString)
+//        self.splitLbl.text = "\(self.todLbl.text!)"
+
+        if offCourse {
+//            lateness = lateness + self.delta
+            print("sa oc \(lateness)")
+        }
+        else {
+            if delta < 0.0 {
+                lateness = lateness + fabs(self.delta)
+            }
+            
+        }
+//        lateness = lateness + self.delta
 
     }
     
@@ -169,7 +190,7 @@ class ViewController: UIViewController {
             insertIntoManagedObjectContext: managedContext)
         
         //3
-        print("save  \(speedd) \(speed) \(controlNumber) \(startTime) \(startDistance)")
+//        print("save  \(speedd) \(speed) \(controlNumber) \(startTime) \(startDistance)")
         controlZone.setValue(controlNumber, forKey: "controlNumber")
 //        controlZone.setValue(speed, forKey: "speed")
         controlZone.setValue(speedd, forKey: "speedd")
@@ -286,8 +307,8 @@ class ViewController: UIViewController {
             self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
             self.startTime = selectedCZ.valueForKey("startTime") as? NSDate
             self.selectedStartDistance = (selectedCZ.valueForKey("startDistance")! as? Double)!
-            self.deltaLbl.text = "--"
-            
+            self.deltaLbl.text = "0.0"
+            self.lateness = 0.00
         }
         if(sender.sourceViewController.isKindOfClass(ConfigSegueViewController))
         {
@@ -295,8 +316,15 @@ class ViewController: UIViewController {
             print("\(dvc!.factor)")
             print("\(dvc!.distanceType)")
             print("\(dvc!.timeUnit)")
+            print("\(dvc!.distances)")
+            print("\(dvc!.destinations)")
+            print("\(dvc!.speeds)")
             self.distanceType = dvc!.distanceType
             self.timeUnit = dvc!.timeUnit
+//            if Import btn then set
+            self.destinations = dvc!.destinations
+            self.destinationMileages = dvc!.distances
+            self.testSpeeds = dvc!.speeds
         }
         
     }
@@ -332,11 +360,27 @@ class ViewController: UIViewController {
     }
 
 //    Updating Distance & Time
+    func updateMiles(miles: Double) {
+        
+        self.distanceLbl.text = String(format: "%.2f", miles)
+        
+        switch distanceType
+        {
+        case "miles":
+            let m = miles
+            self.distanceLbl.text = (String(format: "%.2f", m))
+        case "km":
+            let d = miles * 1.66667
+            self.distanceLbl.text = (String(format: "%.2f", d))
+        default:
+            break;
+        }
+        let userInfo = ["newMileage":miles]
+        NSNotificationCenter.defaultCenter().postNotificationName("MilesFixForOc", object: nil, userInfo: userInfo)
+    }
     
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
-//        print("Odometer UserInfo: \(userInfo)")
-//        print(userInfo!)
         let m = userInfo!["miles"]!
         self.distanceLbl.text = (String(format: "%.2f", m as! Float64))
         let lat = String(format: "%.6f", userInfo!["latitude"]! as! Float64)
@@ -358,7 +402,6 @@ class ViewController: UIViewController {
         default:
             break;
         }
-        
         self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
@@ -370,15 +413,18 @@ class ViewController: UIViewController {
 //        }
         
         if destinationsIndex >= destinations.count {
+            let total = parseForTotal(self.splits)
 //            Done
-            self.splitBbl.text = "\(destinations.count) CPs"
+            self.splitLbl.text = "\(destinations.count) CPs \(total)"
         }
         else {
             let curentLocation = userInfo!["currentLocation"]! as! CLLocation
             let destinationGPS = destinations[destinationsIndex]
-            let destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
-            
-            let destinationDistanceString = String(format: "%.2f", destinationDistance)
+            var destinationDistance = Double?()
+        
+            destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
+
+            let destinationDistanceString = String(format: "%.2f", destinationDistance!)
             self.destinationDistanceLbl.text = destinationDistanceString
             
             let zone = 20.0
@@ -392,27 +438,58 @@ class ViewController: UIViewController {
             if currentOM < destOM {
                 approachState = "decreasing"
             }
-//            && destinationDistance < 200.0
-            if currentOM >= destOM && destinationDistance < 80.0 {
+//            && destinationDistance < 80.0
+//            print(destOM)
+//            var debugDest = 0.74
+            if currentOM >= 1.00 {
+//                print("debug")
+                destinationDistance = 10.0
+            }
+            if currentOM > destOM && destinationDistance < 80.0 && offCourse == true {
+                // Found TP after OC
+                print("Found TP after OC")
+                self.splitLbl.text = "Found \(destinationsIndex)"
+
+//                let nm = self.destinationMileages[destinationsIndex]
+//                NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+//                correct using correct mileage - 80m for early find (.02-05?)
+                let correctedOM = destinationMileages[destinationsIndex] - 0.04
+                self.updateMiles(correctedOM)
+                print(lateness)
+//                let calcTimeToHere = correctedOM * 60/testSpeeds[destinationsIndex]
+//                let ocSeconds = ocAcumulator(correctedOM,calcSpeed: testSpeeds[destinationsIndex])
+//                lateness = lateness + ocSeconds
+//                print(lateness)
+                if delta > 0.0 {delta = delta * -1.0}
                 self.splitActions()
-                self.splitBbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
+                offCourse = false
+
+                destinationsIndex += 1
+
+            }
+            else if currentOM >= destOM && destinationDistance < 80.0 {
+                // Normal on course
+                self.splitActions()
+                self.splitLbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(self.deltaString())"
                 approachState = "increasing"
 //                
 //                self.speedd = testSpeeds[destinationsIndex]
 //                self.speedLbl.text = String(format: "%0.1f", self.speedd!)
-                print("\(self.speedd) \(testSpeeds[destinationsIndex])")
-                    
+//                print("\(self.speedd) \(testSpeeds[destinationsIndex])")
+                
 //                off course
-                if currentOM + 0.20 > destOM && offCourse == true {
-                    let nm = self.destinationMileages[destinationsIndex]
-                    let userInfo = ["newMileage":nm]
-                    NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
-                    deltaFixup = Double(deltaLbl.text!)!
-                }
+//                if currentOM + 0.20 > destOM && offCourse == true {
+//                    let nm = self.destinationMileages[destinationsIndex]
+//                    let userInfo = ["newMileage":nm]
+//                    NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+//                    lateness = lateness + Double(deltaLbl.text!)!
+//                }
                 destinationsIndex += 1
             }
-            else if currentOM > destOM && destinationDistance > 80.0 {
-                self.splitBbl.text = "Off Course!"
+            else if currentOM > destOM && destinationDistance > 160.0 {
+//                self.splitActions()
+                self.offCourse = true
+                self.splitLbl.text = "Off Course!"
             }
             else if destinationDistance < zone && approachState == "decreasing" {
 //                Found control via GPS proximity and decreasing
@@ -421,9 +498,11 @@ class ViewController: UIViewController {
                 }
                 else if currentOM >= destOM {
                     self.splitActions()
-                    self.splitBbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
+                    self.splitLbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
                     approachState = "increasing"
                     destinationsIndex += 1
+                    self.splitLbl.text = "Found by GPS"
+
                 }
             }
             else if currentOM < destOM {
@@ -449,11 +528,25 @@ class ViewController: UIViewController {
             else {
                 
             }
-            previousDestinationDistance = destinationDistance
+            previousDestinationDistance = destinationDistance!
             previousDestinationDistanceGPS = curentLocation
         }
     }
 
+    func ocAcumulator(calcDistance: Double, calcSpeed: Double) -> Double{
+        let calendar = NSCalendar.currentCalendar()
+        let calcFactor = 60.0/calcSpeed
+        
+        //              Simple Accumulator
+        let calcTime = calcDistance * calcFactor
+        let ctcSecs = (calcTime) * 60
+        print("ctcSecs \(ctcSecs)")
+        let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])
+        print(ctcDate)
+        delta = ctcDate!.timeIntervalSinceDate(NSDate()) * -1.0
+        
+        return ctcSecs
+    }
     
     func updateTimeLabel() {
         let currentDate = NSDate()
@@ -484,8 +577,8 @@ class ViewController: UIViewController {
         if startTime != nil {
             if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
                 self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
-//                delta = startTime!.timeIntervalSinceDate(NSDate())
-                self.deltaLbl.text = ">\(String(format: "%.0f",(startTime!.timeIntervalSinceDate(NSDate()))))"
+                delta = startTime!.timeIntervalSinceDate(NSDate())
+                self.deltaLbl.text = ">\(deltaString())"
             }
             if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
 
@@ -495,12 +588,30 @@ class ViewController: UIViewController {
 
                 //              Simple Accumulator
                 ctc = calcDistance * factor
-                
-                let ctcSecs = (calcDistance * factor) * 60
+//                
+//                if lateness < 0.0 {
+//                    lateness = fabs(lateness)
+//                }
+                if lateness > 0.00 {
+//                    print("ctc before \(ctc!)")
+//                    print("lateness \(lateness)")
+                    latenessInCents = lateness * 0.0166667
+//                    print(latenessInCents)
+                    ctc = ctc! + latenessInCents
+//                    print("ctc after add \(ctc!)")
+//                    print("delta \(delta)")
+                    
+                }
+//                ctc = ctc! + latenessInCents
+//                print(ctc!)
+//                ctc not used? code duplicated below?
+//                ctc += lateness
+//                let ctcSecs = (calcDistance * factor) * 60
+                let ctcSecs = (ctc)! * 60
                 let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
 
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
-                var delta = 0.0
+//                var delta = 0.0
                 switch timeUnit {
                 case "seconds":
                     delta = ctcDate!.timeIntervalSinceDate(NSDate())
@@ -509,12 +620,11 @@ class ViewController: UIViewController {
                 default:
                     break;
                 }
-                delta += deltaFixup
                 if delta < 4.0 {
-                    self.deltaLbl.text = "\(String(format: "%.1f",(delta)))"
+                    self.deltaLbl.text = "\(String(format: "%.1f",(self.delta)))"
                 }
                 else {
-                    self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
+                    self.deltaLbl.text = "\(String(format: "%.0f",(self.delta)))"
                 }
             }
             else {
@@ -620,15 +730,37 @@ class ViewController: UIViewController {
         let secStr = String(format: "%02d", dateComponents.second)
         self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
         self.startTime = NSDate()
-        self.deltaLbl.text = "--"
+        self.deltaLbl.text = "0.0"
         let userInfo = ["action":"reset"]
         NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
-        self.speedd = testSpeeds[destinationsIndex]
+//        self.speedd = testSpeeds[destinationsIndex]
+//        self.speedd = self.c
         self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
         let smStr = String(format: "%.2f", 0.00)
         self.startDistanceLbl.text = "\(smStr)"
-
+        self.splitLbl.text = "GoNow"
+        self.lateness = 0.00
     }
+    
+    func parseForTotal(content: [String]) -> Int{
+        var totalScore = 0
+        let delimiter = ","
+        for line in content {
+            print("line \(line)")
+            var values:[String] = []
+            if line != "" {
+                values = line.componentsSeparatedByString(delimiter)
+                // Put the values into the tuple and add it to the items array
+                let item = (time: values[0], om: values[1], latitude: values[2],longitude:values[3],course:values[4],speed:values[5],score:values[6])
+                print("\(item)")
+                print("Score: \(item.score)")
+                totalScore = totalScore + abs(Int(item.score)!)
+            }
+        }
+        print(totalScore)
+        return totalScore
+    }
+
 //    
 //    func httpGet(request: NSURLRequest!, callback: (String, String?) -> Void) {
 //        let session = NSURLSession.sharedSession()
@@ -660,11 +792,12 @@ class ViewController: UIViewController {
 //    }
 //    
 //    func parse(content: String) {
+//        var score = 0
 //        print(content)
 //        var gpsLocations = [CLLocation]()
 //        var omLocations = [Double]()
 //        let delimiter = ","
-//        //    var items:[(time:String, om:String, latitude: String,longitude: String,course: String,speed: String)]?
+////        var items:[(time:String, om:String, latitude: String,longitude: String,course: String,speed: String,score:String)]?
 //        let lines:[String] = content.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet()) as [String]
 //        print("lines count \(lines.count)")
 //        print("lines  \(lines)")
@@ -674,17 +807,20 @@ class ViewController: UIViewController {
 //            if line != "" {
 //                values = line.componentsSeparatedByString(delimiter)
 //                // Put the values into the tuple and add it to the items array
-//                let item = (time: values[0], om: values[1], latitude: values[2],longitude:values[3],course:values[4],speed:values[5])
+//                let item = (time: values[0], om: values[1], latitude: values[2],longitude:values[3],course:values[4],speed:values[5],score:values[6])
 //                print("\(item)")
 //                let location = CLLocation.init(latitude: Double(item.latitude)!, longitude: Double(item.longitude)!)
 //                gpsLocations.insert(location, atIndex: 0)
 //                print(gpsLocations)
 //                omLocations.insert(Double(item.om)!, atIndex: 0)
 //                print(omLocations)
+//                print("Score: \(item.score) \(score += score)")
+//                
+//                
 //            }
 //        }
 //    }
-    
+//    
 
 }
 

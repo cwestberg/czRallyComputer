@@ -12,26 +12,14 @@ class CZSegueViewController: UIViewController {
 
     @IBOutlet weak var controlNumberLbl: UILabel!
     
-    @IBOutlet weak var startDistanceLbl: UILabel!
-    @IBOutlet weak var speedLbl: UILabel!
-    
-    
     @IBOutlet weak var hourLbl: UILabel!
-    
     @IBOutlet weak var minuteLbl: UILabel!
-    
     @IBOutlet weak var timeUnitLbl: UILabel!
-    
-    
-//    @IBOutlet weak var controlNumberField: UITextField!
-//    @IBOutlet weak var speedField: UITextField!
-//    
-//    @IBOutlet weak var hourField: UITextField!
-//    @IBOutlet weak var minuteField: UITextField!
-//    @IBOutlet weak var timeUnitField: UITextField!
-//    
-//    @IBOutlet weak var startDistanceField: UITextField!
-//    
+    @IBOutlet weak var speedLbl: UILabel!
+   
+    @IBOutlet weak var startDistanceLbl: UILabel!
+
+   
     var controlNumber: Int!
     var speed: Int!
     var speedd: Double!
