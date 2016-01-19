@@ -994,21 +994,6 @@
                                     <action selector="speedButton:" destination="Nxh-Zj-WtI" eventType="touchUpInside" id="0kg-n4-Wo1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mql-E4-icS">
-                                <rect key="frame" x="275" y="193" width="63" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Save"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="72" y="244" width="63" height="30"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                    <rect key="frame" x="373" y="199" width="77" height="58"/>
-                                </variation>
-                                <connections>
-                                    <action selector="doneBtn:" destination="Nxh-Zj-WtI" eventType="touchUpInside" id="H1k-Iz-uD5"/>
-                                    <segue destination="7tv-aB-9ms" kind="unwind" unwindAction="unwindToViewController:" id="iIS-Up-Oxx"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tvs-Wt-ymh">
                                 <rect key="frame" x="29" y="159" width="82" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
@@ -1121,6 +1106,21 @@
                                     <action selector="hourButton:" destination="Nxh-Zj-WtI" eventType="touchUpInside" id="ARa-SO-mvl"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mql-E4-icS">
+                                <rect key="frame" x="275" y="193" width="63" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Save"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="72" y="244" width="63" height="30"/>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
+                                    <rect key="frame" x="373" y="199" width="77" height="58"/>
+                                </variation>
+                                <connections>
+                                    <action selector="doneBtn:" destination="Nxh-Zj-WtI" eventType="touchUpInside" id="H1k-Iz-uD5"/>
+                                    <segue destination="7tv-aB-9ms" kind="unwind" unwindAction="unwindToViewController:" id="iIS-Up-Oxx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -1145,7 +1145,7 @@
                                 <variation key="heightClass=compact" constant="22"/>
                             </constraint>
                             <constraint firstItem="Mql-E4-icS" firstAttribute="top" secondItem="w6x-jr-WJL" secondAttribute="bottom" constant="150" id="Pqz-K0-zZj">
-                                <variation key="heightClass=compact" constant="129"/>
+                                <variation key="heightClass=compact" constant="150"/>
                             </constraint>
                             <constraint firstItem="eT6-Em-z5b" firstAttribute="trailing" secondItem="FAm-2i-e05" secondAttribute="trailing" id="Q6X-gX-KQf"/>
                             <constraint firstItem="jVQ-00-9nV" firstAttribute="baseline" secondItem="Tvs-Wt-ymh" secondAttribute="firstBaseline" id="QZW-fm-h6H"/>
