@@ -326,7 +326,13 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         var userInfo = notification.userInfo
 //        print("setMileage notification: \(userInfo!)")
         
-        let newMileage = userInfo!["newMileage"] as! Float64
+        guard let newMileageString = userInfo!["newMileage"]
+            else {
+                print("nil value, guard used")
+                return
+        }
+        let newMileage = newMileageString as! Double
+//        let newMileage = userInfo!["newMileage"] as! Float64
         let newMilesAsKM = newMileage * 1.60934
         self.meters = newMilesAsKM * 1000
         let distanceInMiles:Float64 = ((self.meters * 0.000621371))

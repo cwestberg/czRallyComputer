@@ -55,7 +55,8 @@ class ViewController: UIViewController {
     var latenessInCents = 0.0
     var carNumber = 0
     var delta = 0.0
-    
+    var ocFound = false
+    var ocTime = 0.0
     var testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
 
 
@@ -128,7 +129,6 @@ class ViewController: UIViewController {
 
     }
    
-
     @IBAction func splitBtn(sender: AnyObject) {
 //        print("split btn")
         let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(self.course!),\(self.speedd!),\(self.deltaString())"
@@ -142,23 +142,24 @@ class ViewController: UIViewController {
     
     func splitActions() {
 //        called when checkpoint found
-//        self.deltaLbl.text!
         let courseString = String(format: "%.0f",self.course!)
-        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(courseString),\(self.speedd!),\(self.deltaString())"
-        self.splits.insert(splitString, atIndex: 0)
-//        self.splitLbl.text = "\(self.todLbl.text!)"
+
+        var score = self.deltaString()
 
         if offCourse {
-//            lateness = lateness + self.delta
             print("sa oc \(lateness)")
+            score = String(10)
         }
         else {
             if delta < 0.0 {
-                lateness = lateness + fabs(self.delta)
+                print(fabs(self.delta))
+                lateness = lateness + fabs(self.delta * 0.01)
+//                seconds, issue with cents!!
             }
             
         }
-//        lateness = lateness + self.delta
+        let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(courseString),\(self.speedd!),\(score)"
+        self.splits.insert(splitString, atIndex: 0)
 
     }
     
@@ -438,52 +439,30 @@ class ViewController: UIViewController {
             if currentOM < destOM {
                 approachState = "decreasing"
             }
-//            && destinationDistance < 80.0
-//            print(destOM)
-//            var debugDest = 0.74
-            if currentOM >= 1.00 {
-//                print("debug")
-                destinationDistance = 10.0
-            }
+//Force finding
+//            speedd = 75.0
+//            if currentOM >= 1.00 {
+//                destinationDistance = 10.0
+//            }
             if currentOM > destOM && destinationDistance < 80.0 && offCourse == true {
                 // Found TP after OC
                 print("Found TP after OC")
+                ocFound = true
                 self.splitLbl.text = "Found \(destinationsIndex)"
-
-//                let nm = self.destinationMileages[destinationsIndex]
-//                NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
 //                correct using correct mileage - 80m for early find (.02-05?)
                 let correctedOM = destinationMileages[destinationsIndex] - 0.04
                 self.updateMiles(correctedOM)
-                print(lateness)
-//                let calcTimeToHere = correctedOM * 60/testSpeeds[destinationsIndex]
-//                let ocSeconds = ocAcumulator(correctedOM,calcSpeed: testSpeeds[destinationsIndex])
-//                lateness = lateness + ocSeconds
-//                print(lateness)
-                if delta > 0.0 {delta = delta * -1.0}
                 self.splitActions()
                 offCourse = false
-
                 destinationsIndex += 1
-
             }
             else if currentOM >= destOM && destinationDistance < 80.0 {
                 // Normal on course
                 self.splitActions()
                 self.splitLbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(self.deltaString())"
                 approachState = "increasing"
-//                
-//                self.speedd = testSpeeds[destinationsIndex]
-//                self.speedLbl.text = String(format: "%0.1f", self.speedd!)
-//                print("\(self.speedd) \(testSpeeds[destinationsIndex])")
+//            NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
                 
-//                off course
-//                if currentOM + 0.20 > destOM && offCourse == true {
-//                    let nm = self.destinationMileages[destinationsIndex]
-//                    let userInfo = ["newMileage":nm]
-//                    NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
-//                    lateness = lateness + Double(deltaLbl.text!)!
-//                }
                 destinationsIndex += 1
             }
             else if currentOM > destOM && destinationDistance > 160.0 {
@@ -533,20 +512,20 @@ class ViewController: UIViewController {
         }
     }
 
-    func ocAcumulator(calcDistance: Double, calcSpeed: Double) -> Double{
-        let calendar = NSCalendar.currentCalendar()
-        let calcFactor = 60.0/calcSpeed
-        
-        //              Simple Accumulator
-        let calcTime = calcDistance * calcFactor
-        let ctcSecs = (calcTime) * 60
-        print("ctcSecs \(ctcSecs)")
-        let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])
-        print(ctcDate)
-        delta = ctcDate!.timeIntervalSinceDate(NSDate()) * -1.0
-        
-        return ctcSecs
-    }
+//    func ocAcumulator(calcDistance: Double, calcSpeed: Double) -> Double{
+//        let calendar = NSCalendar.currentCalendar()
+//        let calcFactor = 60.0/calcSpeed
+//        
+//        //              Simple Accumulator
+//        let calcTime = calcDistance * calcFactor
+//        let ctcSecs = (calcTime) * 60
+//        print("ctcSecs \(ctcSecs)")
+//        let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])
+//        print(ctcDate)
+//        delta = ctcDate!.timeIntervalSinceDate(NSDate()) * -1.0
+//        
+//        return ctcSecs
+//    }
     
     func updateTimeLabel() {
         let currentDate = NSDate()
@@ -588,26 +567,44 @@ class ViewController: UIViewController {
 
                 //              Simple Accumulator
                 ctc = calcDistance * factor
-//                
-//                if lateness < 0.0 {
-//                    lateness = fabs(lateness)
-//                }
-                if lateness > 0.00 {
-//                    print("ctc before \(ctc!)")
-//                    print("lateness \(lateness)")
-                    latenessInCents = lateness * 0.0166667
-//                    print(latenessInCents)
-                    ctc = ctc! + latenessInCents
-//                    print("ctc after add \(ctc!)")
-//                    print("delta \(delta)")
+                if destinationsIndex < destinationMileages.count  {
+                    if calcDistance > destinationMileages[destinationsIndex] + 0.05 {
+                        // ocTime it the calculated time to be where you are given you were off course
+                        // would need to compare with actual time to see how late you are in order to adjust lateness fully
+                        let ocDist = calcDistance - destinationMileages[destinationsIndex]
+                            ocTime = ocDist * factor
+                        print("calc thinks you are off course \(ocTime)")
+                    }
                     
                 }
-//                ctc = ctc! + latenessInCents
-//                print(ctc!)
-//                ctc not used? code duplicated below?
-//                ctc += lateness
-//                let ctcSecs = (calcDistance * factor) * 60
+                if ocFound == true {
+                    print("oc found in calc \(ocTime)")
+                    let actualTimeInterval = NSDate().timeIntervalSinceDate(startTime!)
+                    //If off course and late
+                    if actualTimeInterval > ((ctc)! * 60) {
+                        print(actualTimeInterval)
+                        print(ctc)
+                        print((ctc)! * 60)
+                        ocTime = (actualTimeInterval - ((ctc)! * 60))/60.0
+                        print(ocTime)
+                    }
+                    ocFound = false
+                    lateness = lateness + ocTime
+                    
+                    ocTime = 0.0
+                    print(lateness)
+                    print(ctc)
+                }
+                if lateness > 0.00 {
+//                    latenessInCents = lateness * 0.0166667
+                    latenessInCents = lateness * 1.66667
+                    ctc = ctc! + latenessInCents
+                    print("lateness \(lateness) \(latenessInCents)")
+                }
+print(ctc)
                 let ctcSecs = (ctc)! * 60
+                print("ctcSecs \(ctcSecs)")
+
                 let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
 
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
