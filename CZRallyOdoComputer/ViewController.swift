@@ -409,9 +409,7 @@ class ViewController: UIViewController {
 //    ---------------------------------------
     func workerlessControl(notification:NSNotification) {
         let userInfo = notification.userInfo
-//        if let locs = userInfo?["locations"] {
-//            print("locations: \(locs)")
-//        }
+
         
         if destinationsIndex >= destinations.count {
             let total = parseForTotal(self.splits)
@@ -440,7 +438,7 @@ class ViewController: UIViewController {
                 approachState = "decreasing"
             }
 //Force finding
-//            speedd = 75.0
+//            speedd = 100.0
 //            if currentOM >= 1.00 {
 //                destinationDistance = 10.0
 //            }
@@ -466,7 +464,7 @@ class ViewController: UIViewController {
                 destinationsIndex += 1
             }
             else if currentOM > destOM && destinationDistance > 160.0 {
-//                self.splitActions()
+                // we are off course
                 self.offCourse = true
                 self.splitLbl.text = "Off Course!"
             }
@@ -511,21 +509,6 @@ class ViewController: UIViewController {
             previousDestinationDistanceGPS = curentLocation
         }
     }
-
-//    func ocAcumulator(calcDistance: Double, calcSpeed: Double) -> Double{
-//        let calendar = NSCalendar.currentCalendar()
-//        let calcFactor = 60.0/calcSpeed
-//        
-//        //              Simple Accumulator
-//        let calcTime = calcDistance * calcFactor
-//        let ctcSecs = (calcTime) * 60
-//        print("ctcSecs \(ctcSecs)")
-//        let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])
-//        print(ctcDate)
-//        delta = ctcDate!.timeIntervalSinceDate(NSDate()) * -1.0
-//        
-//        return ctcSecs
-//    }
     
     func updateTimeLabel() {
         let currentDate = NSDate()
@@ -567,6 +550,7 @@ class ViewController: UIViewController {
 
                 //              Simple Accumulator
                 ctc = calcDistance * factor
+                
                 if destinationsIndex < destinationMileages.count  {
                     if calcDistance > destinationMileages[destinationsIndex] + 0.05 {
                         // ocTime it the calculated time to be where you are given you were off course
@@ -578,18 +562,18 @@ class ViewController: UIViewController {
                     
                 }
                 if ocFound == true {
-                    print("oc found in calc \(ocTime)")
+                    print("oc found in calc \(ocTime) \(calcDistance)")
                     let actualTimeInterval = NSDate().timeIntervalSinceDate(startTime!)
                     //If off course and late
                     if actualTimeInterval > ((ctc)! * 60) {
                         print(actualTimeInterval)
                         print(ctc)
                         print((ctc)! * 60)
-                        ocTime = (actualTimeInterval - ((ctc)! * 60))/60.0
+                        ocTime = (actualTimeInterval - ((ctc)! * 60))
                         print(ocTime)
                     }
                     ocFound = false
-                    lateness = lateness + ocTime
+                    lateness = lateness + ocTime/100.0
                     
                     ocTime = 0.0
                     print(lateness)
