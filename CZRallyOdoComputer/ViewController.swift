@@ -95,7 +95,8 @@ class ViewController: UIViewController {
         self.goNow()
     }
     @IBAction func nextBtn(sender: AnyObject) {
-        destinationsIndex += 1
+//        destinationsIndex += 1
+        self.nextTP()
     }
 //    @IBAction func testBtn(sender: AnyObject) {
 //        let userInfo = ["newMileage":self.destinationMileages[destinationsIndex] - 0.02]
@@ -457,7 +458,8 @@ class ViewController: UIViewController {
                 self.updateMiles(correctedOM)
                 self.splitActions()
                 offCourse = false
-                destinationsIndex += 1
+//                destinationsIndex += 1
+                self.nextTP()
             }
             else if currentOM >= destOM && destinationDistance < 80.0 {
                 // Normal on course
@@ -466,7 +468,8 @@ class ViewController: UIViewController {
                 approachState = "increasing"
 //            NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
                 
-                destinationsIndex += 1
+//                destinationsIndex += 1
+                self.nextTP()
             }
             else if currentOM > destOM && destinationDistance > 160.0 {
                 // we are off course
@@ -482,7 +485,8 @@ class ViewController: UIViewController {
                     self.splitActions()
                     self.splitLbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
                     approachState = "increasing"
-                    destinationsIndex += 1
+//                    destinationsIndex += 1
+                    self.nextTP()
                     self.splitLbl.text = "Found by GPS"
 
                 }
