@@ -58,6 +58,7 @@ class ViewController: UIViewController {
     var ocFound = false
     var ocTime = 0.0
     var testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
+    var incrementWhenFound = true
 
 
     
@@ -459,7 +460,9 @@ class ViewController: UIViewController {
                 self.splitActions()
                 offCourse = false
 //                destinationsIndex += 1
-                self.nextTP()
+                if incrementWhenFound == true {
+                    self.nextTP()
+                }
             }
             else if currentOM >= destOM && destinationDistance < 80.0 {
                 // Normal on course
@@ -469,7 +472,9 @@ class ViewController: UIViewController {
 //            NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
                 
 //                destinationsIndex += 1
-                self.nextTP()
+                if incrementWhenFound == true {
+                    self.nextTP()
+                }
             }
             else if currentOM > destOM && destinationDistance > 160.0 {
                 // we are off course
@@ -486,7 +491,9 @@ class ViewController: UIViewController {
                     self.splitLbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
                     approachState = "increasing"
 //                    destinationsIndex += 1
-                    self.nextTP()
+                    if incrementWhenFound == true {
+                        self.nextTP()
+                    }
                     self.splitLbl.text = "Found by GPS"
 
                 }
@@ -729,6 +736,13 @@ print(ctc)
         self.startDistanceLbl.text = "\(smStr)"
         self.splitLbl.text = "GoNow"
         self.lateness = 0.00
+        if destinationsIndex > 0 {
+            if incrementWhenFound == false {
+                self.nextTP()
+            }
+            
+        }
+        
     }
     
     func parseForTotal(content: [String]) -> Int{
