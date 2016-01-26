@@ -57,9 +57,7 @@ class SplitsSegueViewController: UIViewController,UITableViewDelegate, UITableVi
         
         //Add a text field
         importSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
-            textField.textColor = UIColor.blueColor()
-            textField.keyboardType = UIKeyboardType.DecimalPad
-            
+            textField.textColor = UIColor.blueColor()            
         }
         
         //Present the AlertController

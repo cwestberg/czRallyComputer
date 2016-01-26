@@ -361,6 +361,11 @@ class ViewController: UIViewController {
     }
 
 //    Updating Distance & Time
+    
+    func nextTP() {
+        destinationsIndex += 1
+    }
+    
     func updateMiles(miles: Double) {
         
         self.distanceLbl.text = String(format: "%.2f", miles)
@@ -527,7 +532,6 @@ class ViewController: UIViewController {
         
         switch timeUnit {
         case "seconds":
-//            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString)"
             todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString).\(nanoString)"
 
         case "cents":
@@ -566,24 +570,24 @@ class ViewController: UIViewController {
                     let actualTimeInterval = NSDate().timeIntervalSinceDate(startTime!)
                     //If off course and late
                     if actualTimeInterval > ((ctc)! * 60) {
-                        print(actualTimeInterval)
-                        print(ctc)
-                        print((ctc)! * 60)
+//                        print(actualTimeInterval)
+//                        print(ctc)
+//                        print((ctc)! * 60)
                         ocTime = (actualTimeInterval - ((ctc)! * 60))
-                        print(ocTime)
+//                        print(ocTime)
                     }
                     ocFound = false
                     lateness = lateness + ocTime/100.0
                     
                     ocTime = 0.0
-                    print(lateness)
-                    print(ctc)
+//                    print(lateness)
+//                    print(ctc)
                 }
                 if lateness > 0.00 {
 //                    latenessInCents = lateness * 0.0166667
                     latenessInCents = lateness * 1.66667
                     ctc = ctc! + latenessInCents
-                    print("lateness \(lateness) \(latenessInCents)")
+//                    print("lateness \(lateness) \(latenessInCents)")
                 }
 print(ctc)
                 let ctcSecs = (ctc)! * 60

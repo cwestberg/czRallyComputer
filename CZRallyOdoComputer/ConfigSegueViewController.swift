@@ -122,7 +122,10 @@ class ConfigSegueViewController: UIViewController {
     
     func loadLocations(rallyName: String) {
         let predicate = NSPredicate(format: "rallyName = %@", rallyName)
+        let sort = NSSortDescriptor(key: "sequence", ascending: false)
         let query = CKQuery(recordType: "RallyLocation", predicate: predicate)
+        query.sortDescriptors = [sort]
+
         publicDatabase?.performQuery(query, inZoneWithID: nil,
             completionHandler: (
                 {results, error in
