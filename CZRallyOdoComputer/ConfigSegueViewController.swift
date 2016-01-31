@@ -75,7 +75,6 @@ class ConfigSegueViewController: UIViewController {
         //Add a text field
         importSheetController.addTextFieldWithConfigurationHandler { textField -> Void in
             textField.textColor = UIColor.blueColor()
-            textField.keyboardType = UIKeyboardType.DecimalPad
             
         }
         
@@ -122,7 +121,7 @@ class ConfigSegueViewController: UIViewController {
     
     func loadLocations(rallyName: String) {
         let predicate = NSPredicate(format: "rallyName = %@", rallyName)
-        let sort = NSSortDescriptor(key: "sequence", ascending: false)
+        let sort = NSSortDescriptor(key: "sequence", ascending: true)
         let query = CKQuery(recordType: "RallyLocation", predicate: predicate)
         query.sortDescriptors = [sort]
 
@@ -134,6 +133,7 @@ class ConfigSegueViewController: UIViewController {
                 } else {
                     if results!.count > 0 {
                         print(results!.count)
+                        print(results!)
                         for record in results!{
 //                            print(record)
                             dispatch_async(dispatch_get_main_queue()) {
@@ -156,6 +156,7 @@ class ConfigSegueViewController: UIViewController {
             }
         )
     )
+        print(self.destinations)
     }
    
     func dismissKeyboard() {

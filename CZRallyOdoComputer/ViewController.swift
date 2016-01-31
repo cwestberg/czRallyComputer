@@ -20,10 +20,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var startTimeLbl: UILabel!
     @IBOutlet weak var deltaLbl: UILabel!
     @IBOutlet weak var startDistanceLbl: UILabel!
-    
- 
-    
     @IBOutlet weak var destinationDistanceLbl: UILabel!
+    
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
@@ -57,8 +55,10 @@ class ViewController: UIViewController {
     var delta = 0.0
     var ocFound = false
     var ocTime = 0.0
-    var testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
-    var incrementWhenFound = true
+//    var testSpeeds = [33.0,40.0,30.0,30.0,30.0,30.0,35.0,35.0,30.0,30.0]
+    var testSpeeds = [Double]()
+    var incrementWhenFound = false
+    var tpStatus = "odoCheck"
 
 
     
@@ -82,8 +82,8 @@ class ViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
         
-        self.loadTestData()
-        self.loadMileages()
+//        self.loadTestData()
+//        self.loadMileages()
     }
 
     override func didReceiveMemoryWarning() {
@@ -149,12 +149,12 @@ class ViewController: UIViewController {
         var score = self.deltaString()
 
         if offCourse {
-            print("sa oc \(lateness)")
+//            print("sa oc \(lateness)")
             score = String(10)
         }
         else {
             if delta < 0.0 {
-                print(fabs(self.delta))
+//                print(fabs(self.delta))
                 lateness = lateness + fabs(self.delta * 0.01)
 //                seconds, issue with cents!!
             }
@@ -174,6 +174,7 @@ class ViewController: UIViewController {
         let nm = selectedStartDistance
         let userInfo = ["newMileage":nm]
         NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+        self.tpStatus = "seek"
     }
     
 //    Persistence
@@ -257,7 +258,7 @@ class ViewController: UIViewController {
         do
         {
             let results = try managedContext.executeFetchRequest(fetchRequest)
-            print("results \(results.count)")
+//            print("results \(results.count)")
             for managedObject in results
             {
                 let managedObjectData:NSManagedObject = managedObject as! NSManagedObject
@@ -345,7 +346,7 @@ class ViewController: UIViewController {
                 destinationVC.timeUnit = self.timeUnit
             }
         case "configSegue":
-            print("config segue")
+//            print("config segue")
             if let configVC = segue.destinationViewController as? ConfigSegueViewController{
                 configVC.factor = self.factor
                 configVC.timeUnit = self.timeUnit
@@ -423,7 +424,8 @@ class ViewController: UIViewController {
 //            Done
             self.splitLbl.text = "\(destinations.count) CPs \(total)"
         }
-        else {
+        else if self.tpStatus == "seek"
+        {
             let curentLocation = userInfo!["currentLocation"]! as! CLLocation
             let destinationGPS = destinations[destinationsIndex]
             var destinationDistance = Double?()
@@ -431,6 +433,7 @@ class ViewController: UIViewController {
             destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
 
             let destinationDistanceString = String(format: "%.2f", destinationDistance!)
+
             self.destinationDistanceLbl.text = destinationDistanceString
             
             let zone = 20.0
@@ -453,6 +456,7 @@ class ViewController: UIViewController {
                 // Found TP after OC
                 print("Found TP after OC")
                 ocFound = true
+                self.tpStatus = "found"
                 self.splitLbl.text = "Found \(destinationsIndex)"
 //                correct using correct mileage - 80m for early find (.02-05?)
                 let correctedOM = destinationMileages[destinationsIndex] - 0.04
@@ -462,21 +466,30 @@ class ViewController: UIViewController {
 //                destinationsIndex += 1
                 if incrementWhenFound == true {
                     self.nextTP()
+                    self.tpStatus = "seek"
+                } else {
+                    self.tpStatus = "found"
                 }
             }
             else if currentOM >= destOM && destinationDistance < 80.0 {
                 // Normal on course
                 self.splitActions()
                 self.splitLbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(self.deltaString())"
-                approachState = "increasing"
 //            NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+                approachState = "increasing"
                 
 //                destinationsIndex += 1
                 if incrementWhenFound == true {
                     self.nextTP()
+                    self.tpStatus = "seek"
+                } else {
+                    self.tpStatus = "found"
+                    self.destinationDistanceLbl.text = tpStatus
+
                 }
             }
-            else if currentOM > destOM && destinationDistance > 160.0 {
+            else if currentOM > destOM && destinationDistance > 160.0 && incrementWhenFound == true && self.tpStatus == "seek"
+            {
                 // we are off course
                 self.offCourse = true
                 self.splitLbl.text = "Off Course!"
@@ -572,12 +585,12 @@ class ViewController: UIViewController {
                         // would need to compare with actual time to see how late you are in order to adjust lateness fully
                         let ocDist = calcDistance - destinationMileages[destinationsIndex]
                             ocTime = ocDist * factor
-                        print("calc thinks you are off course \(ocTime)")
+//                        print("calc thinks you are off course \(ocTime)")
                     }
                     
                 }
                 if ocFound == true {
-                    print("oc found in calc \(ocTime) \(calcDistance)")
+//                    print("oc found in calc \(ocTime) \(calcDistance)")
                     let actualTimeInterval = NSDate().timeIntervalSinceDate(startTime!)
                     //If off course and late
                     if actualTimeInterval > ((ctc)! * 60) {
@@ -600,9 +613,9 @@ class ViewController: UIViewController {
                     ctc = ctc! + latenessInCents
 //                    print("lateness \(lateness) \(latenessInCents)")
                 }
-print(ctc)
+//                print(ctc)
                 let ctcSecs = (ctc)! * 60
-                print("ctcSecs \(ctcSecs)")
+//                print("ctcSecs \(ctcSecs)")
 
                 let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
 
@@ -717,8 +730,6 @@ print(ctc)
     }
     
     func goNow() {
-        
-        
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
         
@@ -730,18 +741,32 @@ print(ctc)
         let userInfo = ["action":"reset"]
         NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
 //        self.speedd = testSpeeds[destinationsIndex]
-//        self.speedd = self.c
-        self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
+//        self.speedd = self.testSpeeds[destinationsIndex]
+//        self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
         let smStr = String(format: "%.2f", 0.00)
         self.startDistanceLbl.text = "\(smStr)"
-        self.splitLbl.text = "GoNow"
+//        self.splitLbl.text = "GoNow"
         self.lateness = 0.00
-        if destinationsIndex > 0 {
-            if incrementWhenFound == false {
-                self.nextTP()
-            }
-            
+        
+        switch tpStatus
+        {
+        case "odoCheck":
+            break
+        case "found":
+            self.nextTP()
+        case "seek":
+            break
+        default:
+            break;
         }
+        self.tpStatus = "seek"
+        self.splitLbl.text = "GoNow \(tpStatus) \(destinationsIndex)"
+        if testSpeeds.count > 0 {
+            self.speedd = self.testSpeeds[destinationsIndex]
+            self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
+        }
+        // otherwise stay at current speed
+     
         
     }
     
@@ -749,18 +774,18 @@ print(ctc)
         var totalScore = 0
         let delimiter = ","
         for line in content {
-            print("line \(line)")
+//            print("line \(line)")
             var values:[String] = []
             if line != "" {
                 values = line.componentsSeparatedByString(delimiter)
                 // Put the values into the tuple and add it to the items array
                 let item = (time: values[0], om: values[1], latitude: values[2],longitude:values[3],course:values[4],speed:values[5],score:values[6])
-                print("\(item)")
-                print("Score: \(item.score)")
+//                print("\(item)")
+//                print("Score: \(item.score)")
                 totalScore = totalScore + abs(Int(item.score)!)
             }
         }
-        print(totalScore)
+//        print(totalScore)
         return totalScore
     }
 
