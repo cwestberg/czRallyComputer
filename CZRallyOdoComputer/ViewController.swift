@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import CoreLocation
+import GameController
 
 
 class ViewController: UIViewController {
@@ -21,12 +22,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var deltaLbl: UILabel!
     @IBOutlet weak var startDistanceLbl: UILabel!
     @IBOutlet weak var destinationDistanceLbl: UILabel!
+    @IBOutlet weak var splitLbl: UILabel!
     
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
     var startDistance: Double?
-    @IBOutlet weak var splitLbl: UILabel!
     var controlNumber: Int?
     var startTime: NSDate?
     var todTimer = NSTimer()
@@ -82,6 +83,8 @@ class ViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "controllerDidConnect:", name: "GCControllerDidConnectNotification", object: nil)
+        
 //        self.loadTestData()
 //        self.loadMileages()
     }
@@ -90,19 +93,143 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
+
+    func add10ToStartMinute(){
+        let calendar = NSCalendar.currentCalendar()
+        var dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: self.startTime!)
+        let secondsToAdd = 10
+        let timePlus10 = self.startTime!.dateByAddingTimeInterval(Double(secondsToAdd))
+        dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: timePlus10)
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        let secStr = String(format: "%02d", dateComponents.second)
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        
+        self.startTime = timePlus10
+    }
+    
+    func roundStartDateToNextMinute(){
+        let calendar = NSCalendar.currentCalendar()
+        var dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: self.startTime!)
+        let secondsToAdd = 60 - dateComponents.second
+        let timePlusOneMinute = self.startTime!.dateByAddingTimeInterval(Double(secondsToAdd))
+        dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: timePlusOneMinute)
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        let secStr = "00"
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        self.startTime = timePlusOneMinute
+    }
+//    Shortcuts
+
+    @IBAction func aBtn(sender: AnyObject) {
+        self.aShortcut()
+    }
+    
+    @IBAction func bBtn(sender: AnyObject) {
+        self.add10ToStartMinute()
+    }
+
+    @IBAction func xBtn(sender: AnyObject) {
+        self.xShortcut()
+    }
+    
+    func aShortcut() {
+        print("buttonA")
+        // set start mileage to /0.00
+        let userInfo = ["action":"reset"]
+        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        self.selectedStartDistance = 0.00
+        // get current time
+        // add one minute
+        // make it start time
+        let calendar = NSCalendar.currentCalendar()
+        var dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
+        let secondsToAdd = 60 - dateComponents.second
+        
+        let timePlusOneMinute = NSDate().dateByAddingTimeInterval(Double(secondsToAdd))
+        dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: timePlusOneMinute)
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        let secStr = "00"
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        
+        self.startTime = timePlusOneMinute
+        print(self.startTime!)
+    }
+    
+    func xShortcut(){
+        //        let controllerSpeedChoices = [60.0,75.0,85.0]
+        //        let controllerSpeedChoices = [24.0,30.0.32.6,36.0,40.0,45.0]
+        let controllerSpeedChoices = [30.0,32.6,36.0]
+        var speedIndex = controllerSpeedChoices.indexOf(self.speedd!)
+        if speedIndex == nil {
+            speedIndex = 0
+        }
+        print(speedIndex!)
+        if speedIndex == controllerSpeedChoices.count - 1 {
+            speedIndex = 0
+        }
+        else {
+            speedIndex = speedIndex! + 1
+        }
+        print(controllerSpeedChoices[speedIndex!])
+        self.speedd = controllerSpeedChoices[speedIndex!]
+        self.speedLbl.text = String(format: "%.1f",self.speedd! as Float64)
+    }
+//    Game Conroller
+    func controllerDidConnect(notification: NSNotification) {
+        
+        let controller = notification.object as! GCController
+        print("controller is \(controller)")
+        print("game on ")
+        print("\(controller.gamepad!.buttonA.pressed)")
+
+        controller.gamepad?.buttonA.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonA \(value)")
+                self.aShortcut()
+            }
+        }
+        controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonB")
+                self.add10ToStartMinute()
+            }
+        }
+        controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonX")
+                self.xShortcut()
+            }
+
+        }
+        controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("buttonY")
+                // add one minute
+                // make it start time
+            }
+        }
+        controller.gamepad?.rightShoulder.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed {
+                print("rightShoulder")
+                self.splitBtn("now")
+            }
+        }
+    }
+
+
 //    Actions
 
     @IBAction func goNowBtn(sender: AnyObject) {
         self.goNow()
     }
-    @IBAction func nextBtn(sender: AnyObject) {
-//        destinationsIndex += 1
-        self.nextTP()
-    }
-//    @IBAction func testBtn(sender: AnyObject) {
-//        let userInfo = ["newMileage":self.destinationMileages[destinationsIndex] - 0.02]
-//        NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+//    @IBAction func nextBtn(sender: AnyObject) {
+//        self.nextTP()
 //    }
+
     @IBAction func resetBtn(sender: AnyObject) {
         
         //print("Set Factor Btn pushed")
@@ -417,9 +544,11 @@ class ViewController: UIViewController {
 //    ---------------------------------------
     func workerlessControl(notification:NSNotification) {
         let userInfo = notification.userInfo
-
+        if destinations.count == 0 {
+            return
+        }
         
-        if destinationsIndex >= destinations.count {
+        if destinationsIndex >= destinations.count && destinations.count != 0 {
             let total = parseForTotal(self.splits)
 //            Done
             self.splitLbl.text = "\(destinations.count) CPs \(total)"

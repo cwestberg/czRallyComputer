@@ -163,6 +163,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func splitOM(notification:NSNotification) -> Void {
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
 //        print("splitOM")
         let userInfo = [
             "miles": self.miles,
@@ -229,7 +233,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func plusOne(notification:NSNotification) -> Void {
-        
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
         let updateChoices = self.selectedCounters
 //        print("plusOne \(updateChoices)")
         
@@ -266,7 +273,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func minusOne(notification:NSNotification) -> Void {
-        
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
         let updateChoices = self.selectedCounters
 //        print("plusOne /(updateChoices)")
         
@@ -357,7 +367,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     }
     
     func makeLocationNotification() -> Void {
-        
+        guard let _ = self.fromLocation.last
+            else {
+                return
+        }
         let userInfo = [
             "currentLocation":self.currentLocations.last!,
             "course":180.0, // Fake
