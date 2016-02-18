@@ -261,6 +261,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.imKM = (self.imMeters/1000)
         
         let userInfo = [
+            "timestamp":NSDate(),
+            "course":0.0,
             "miles":miles,
             "imMiles":self.imMiles,
             "km":self.km,
@@ -308,6 +310,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.imKM = (self.imMeters/1000)
         
         let userInfo = [
+            "timestamp":NSDate(),
+            "course":0.0,
             "miles":miles,
             "imMiles":self.imMiles,
             "km":self.km,

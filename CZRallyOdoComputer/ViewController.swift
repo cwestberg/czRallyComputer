@@ -27,6 +27,7 @@ class ViewController: UIViewController {
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
+    var ctcDate: NSDate?
     var startDistance: Double?
     var controlNumber: Int?
     var startTime: NSDate?
@@ -123,8 +124,12 @@ class ViewController: UIViewController {
     }
 //    Shortcuts
 
+    @IBAction func toggleSpeedBtn(sender: AnyObject) {
+        self.speedShortcut()
+    }
+
     @IBAction func aBtn(sender: AnyObject) {
-        self.aShortcut()
+        self.nextMinuteShortcut()
     }
     
     @IBAction func bBtn(sender: AnyObject) {
@@ -132,10 +137,52 @@ class ViewController: UIViewController {
     }
 
     @IBAction func xBtn(sender: AnyObject) {
-        self.xShortcut()
+        self.setStartTimeToCTC()
     }
     
-    func aShortcut() {
+    @IBAction func yBtn(sender: AnyObject) {
+        self.setStartToCurrentMinute()
+    }
+    func setStartTimeToCTC() {
+        print(self.ctcDate!)
+        let calendar = NSCalendar.currentCalendar()
+        let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: self.ctcDate!)
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        let secStr = String(format: "%02d", dateComponents.second)
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        self.startDistance = Double(self.distanceLbl.text!)
+        self.selectedStartDistance =  self.startDistance!
+        self.startTime = self.ctcDate!
+        self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
+
+        print(self.startTime!)
+        print(self.startDistance!)
+    }
+    
+    func setStartToCurrentMinute() {
+        // set start mileage to /0.00
+        let userInfo = ["action":"reset"]
+        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        self.selectedStartDistance = 0.00
+        // get current time
+
+        let calendar = NSCalendar.currentCalendar()
+        var dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
+        let secondsToSubtract = Double(dateComponents.second * -1)
+        
+        let dateForCurrentMinute = NSDate().dateByAddingTimeInterval(Double(secondsToSubtract))
+        dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: dateForCurrentMinute)
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        let secStr = "00"
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        
+        self.startTime = dateForCurrentMinute
+        print(self.startTime!)
+    }
+    
+    func nextMinuteShortcut() {
         print("buttonA")
         // set start mileage to /0.00
         let userInfo = ["action":"reset"]
@@ -159,10 +206,10 @@ class ViewController: UIViewController {
         print(self.startTime!)
     }
     
-    func xShortcut(){
+    func speedShortcut(){
         //        let controllerSpeedChoices = [60.0,75.0,85.0]
-        //        let controllerSpeedChoices = [24.0,30.0.32.6,36.0,40.0,45.0]
-        let controllerSpeedChoices = [30.0,32.6,36.0]
+        let controllerSpeedChoices = [24.0,30.0,36.0,40.0,45.0,50.0,60.0]
+//        let controllerSpeedChoices = [30.0,32.6,36.0]
         var speedIndex = controllerSpeedChoices.indexOf(self.speedd!)
         if speedIndex == nil {
             speedIndex = 0
@@ -189,7 +236,7 @@ class ViewController: UIViewController {
         controller.gamepad?.buttonA.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonA \(value)")
-                self.aShortcut()
+                self.nextMinuteShortcut()
             }
         }
         controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
@@ -201,13 +248,14 @@ class ViewController: UIViewController {
         controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonX")
-                self.xShortcut()
+                self.setStartTimeToCTC()
             }
 
         }
         controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonY")
+                self.setStartToCurrentMinute()
                 // add one minute
                 // make it start time
             }
@@ -218,6 +266,38 @@ class ViewController: UIViewController {
                 self.splitBtn("now")
             }
         }
+        controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed && value > 0.2 {
+                print("dpad.left")
+                self.speedShortcut()
+            }
+        }
+        
+        controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed && value > 0.2 {
+                print("dpad.right \(value)")
+                self.speedShortcut()
+            }
+        }
+        
+        controller.gamepad?.dpad.up.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed && value > 0.2 {
+                print("dpad.up \(value)")
+                let userInfo = [
+                    "action":"plusOne"]
+                NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+            }
+        }
+        
+        controller.gamepad?.dpad.down.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
+            if pressed && value > 0.2 {
+                print("dpad.down")
+                let userInfo = [
+                    "action":"minusOne"]
+                NSNotificationCenter.defaultCenter().postNotificationName("MinusOne", object: nil, userInfo: userInfo)
+            }
+        }
+
     }
 
 
@@ -746,7 +826,7 @@ class ViewController: UIViewController {
                 let ctcSecs = (ctc)! * 60
 //                print("ctcSecs \(ctcSecs)")
 
-                let ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
+                ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
 
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
 //                var delta = 0.0
