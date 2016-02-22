@@ -124,6 +124,12 @@ class ViewController: UIViewController {
     }
 //    Shortcuts
 
+    @IBAction func plusOneBtn(sender: AnyObject) {
+        let userInfo = [
+            "action":"plusOne"]
+        NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+    }
+
     @IBAction func toggleSpeedBtn(sender: AnyObject) {
         self.speedShortcut()
     }
