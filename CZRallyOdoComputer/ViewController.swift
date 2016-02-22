@@ -624,8 +624,23 @@ class ViewController: UIViewController {
         default:
             break;
         }
-        self.workerlessControl(notification)
+        self.zrControl(userInfo!["miles"]! as! Double)
+//        self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
+    }
+    
+    func zrControl(zrDistance: Double) {
+        print(zrDistance)
+        if zrDistance < 0.5 {return}
+        print(zrDistance % 0.25)
+
+        if zrDistance % 0.25 < 0.02 {
+            let courseString = String(format: "%.0f",self.course!)
+            let score = self.deltaString()
+            let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(courseString),\(self.speedd!),\(score)"
+            self.splits.insert(splitString, atIndex: 0)
+            self.splitLbl.text = "OM \(self.distanceLbl.text!) \(self.deltaString())"
+        }
     }
 //    ---------------------------------------
     func workerlessControl(notification:NSNotification) {
