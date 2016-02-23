@@ -61,7 +61,9 @@ class ViewController: UIViewController {
     var testSpeeds = [Double]()
     var incrementWhenFound = false
     var tpStatus = "odoCheck"
-
+    var zrStatus = false
+    var zrNumber = 1
+    var zrCurrent = 0.24
 
     
     override func viewDidLoad() {
@@ -76,7 +78,7 @@ class ViewController: UIViewController {
         startDistance = 0.00
         self.distanceLbl.text = "0.00"
         
-        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self,
+        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
         
         
@@ -122,6 +124,34 @@ class ViewController: UIViewController {
         self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
         self.startTime = timePlusOneMinute
     }
+    
+    @IBAction func zeroBtn(sender: AnyObject) {
+        let userInfo = ["action":"reset"]
+        NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
+        self.selectedStartDistance = 0.00
+    }
+    
+    @IBAction func startZrBtn(sender: AnyObject) {
+        self.zrStart()
+    }
+    
+    @IBAction func endZrBtn(sender: AnyObject) {
+        self.zrEnd()
+    }
+    
+    func zrStart() {
+        zrStatus = true
+        self.nextMinuteShortcut()
+        self.splitLbl.text = "Start ZR: \(zrNumber)"
+    }
+    
+    func zrEnd() {
+        zrStatus = false
+        zrCurrent = 0.24
+        self.splitLbl.text = "End ZR: \(zrNumber)"
+        zrNumber += 1
+    }
+    
 //    Shortcuts
 
     @IBAction func plusOneBtn(sender: AnyObject) {
@@ -135,19 +165,24 @@ class ViewController: UIViewController {
     }
 
     @IBAction func aBtn(sender: AnyObject) {
-        self.nextMinuteShortcut()
+        self.zrStart()
+//        self.nextMinuteShortcut()
     }
     
     @IBAction func bBtn(sender: AnyObject) {
-        self.add10ToStartMinute()
+        self.zrEnd()
+//        self.add10ToStartMinute()
     }
 
     @IBAction func xBtn(sender: AnyObject) {
-        self.setStartTimeToCTC()
+//        self.setStartTimeToCTC()
+        self.speedShortcut()
     }
     
     @IBAction func yBtn(sender: AnyObject) {
-        self.setStartToCurrentMinute()
+        self.add10ToStartMinute()
+
+//        self.setStartToCurrentMinute()
     }
     func setStartTimeToCTC() {
         print(self.ctcDate!)
@@ -624,22 +659,26 @@ class ViewController: UIViewController {
         default:
             break;
         }
-        self.zrControl(userInfo!["miles"]! as! Double)
+        if zrStatus == true {
+            self.zrControl(userInfo!["miles"]! as! Double)
+        }
 //        self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
     
     func zrControl(zrDistance: Double) {
         print(zrDistance)
-        if zrDistance < 0.5 {return}
+//        if zrDistance < 0.5 {return}
+        if zrDistance < zrCurrent {return}
         print(zrDistance % 0.25)
-
-        if zrDistance % 0.25 < 0.02 {
+        let mod = zrDistance % 0.25
+        if  mod < 0.01 || mod > 0.24 {
+            zrCurrent += 0.25
             let courseString = String(format: "%.0f",self.course!)
             let score = self.deltaString()
-            let splitString = "\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(courseString),\(self.speedd!),\(score)"
+            let splitString = "\(zrNumber),\(self.todLbl.text!),\(self.distanceLbl.text!),\(self.locationLatitude),\(self.locationLongitude),\(courseString),\(self.speedd!),\(score)"
             self.splits.insert(splitString, atIndex: 0)
-            self.splitLbl.text = "OM \(self.distanceLbl.text!) \(self.deltaString())"
+            self.splitLbl.text = "ZR: \(zrNumber) OM: \(self.distanceLbl.text!) \(self.deltaString())"
         }
     }
 //    ---------------------------------------
