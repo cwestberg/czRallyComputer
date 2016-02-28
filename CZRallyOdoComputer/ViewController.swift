@@ -624,7 +624,7 @@ class ViewController: UIViewController {
         default:
             break;
         }
-        self.zrControl(userInfo!["miles"]! as! Double)
+//        self.zrControl(userInfo!["miles"]! as! Double)
 //        self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }

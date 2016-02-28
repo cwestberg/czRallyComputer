@@ -41,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		2A2AD9F31C3D637F0053B02F /* SplitsSequeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitsSequeViewController.swift; sourceTree = "<group>"; };
+		2A6EEAE81C835DD2006AAE0E /* CZRallyOdoComputer copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "CZRallyOdoComputer copy-Info.plist"; path = "/Users/clarencewestberg/xcode_projects/CZRallyOdoComputer/CZRallyOdoComputer copy-Info.plist"; sourceTree = "<absolute>"; };
 		2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigSegueViewController.swift; sourceTree = "<group>"; };
 		2AB262FF1C472B3E00CDCEC1 /* CZRallyOdoComputer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CZRallyOdoComputer.entitlements; sourceTree = "<group>"; };
 		2AB263001C472B5D00CDCEC1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -96,6 +97,7 @@
 				2AC4D2381C2F1DF400B2D76B /* CZRallyOdoComputerTests */,
 				2AC4D2431C2F1DF400B2D76B /* CZRallyOdoComputerUITests */,
 				2AC4D21F1C2F1DF400B2D76B /* Products */,
+				2A6EEAE81C835DD2006AAE0E /* CZRallyOdoComputer copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
