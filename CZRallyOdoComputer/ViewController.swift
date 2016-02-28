@@ -24,6 +24,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var destinationDistanceLbl: UILabel!
     @IBOutlet weak var splitLbl: UILabel!
     
+    @IBOutlet weak var speedStepper: UIStepper!
+    @IBOutlet weak var speedometerLbl: UILabel!
+
     var speed: Int?
     var speedd: Double?
     var ctc: Double?
@@ -64,6 +67,7 @@ class ViewController: UIViewController {
     var zrStatus = false
     var zrNumber = 1
     var zrCurrent = 0.24
+    var speedStepValue = 5.0
 
     
     override func viewDidLoad() {
@@ -71,14 +75,18 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         controlNumber = 0
 //        speed = 7
-        speedd = 36.0
+        speedd = 40.0
         self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
 
         startTime = NSDate()
         startDistance = 0.00
         self.distanceLbl.text = "0.00"
+        speedStepper.maximumValue = 85
+        speedStepper.minimumValue = 5
+        speedStepper.stepValue = speedStepValue
+        speedStepper.value = 40.0
         
-        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self,
+        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
         
         
@@ -125,6 +133,14 @@ class ViewController: UIViewController {
         self.startTime = timePlusOneMinute
     }
     
+    @IBAction func speedStepper(sender: UIStepper) {
+        self.speedd = sender.value
+        self.speedLbl.text = String(format: "%.1f",self.speedd! as Float64)
+    }
+    
+    @IBAction func speedChangeBtn(sender: AnyObject) {
+        self.setStartTimeToCTC()
+    }
     @IBAction func zeroBtn(sender: AnyObject) {
         let userInfo = ["action":"reset"]
         NSNotificationCenter.defaultCenter().postNotificationName("Reset", object: nil, userInfo: userInfo)
@@ -160,9 +176,6 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
     }
 
-    @IBAction func toggleSpeedBtn(sender: AnyObject) {
-        self.speedShortcut()
-    }
 
     @IBAction func aBtn(sender: AnyObject) {
         self.zrStart()
@@ -175,13 +188,12 @@ class ViewController: UIViewController {
     }
 
     @IBAction func xBtn(sender: AnyObject) {
-//        self.setStartTimeToCTC()
-        self.speedShortcut()
+        self.setStartTimeToCTC()
+//        self.speedShortcut()
     }
     
     @IBAction func yBtn(sender: AnyObject) {
         self.add10ToStartMinute()
-
 //        self.setStartToCurrentMinute()
     }
     func setStartTimeToCTC() {
@@ -247,24 +259,24 @@ class ViewController: UIViewController {
         print(self.startTime!)
     }
     
-    func speedShortcut(){
+    func speedShortcut(value: Int){
         //        let controllerSpeedChoices = [60.0,75.0,85.0]
-        let controllerSpeedChoices = [24.0,30.0,36.0,40.0,45.0,50.0,60.0]
+        let controllerSpeedChoices = [20.0,25.0,30.0,35.0,40.0,45.0,50.0,55.0,60.0,65.0,70.0,75.0,85.0]
 //        let controllerSpeedChoices = [30.0,32.6,36.0]
         var speedIndex = controllerSpeedChoices.indexOf(self.speedd!)
         if speedIndex == nil {
             speedIndex = 0
         }
-        print(speedIndex!)
-        if speedIndex == controllerSpeedChoices.count - 1 {
+        speedIndex = speedIndex! + value
+        if speedIndex == controllerSpeedChoices.count {
             speedIndex = 0
         }
-        else {
-            speedIndex = speedIndex! + 1
+        else if speedIndex < 0 {
+            speedIndex = controllerSpeedChoices.count - 1
         }
-        print(controllerSpeedChoices[speedIndex!])
         self.speedd = controllerSpeedChoices[speedIndex!]
         self.speedLbl.text = String(format: "%.1f",self.speedd! as Float64)
+        self.speedStepper.value = self.speedd!
     }
 //    Game Conroller
     func controllerDidConnect(notification: NSNotification) {
@@ -283,20 +295,20 @@ class ViewController: UIViewController {
         controller.gamepad?.buttonB.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonB")
-                self.add10ToStartMinute()
+//                self.add10ToStartMinute()
             }
         }
         controller.gamepad?.buttonX.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonX")
-                self.setStartTimeToCTC()
+//                self.setStartTimeToCTC()
             }
 
         }
         controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonY")
-                self.setStartToCurrentMinute()
+//                self.setStartToCurrentMinute()
                 // add one minute
                 // make it start time
             }
@@ -310,14 +322,14 @@ class ViewController: UIViewController {
         controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed && value > 0.2 {
                 print("dpad.left")
-                self.speedShortcut()
+                self.speedShortcut(-1)
             }
         }
         
         controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed && value > 0.2 {
                 print("dpad.right \(value)")
-                self.speedShortcut()
+                self.speedShortcut(1)
             }
         }
         
@@ -647,7 +659,7 @@ class ViewController: UIViewController {
         locationLongitude = lon
         
         self.course = userInfo!["course"]! as? Double
-        
+        self.speedometerLbl.text = "\(userInfo!["speed"]!)"
         switch distanceType
         {
         case "miles":
@@ -662,6 +674,7 @@ class ViewController: UIViewController {
         if zrStatus == true {
             self.zrControl(userInfo!["miles"]! as! Double)
         }
+        self.updateDelta()
 //        self.workerlessControl(notification)
 //        horrizontalAccuracy.text = String(userInfo!["horizontalAccuracy"]!)
     }
@@ -682,131 +695,6 @@ class ViewController: UIViewController {
         }
     }
 //    ---------------------------------------
-    func workerlessControl(notification:NSNotification) {
-        let userInfo = notification.userInfo
-        if destinations.count == 0 {
-            return
-        }
-        
-        if destinationsIndex >= destinations.count && destinations.count != 0 {
-            let total = parseForTotal(self.splits)
-//            Done
-            self.splitLbl.text = "\(destinations.count) CPs \(total)"
-        }
-        else if self.tpStatus == "seek"
-        {
-            let curentLocation = userInfo!["currentLocation"]! as! CLLocation
-            let destinationGPS = destinations[destinationsIndex]
-            var destinationDistance = Double?()
-        
-            destinationDistance = destinationGPS.distanceFromLocation(curentLocation)
-
-            let destinationDistanceString = String(format: "%.2f", destinationDistance!)
-
-            self.destinationDistanceLbl.text = destinationDistanceString
-            
-            let zone = 20.0
-//            if curentLocation.speed > 40.0 {
-//                zone = 30.0
-//            }
-            
-            let currentOM = userInfo!["miles"]! as! Double
-            let destOM = destinationMileages[destinationsIndex] - 0.005
-            
-            if currentOM < destOM {
-                approachState = "decreasing"
-            }
-//Force finding
-//            speedd = 100.0
-//            if currentOM >= 1.00 {
-//                destinationDistance = 10.0
-//            }
-            if currentOM > destOM && destinationDistance < 80.0 && offCourse == true {
-                // Found TP after OC
-                print("Found TP after OC")
-                ocFound = true
-                self.tpStatus = "found"
-                self.splitLbl.text = "Found \(destinationsIndex)"
-//                correct using correct mileage - 80m for early find (.02-05?)
-                let correctedOM = destinationMileages[destinationsIndex] - 0.04
-                self.updateMiles(correctedOM)
-                self.splitActions()
-                offCourse = false
-//                destinationsIndex += 1
-                if incrementWhenFound == true {
-                    self.nextTP()
-                    self.tpStatus = "seek"
-                } else {
-                    self.tpStatus = "found"
-                }
-            }
-            else if currentOM >= destOM && destinationDistance < 80.0 {
-                // Normal on course
-                self.splitActions()
-                self.splitLbl.text = "OM \(destinationsIndex) \(self.distanceLbl.text!) \(self.deltaString())"
-//            NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
-                approachState = "increasing"
-                
-//                destinationsIndex += 1
-                if incrementWhenFound == true {
-                    self.nextTP()
-                    self.tpStatus = "seek"
-                } else {
-                    self.tpStatus = "found"
-                    self.destinationDistanceLbl.text = tpStatus
-
-                }
-            }
-            else if currentOM > destOM && destinationDistance > 160.0 && incrementWhenFound == true && self.tpStatus == "seek"
-            {
-                // we are off course
-                self.offCourse = true
-                self.splitLbl.text = "Off Course!"
-            }
-            else if destinationDistance < zone && approachState == "decreasing" {
-//                Found control via GPS proximity and decreasing
-                if currentOM < destOM {
-//                    ignore, wait for mileage to come up
-                }
-                else if currentOM >= destOM {
-                    self.splitActions()
-                    self.splitLbl.text = "GPS \(destinationsIndex) \(self.distanceLbl.text!) \(destinationDistance)"
-                    approachState = "increasing"
-//                    destinationsIndex += 1
-                    if incrementWhenFound == true {
-                        self.nextTP()
-                    }
-                    self.splitLbl.text = "Found by GPS"
-
-                }
-            }
-            else if currentOM < destOM {
-                approachState = "decreasing"
-            }
-
-            else if previousDestinationDistance > destinationDistance {
-                approachState = "decreasing"
-//                previousDestinationDistanceGPS = curentLocation
-            }
-            else if previousDestinationDistance < destinationDistance {
-                if approachState == "decreasing" {
-                    if destinationDistance < 60.0 {
-                        //                    let pTS = previousDestinationDistanceGPS.timestamp
-                        //                    let pTSS = strippedNSDate(pTS)
-                        //                    self.splits.insert("prev \(pTSS)", atIndex:0)
-                        //                    self.splits.insert("clock \(self.todLbl.text!)", atIndex: 0)
-                        //                    self.splitTable.reloadData()
-                    }
-                }
-                approachState = "increasing"
-            }
-            else {
-                
-            }
-            previousDestinationDistance = destinationDistance!
-            previousDestinationDistanceGPS = curentLocation
-        }
-    }
     
     func updateTimeLabel() {
         let currentDate = NSDate()
@@ -817,7 +705,7 @@ class ViewController: UIViewController {
         let unit = Double(dateComponents.second)
         let second = Int(unit)
         let secondString = String(format: "%02d", second)
-        let nanoString = String(format: "%01ld", dateComponents.nanosecond/100000000)
+        _ = String(format: "%01ld", dateComponents.nanosecond/100000000)
 
         let cent = Int((unit * (1.6667)))
         let centString = String(format: "%02d", cent)
@@ -825,7 +713,8 @@ class ViewController: UIViewController {
         
         switch timeUnit {
         case "seconds":
-            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString).\(nanoString)"
+//            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString).\(nanoString)"
+            todLbl.text = "\(dateComponents.hour):\(minuteString):\(secondString)"
 
         case "cents":
             todLbl.text = "\(dateComponents.hour):\(minuteString).\(centString)"
@@ -833,63 +722,95 @@ class ViewController: UIViewController {
             break;
         }
         
+//        if startTime != nil {
+//            if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
+//                self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
+//                delta = startTime!.timeIntervalSinceDate(NSDate())
+//                self.deltaLbl.textColor = UIColor.blackColor()
+//                self.deltaLbl.text = ">\(deltaString())"
+//            }
+//            if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
+//
+//                let factor = 60.0/Double(speedd!)
+//                
+//                let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
+//
+//                //              Simple Accumulator
+//                ctc = calcDistance * factor
+//                
+//
+//                let ctcSecs = (ctc)! * 60
+////                print("ctcSecs \(ctcSecs)")
+//
+//                ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
+//
+//                self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
+////                var delta = 0.0
+//                switch timeUnit {
+//                case "seconds":
+//                    delta = ctcDate!.timeIntervalSinceDate(NSDate())
+//                case "cents":
+//                    delta = (ctcDate!.timeIntervalSinceDate(NSDate())) * 1.66667
+//                default:
+//                    break;
+//                }
+//                if zrStatus == false {return}
+//                if delta > 600.0 {
+//                    self.deltaLbl.textColor = UIColor.blackColor()
+//                    self.deltaLbl.text = "EEEE"
+//                }
+//                else if delta < -600.0{
+//                    self.deltaLbl.textColor = UIColor.blackColor()
+//                    self.deltaLbl.text = "LLLL"
+//                }
+//                else if delta < 0.9 && delta > -0.9 {
+//                    self.deltaLbl.textColor = UIColor.blueColor()
+//                    self.deltaLbl.text = "\(String(format: "%.0f",(self.delta)))"
+//                }
+//
+//                else if delta < 4.0 && delta > -4.0 {
+//                    if delta > 0.0 {self.deltaLbl.textColor = UIColor.redColor()}
+//                    else {self.deltaLbl.textColor = UIColor.greenColor()}
+//                    self.deltaLbl.text = "\(String(format: "%.0f",(self.delta)))"
+//                }
+//                else {
+//                    self.deltaLbl.textColor = UIColor.blackColor()
+//                    self.deltaLbl.text = "\(String(format: "%.0f",(self.delta)))"
+//                }
+//            }
+//            else {
+////                self.mileageLbl.text = "NA"
+//            }
+//        }
+        
+    }
+    
+    func updateDelta() {
         if startTime != nil {
             if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
                 self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
                 delta = startTime!.timeIntervalSinceDate(NSDate())
+                self.deltaLbl.textColor = UIColor.blackColor()
                 self.deltaLbl.text = ">\(deltaString())"
             }
             if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-
+                
                 let factor = 60.0/Double(speedd!)
                 
                 let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
-
+                
                 //              Simple Accumulator
                 ctc = calcDistance * factor
                 
-                if destinationsIndex < destinationMileages.count  {
-                    if calcDistance > destinationMileages[destinationsIndex] + 0.05 {
-                        // ocTime it the calculated time to be where you are given you were off course
-                        // would need to compare with actual time to see how late you are in order to adjust lateness fully
-                        let ocDist = calcDistance - destinationMileages[destinationsIndex]
-                            ocTime = ocDist * factor
-//                        print("calc thinks you are off course \(ocTime)")
-                    }
-                    
-                }
-                if ocFound == true {
-//                    print("oc found in calc \(ocTime) \(calcDistance)")
-                    let actualTimeInterval = NSDate().timeIntervalSinceDate(startTime!)
-                    //If off course and late
-                    if actualTimeInterval > ((ctc)! * 60) {
-//                        print(actualTimeInterval)
-//                        print(ctc)
-//                        print((ctc)! * 60)
-                        ocTime = (actualTimeInterval - ((ctc)! * 60))
-//                        print(ocTime)
-                    }
-                    ocFound = false
-                    lateness = lateness + ocTime/100.0
-                    
-                    ocTime = 0.0
-//                    print(lateness)
-//                    print(ctc)
-                }
-                if lateness > 0.00 {
-//                    latenessInCents = lateness * 0.0166667
-                    latenessInCents = lateness * 1.66667
-                    ctc = ctc! + latenessInCents
-//                    print("lateness \(lateness) \(latenessInCents)")
-                }
-//                print(ctc)
+                
                 let ctcSecs = (ctc)! * 60
-//                print("ctcSecs \(ctcSecs)")
+                //                print("ctcSecs \(ctcSecs)")
+                let calendar = NSCalendar.currentCalendar()
 
                 ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
-
+                
                 self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
-//                var delta = 0.0
+                //                var delta = 0.0
                 switch timeUnit {
                 case "seconds":
                     delta = ctcDate!.timeIntervalSinceDate(NSDate())
@@ -898,18 +819,36 @@ class ViewController: UIViewController {
                 default:
                     break;
                 }
-                if delta < 4.0 {
+                if zrStatus == false {return}
+                if delta > 600.0 {
+                    self.deltaLbl.textColor = UIColor.blackColor()
+                    self.deltaLbl.text = "EEEE"
+                }
+                else if delta < -600.0{
+                    self.deltaLbl.textColor = UIColor.blackColor()
+                    self.deltaLbl.text = "LLLL"
+                }
+                else if delta < 0.9 && delta > -0.9 {
+                    self.deltaLbl.textColor = UIColor.blueColor()
+                    self.deltaLbl.text = "\(String(format: "%.1f",(self.delta)))"
+                }
+                    
+                else if delta < 4.0 && delta > -4.0 {
+                    if delta > 0.0 {self.deltaLbl.textColor = UIColor.redColor()}
+                    else {self.deltaLbl.textColor = UIColor.greenColor()}
                     self.deltaLbl.text = "\(String(format: "%.1f",(self.delta)))"
                 }
                 else {
+//                    self.deltaLbl.textColor = UIColor.blackColor()
+                    if delta > 0.0 {self.deltaLbl.textColor = UIColor.redColor()}
+                    else {self.deltaLbl.textColor = UIColor.greenColor()}
                     self.deltaLbl.text = "\(String(format: "%.0f",(self.delta)))"
                 }
             }
             else {
-//                self.mileageLbl.text = "NA"
+                //                self.mileageLbl.text = "NA"
             }
         }
-        
     }
     //    utilities
 
