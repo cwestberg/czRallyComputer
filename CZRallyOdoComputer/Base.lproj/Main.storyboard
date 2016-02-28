@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="CZRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ZRRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -670,7 +670,7 @@
         <!--Splits Segue View Controller-->
         <scene sceneID="tl9-bG-LOQ">
             <objects>
-                <viewController id="uli-bu-tEW" customClass="SplitsSegueViewController" customModule="CZRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="uli-bu-tEW" customClass="SplitsSegueViewController" customModule="ZRRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DXr-97-L1s"/>
                         <viewControllerLayoutGuide type="bottom" id="Hmq-h6-csV"/>
@@ -744,7 +744,7 @@
         <!--Config Segue View Controller-->
         <scene sceneID="ypa-5B-MCa">
             <objects>
-                <viewController id="St1-sA-WER" customClass="ConfigSegueViewController" customModule="CZRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="St1-sA-WER" customClass="ConfigSegueViewController" customModule="ZRRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1N1-ah-190"/>
                         <viewControllerLayoutGuide type="bottom" id="bWF-TI-FJk"/>
@@ -1024,7 +1024,7 @@
         <!--Segue View Controller-->
         <scene sceneID="GWt-KE-8fb">
             <objects>
-                <viewController id="Nxh-Zj-WtI" customClass="CZSegueViewController" customModule="CZRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Nxh-Zj-WtI" customClass="CZSegueViewController" customModule="ZRRallyOdoComputer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w6x-jr-WJL"/>
                         <viewControllerLayoutGuide type="bottom" id="ibl-Ek-fnV"/>
