@@ -558,9 +558,9 @@ class ViewController: UIViewController {
             
             self.speedLbl.text = String(format: "%.1f",selectedSpeed as! Float64)
             
-            let sm = selectedCZ.valueForKey("startDistance")!
-            let smStr = String(format: "%.2f", sm as! Float64)
-            self.startDistanceLbl.text = "\(smStr)"
+//            let sm = selectedCZ.valueForKey("startDistance")!
+//            let smStr = String(format: "%.2f", sm as! Float64)
+//            self.startDistanceLbl.text = "\(smStr)"
             
             
             let calendar = NSCalendar.currentCalendar()
