@@ -44,7 +44,7 @@
 		2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigSegueViewController.swift; sourceTree = "<group>"; };
 		2AB262FF1C472B3E00CDCEC1 /* CZRallyOdoComputer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CZRallyOdoComputer.entitlements; sourceTree = "<group>"; };
 		2AB263001C472B5D00CDCEC1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		2AC4D21E1C2F1DF400B2D76B /* ZRRallyOdoComputer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZRRallyOdoComputer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AC4D21E1C2F1DF400B2D76B /* CZRallyOdoComputer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZRallyOdoComputer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AC4D2211C2F1DF400B2D76B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AC4D2231C2F1DF400B2D76B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2AC4D2261C2F1DF400B2D76B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 		2AC4D21F1C2F1DF400B2D76B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2AC4D21E1C2F1DF400B2D76B /* ZRRallyOdoComputer.app */,
+				2AC4D21E1C2F1DF400B2D76B /* CZRallyOdoComputer.app */,
 				2AC4D2351C2F1DF400B2D76B /* CZRallyOdoComputerTests.xctest */,
 				2AC4D2401C2F1DF400B2D76B /* CZRallyOdoComputerUITests.xctest */,
 			);
@@ -149,9 +149,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2AC4D21D1C2F1DF400B2D76B /* ZRRallyOdoComputer */ = {
+		2AC4D21D1C2F1DF400B2D76B /* CZRallyOdoComputer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2AC4D2491C2F1DF400B2D76B /* Build configuration list for PBXNativeTarget "ZRRallyOdoComputer" */;
+			buildConfigurationList = 2AC4D2491C2F1DF400B2D76B /* Build configuration list for PBXNativeTarget "CZRallyOdoComputer" */;
 			buildPhases = (
 				2AC4D21A1C2F1DF400B2D76B /* Sources */,
 				2AC4D21B1C2F1DF400B2D76B /* Frameworks */,
@@ -161,9 +161,9 @@
 			);
 			dependencies = (
 			);
-			name = ZRRallyOdoComputer;
+			name = CZRallyOdoComputer;
 			productName = CZRallyOdoComputer;
-			productReference = 2AC4D21E1C2F1DF400B2D76B /* ZRRallyOdoComputer.app */;
+			productReference = 2AC4D21E1C2F1DF400B2D76B /* CZRallyOdoComputer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2AC4D2341C2F1DF400B2D76B /* CZRallyOdoComputerTests */ = {
@@ -247,7 +247,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2AC4D21D1C2F1DF400B2D76B /* ZRRallyOdoComputer */,
+				2AC4D21D1C2F1DF400B2D76B /* CZRallyOdoComputer */,
 				2AC4D2341C2F1DF400B2D76B /* CZRallyOdoComputerTests */,
 				2AC4D23F1C2F1DF400B2D76B /* CZRallyOdoComputerUITests */,
 			);
@@ -317,12 +317,12 @@
 /* Begin PBXTargetDependency section */
 		2AC4D2371C2F1DF400B2D76B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2AC4D21D1C2F1DF400B2D76B /* ZRRallyOdoComputer */;
+			target = 2AC4D21D1C2F1DF400B2D76B /* CZRallyOdoComputer */;
 			targetProxy = 2AC4D2361C2F1DF400B2D76B /* PBXContainerItemProxy */;
 		};
 		2AC4D2421C2F1DF400B2D76B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2AC4D21D1C2F1DF400B2D76B /* ZRRallyOdoComputer */;
+			target = 2AC4D21D1C2F1DF400B2D76B /* CZRallyOdoComputer */;
 			targetProxy = 2AC4D2411C2F1DF400B2D76B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -522,7 +522,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2AC4D2491C2F1DF400B2D76B /* Build configuration list for PBXNativeTarget "ZRRallyOdoComputer" */ = {
+		2AC4D2491C2F1DF400B2D76B /* Build configuration list for PBXNativeTarget "CZRallyOdoComputer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2AC4D24A1C2F1DF400B2D76B /* Debug */,
