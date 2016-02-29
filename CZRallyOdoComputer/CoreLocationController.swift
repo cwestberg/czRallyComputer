@@ -361,7 +361,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         userInfo!["timestamp"] = NSDate()
         userInfo!["latitude"] = 45.0
         userInfo!["longitude"] = 93.0
-
+        userInfo!["speed"] = 0.0
         userInfo!["km"] = self.meters
         userInfo!["miles"] = self.miles
         userInfo!["imMiles"] = self.imMiles

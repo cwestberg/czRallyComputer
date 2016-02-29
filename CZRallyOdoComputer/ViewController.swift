@@ -23,6 +23,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var startDistanceLbl: UILabel!
     @IBOutlet weak var destinationDistanceLbl: UILabel!
     @IBOutlet weak var splitLbl: UILabel!
+
+    @IBOutlet weak var speedDelta: UILabel!
+    @IBOutlet weak var omStepper: UIStepper!
     
     var speed: Int?
     var speedd: Double?
@@ -61,6 +64,7 @@ class ViewController: UIViewController {
     var testSpeeds = [Double]()
     var incrementWhenFound = false
     var tpStatus = "odoCheck"
+    var oldStepper = 0.0
 
 
     
@@ -69,6 +73,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         controlNumber = 0
 //        speed = 7
+        omStepper.maximumValue = 999.99
+        omStepper.minimumValue = -999.99
         speedd = 36.0
         self.speedLbl.text = String(format: "%.1f",speedd! as Float64)
 
@@ -95,6 +101,21 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+
+    @IBAction func omStepper(sender: UIStepper) {
+        if sender.value < oldStepper{
+            let userInfo = [
+                "action":"minusOne"]
+            NSNotificationCenter.defaultCenter().postNotificationName("MinusOne", object: nil, userInfo: userInfo)
+            
+        }
+        else{
+            let userInfo = [
+                "action":"plusOne"]
+            NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
+        }
+        oldStepper = sender.value
+    }
 
     func add10ToStartMinute(){
         let calendar = NSCalendar.currentCalendar()
@@ -612,6 +633,10 @@ class ViewController: UIViewController {
         locationLongitude = lon
         
         self.course = userInfo!["course"]! as? Double
+        let speedometer = userInfo!["speed"]! as? Double
+        if speedometer > 0 {
+            self.speedDelta.text = "\((self.speedd)! - speedometer!)"
+        }
         
         switch distanceType
         {
