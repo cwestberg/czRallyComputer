@@ -59,7 +59,7 @@ class CZSegueViewController: UIViewController {
     @IBAction func hourButton(sender: AnyObject) {
         
         //Create the AlertController
-        let hourSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Hour", preferredStyle: .Alert)
+        let hourSheetController: UIAlertController = UIAlertController(title: "Enter", message: "Hour", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -94,7 +94,7 @@ class CZSegueViewController: UIViewController {
     
     @IBAction func minuteButton(sender: AnyObject) {
         //Create the AlertController
-        let minuteSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Minute", preferredStyle: .Alert)
+        let minuteSheetController: UIAlertController = UIAlertController(title: "Enter", message: "Minute", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -129,7 +129,7 @@ class CZSegueViewController: UIViewController {
     @IBAction func speedButton(sender: AnyObject) {
         
         //Create the AlertController
-        let speedSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Speed", preferredStyle: .Alert)
+        let speedSheetController: UIAlertController = UIAlertController(title: "Enter", message: "Speed", preferredStyle: .Alert)
 
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -164,7 +164,7 @@ class CZSegueViewController: UIViewController {
     @IBAction func timeUnitsButton(sender: AnyObject) {
         
         //Create the AlertController
-        let timeUnitsSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Cent or Second", preferredStyle: .Alert)
+        let timeUnitsSheetController: UIAlertController = UIAlertController(title: "Enter", message: "Cent or Second", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -211,7 +211,7 @@ class CZSegueViewController: UIViewController {
     }
     @IBAction func distanceButton(sender: AnyObject) {
         //Create the AlertController
-        let actionSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Distance", preferredStyle: .Alert)
+        let actionSheetController: UIAlertController = UIAlertController(title: "Enter", message: "Distance", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -249,7 +249,7 @@ class CZSegueViewController: UIViewController {
     @IBAction func controlButton(sender: AnyObject) {
         
         //Create the AlertController
-        let actionSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Enter Control Number", preferredStyle: .Alert)
+        let actionSheetController: UIAlertController = UIAlertController(title: "Enter", message: "Control Number", preferredStyle: .Alert)
         
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
@@ -287,30 +287,12 @@ class CZSegueViewController: UIViewController {
         //        let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
-        //        let dateString = "2015-12-21 18:51:00"
-        //        let date: NSDate? = dateFormatter.dateFromString(dateString)
-        //        print("date \(date)")
-        
-//        self.startTime = dateFormatter.dateFromString(dateString)
-//        print("st \(self.startTime)")
-        
-//        if cents, convert to seconds
+
         if timeUnit == "cents" {
             self.timeUnitLbl.text = "\(Int(Double(self.second) * 0.6))"
         }
         
         self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourLbl.text!):\(self.minuteLbl.text!):\(self.timeUnitLbl.text!)")!
-//         self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(self.hourField.text!):\(self.minuteLbl.text!):\(self.timeUnitField.text!)")!       
-        
-        
-//        self.controlNumber = Int(self.controlNumberLbl.text!)
-//        self.speed = Int(self.speedField.text!)
-//        self.speedd = Double(self.speedField.text!)
-//        self.startDistance = Double(self.startDistanceLbl.text!)
-//        self.hour = Int(self.hourLbl.text!)
-//        self.minute = Int(self.minuteLbl.text!)
-//        self.second = Int(self.timeUnitLbl.text!)
-        
     }
     
     func validatNumericInput(text: String) -> String {
