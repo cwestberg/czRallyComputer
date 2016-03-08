@@ -18,6 +18,7 @@ class ConfigSegueViewController: UIViewController {
     
     @IBOutlet weak var carNumber: UITextField!
 
+    @IBOutlet weak var factorStepper: UIStepper!
     let container = CKContainer.defaultContainer()
     var publicDatabase: CKDatabase?
     var currentRecord: CKRecord?
@@ -36,7 +37,8 @@ class ConfigSegueViewController: UIViewController {
         super.viewWillAppear(animated)
         
         publicDatabase = container.publicCloudDatabase
-
+//        factorStepper.maximumValue = 1.1000
+//        factorStepper.minimumValue = 0.9000
         factorField.keyboardType = UIKeyboardType.DecimalPad
         self.factorField.text = "\(self.factor)"
         switch timeUnit
@@ -56,6 +58,10 @@ class ConfigSegueViewController: UIViewController {
 
     }
     
+    @IBAction func factorStepper(sender: UIStepper) {
+        self.factor = sender.value
+        self.factorField.text = "\(self.factor)"
+    }
     @IBAction func importBtn(sender: AnyObject) {
         
         //Create the AlertController

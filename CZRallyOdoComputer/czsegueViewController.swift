@@ -19,7 +19,9 @@ class CZSegueViewController: UIViewController {
    
     @IBOutlet weak var startDistanceLbl: UILabel!
 
+    @IBOutlet weak var speedStepper: UIStepper!
    
+    @IBOutlet weak var minuteStepper: UIStepper!
     var controlNumber: Int!
     var speed: Int!
     var speedd: Double!
@@ -41,12 +43,16 @@ class CZSegueViewController: UIViewController {
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: currentDate)
         
+        speedStepper.maximumValue = 85
+        speedStepper.minimumValue = 0
+        speedStepper.value = self.speedd
         self.controlNumberLbl.text = "\(self.controlNumber)"
-        self.startDistanceLbl.text = "\(self.startDistance)"
+        self.startDistanceLbl.text = String(format: "%0.2f", self.startDistance)
         self.speedLbl.text = "\(self.speedd)"
         self.hourLbl.text = "\(dateComponents.hour)"
         let minStr = String(format: "%02d", dateComponents.minute)
         self.minuteLbl.text = "\(minStr)"
+        self.minuteStepper.value = Double(dateComponents.minute)
         
         
         //        self.timeUnitsField.text = "\(dateComponents.second)"
@@ -56,6 +62,19 @@ class CZSegueViewController: UIViewController {
         
     }
     
+    @IBAction func minuteStepper(sender: UIStepper) {
+        self.minute = Int(sender.value)
+        self.minuteLbl.text = "\(self.minute)"
+    }
+
+    @IBAction func speedStepper(sender: UIStepper) {
+        self.speedLbl.text = String(format: "%0.0f",sender.value)
+        self.speedd = sender.value
+    }
+    @IBAction func zeroStartDistance(sender: AnyObject) {
+        self.startDistance = 0.00
+        self.startDistanceLbl.text = "0.00"
+    }
     @IBAction func hourButton(sender: AnyObject) {
         
         //Create the AlertController
