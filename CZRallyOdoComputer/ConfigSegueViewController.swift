@@ -41,6 +41,7 @@ class ConfigSegueViewController: UIViewController {
 //        factorStepper.minimumValue = 0.9000
         factorField.keyboardType = UIKeyboardType.DecimalPad
         self.factorField.text = "\(self.factor)"
+        factorStepper.value = self.factor
         switch timeUnit
         {
         case "seconds":

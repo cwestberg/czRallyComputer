@@ -14,6 +14,10 @@ import GameController
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var splitBtn: UIButton!
+    @IBOutlet weak var factorLbl: UILabel!
+    @IBOutlet weak var addTenBtn: UIButton!
+    @IBOutlet weak var subTenBtn: UIButton!
     @IBOutlet weak var createCZBtn: UIButton!
     @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var distanceLbl: UILabel!
@@ -57,6 +61,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
         controlNumber = 0
 //        speed = 7
@@ -69,6 +74,7 @@ class ViewController: UIViewController {
         startDistance = 0.00
         distance = 0.00
         self.distanceLbl.text = "0.00"
+        self.factorLbl.text = "\(self.factor)"
         
         self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self,
             selector: "updateTimeLabel", userInfo: nil, repeats: true)
@@ -88,6 +94,17 @@ class ViewController: UIViewController {
         createCZBtn.layer.borderColor = UIColor.blueColor().CGColor
         createCZBtn.layer.borderWidth = 1
         createCZBtn.layer.cornerRadius = 20
+        
+        addTenBtn.layer.borderColor = UIColor.blueColor().CGColor
+        addTenBtn.layer.borderWidth = 1
+        addTenBtn.layer.cornerRadius = 20
+        subTenBtn.layer.borderColor = UIColor.blueColor().CGColor
+        subTenBtn.layer.borderWidth = 1
+        subTenBtn.layer.cornerRadius = 20
+        splitBtn.layer.borderColor = UIColor.blueColor().CGColor
+        splitBtn.layer.borderWidth = 1
+        splitBtn.layer.cornerRadius = 20
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,6 +112,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func casBtn(sender: AnyObject) {
+        self.setStartTimeToCTC()
+        self.splitActions()
+
+    }
 
     @IBAction func nextMinuteBtn(sender: AnyObject) {
         self.setStartTimeToCTCPlusOne()
@@ -147,6 +169,35 @@ class ViewController: UIViewController {
         
         self.startTime = timePlus10
     }
+    
+    @IBAction func subTenBtn(sender: AnyObject) {
+        self.sub10ToStartMinute()
+        self.splitActions()
+    }
+    func sub10ToStartMinute(){
+        let calendar = NSCalendar.currentCalendar()
+        var dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: self.startTime!)
+        
+        var secondsToAdd = -10
+        if timeUnit == "cents" {
+            secondsToAdd = -6
+        }
+        
+        let timePlus10 = self.startTime!.dateByAddingTimeInterval(Double(secondsToAdd))
+        dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: timePlus10)
+        
+        let minStr = String(format: "%02d", dateComponents.minute)
+        if timeUnit == "cents" {
+            let centStr = String(format: "%02d", Int((Double(dateComponents.second) * 1.66667)))
+            self.startTimeLbl.text = "\(dateComponents.hour):\(minStr).\(centStr)"
+        } else {
+            let secStr = String(format: "%02d", dateComponents.second)
+            self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
+        }
+        
+        self.startTime = timePlus10
+    }
+
     
     func roundStartDateToNextMinute(){
         let calendar = NSCalendar.currentCalendar()
@@ -271,22 +322,27 @@ class ViewController: UIViewController {
         print(self.startTime!)
     }
     
-    func speedShortcut(){
+    func speedShortcut(direction: String){
         //        let controllerSpeedChoices = [60.0,75.0,85.0]
-        let controllerSpeedChoices = [24.0,30.0,36.0,40.0,45.0,50.0,60.0]
-//        let controllerSpeedChoices = [20.0,25.0,30.0,35.0,40.0,45.0,50.0,60.0]
+//        let controllerSpeedChoices = [24.0,30.0,36.0,40.0,45.0,50.0,60.0]
+        let controllerSpeedChoices = [20.0,25.0,30.0,35.0,36.0,40.0,45.0,50.0,55.0,60.0]
 //        let controllerSpeedChoices = [30.0,32.6,36.0]
         var speedIndex = controllerSpeedChoices.indexOf(self.speedd!)
         if speedIndex == nil {
             speedIndex = 0
         }
         print(speedIndex!)
-        if speedIndex == controllerSpeedChoices.count - 1 {
-            speedIndex = 0
-        }
-        else {
+        if direction ==  "plus" {
             speedIndex = speedIndex! + 1
+        } else {
+            speedIndex = speedIndex! - 1
         }
+        if speedIndex == controllerSpeedChoices.count {
+            speedIndex = 0
+        } else if speedIndex < 0 {
+            speedIndex = controllerSpeedChoices.count - 1
+        }
+
         print(controllerSpeedChoices[speedIndex!])
         self.speedd = controllerSpeedChoices[speedIndex!]
         self.speedLbl.text = String(format: "%.1f",self.speedd! as Float64)
@@ -317,15 +373,18 @@ class ViewController: UIViewController {
             if pressed {
                 print("buttonX")
 //                self.setStartTimeToCTC()
-                self.navigationController?.popViewControllerAnimated(true)
+//                self.navigationController?.popViewControllerAnimated(true)
+                self.sub10ToStartMinute()
             }
 
         }
         controller.gamepad?.buttonY.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
                 print("buttonY")
+                self.add10ToStartMinute()
+
 //                self.nextMinuteShortcut()
-                self.setStartTimeToCTCPlusOne()
+//                self.setStartTimeToCTCPlusOne()
 //                self.setStartToCurrentMinute()
 //                self.performSegueWithIdentifier("czsegue", sender: self)
                 // add one minute
@@ -341,14 +400,14 @@ class ViewController: UIViewController {
         controller.gamepad?.dpad.left.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed && value > 0.2 {
                 print("dpad.left")
-                self.speedShortcut()
+                self.speedShortcut("minus")
             }
         }
         
         controller.gamepad?.dpad.right.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed && value > 0.2 {
                 print("dpad.right \(value)")
-                self.speedShortcut()
+                self.speedShortcut("plus")
             }
         }
         
@@ -428,11 +487,25 @@ class ViewController: UIViewController {
         self.factor = Double(newFactor as! NSNumber)
     }
     @IBAction func startBtn(sender: AnyObject) {
-        self.startActions()
-        self.splitActions()
-//        let nm = selectedStartDistance
-//        let userInfo = ["newMileage":nm]
-//        NSNotificationCenter.defaultCenter().postNotificationName("SetMileage", object: nil, userInfo: userInfo)
+        let alert: UIAlertController = UIAlertController(title: "BCZ", message: "Are You sure", preferredStyle: .Alert)
+        
+        //Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+            //Do some stuff
+        }
+        alert.addAction(cancelAction)
+        
+        let saveAction = UIAlertAction(title: "Do It", style: .Default, handler: { (action: UIAlertAction!) in
+            self.startActions()
+            self.splitActions()
+        })
+        alert.addAction(saveAction)
+        
+        //Present the AlertController
+        self.presentViewController(alert, animated: true, completion: nil)
+//        self.startActions()
+//        self.splitActions()
+
     }
     func startActions(){
         let nm = selectedStartDistance
@@ -838,6 +911,9 @@ class ViewController: UIViewController {
     }
     
     func updateTimeLabel() {
+        self.factorLbl.text = "\(self.factor)"
+
+        
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
         
