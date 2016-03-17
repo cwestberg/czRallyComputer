@@ -22,6 +22,9 @@ class CZSegueViewController: UIViewController {
     @IBOutlet weak var speedStepper: UIStepper!
    
     @IBOutlet weak var minuteStepper: UIStepper!
+    
+    @IBOutlet weak var hourStepper: UIStepper!
+    
     var controlNumber: Int!
     var speed: Int!
     var speedd: Double!
@@ -52,6 +55,7 @@ class CZSegueViewController: UIViewController {
         self.hourLbl.text = "\(dateComponents.hour)"
         let minStr = String(format: "%02d", dateComponents.minute)
         self.minuteLbl.text = "\(minStr)"
+        self.hourStepper.value = Double(dateComponents.hour)
         self.minuteStepper.value = Double(dateComponents.minute)
         
         
@@ -60,6 +64,11 @@ class CZSegueViewController: UIViewController {
         print(self.timeUnit!)
 
         
+    }
+    
+    @IBAction func hourStepper(sender: UIStepper) {
+        self.hour = Int(sender.value)
+        self.hourLbl.text = "\(self.hour)"
     }
     
     @IBAction func minuteStepper(sender: UIStepper) {
