@@ -30,7 +30,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         super.init()
         
         self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         self.locationManager.requestAlwaysAuthorization()
 //        _ = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "updateLocation", userInfo: nil, repeats: true)
 
@@ -108,7 +108,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         if addDistance == true {
             //let distance = location.distanceFromLocation(self.fromLocation.last!) * self.factor
             let distance = location.distanceFromLocation(self.fromLocation.last!)
-            //                print("meters = \(self.meters) distance moved =  \(distance)")
+//            print("meters = \(self.meters) distance moved =  \(distance)")
             
             let updateChoices = (self.direction, self.selectedCounters)
             switch updateChoices
@@ -194,6 +194,10 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 //print("abs > 20")
                 addDistance = false
             }
+            if location.verticalAccuracy < 0 {
+                print(location.verticalAccuracy)
+//                addDistance = false
+            }
             if self.fromLocation.last!.speed < 0 {
                 //print("return: \(self.fromLocation.last!.speed)")
                 addDistance = false
@@ -201,11 +205,13 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             if addDistance == true {
                 //let distance = location.distanceFromLocation(self.fromLocation.last!) * self.factor
                 let distance = location.distanceFromLocation(self.fromLocation.last!)
-//                print("meters = \(self.meters) distance moved =  \(distance)")
-                print(abs(location.course - self.fromLocation.last!.course))
+                print("meters = \(self.meters) distance moved =  \(distance) \(location.speed)")
+//                print(abs(location.course - self.fromLocation.last!.course))
 //                if abs(location.course - self.fromLocation.last!.course) > 100 {
 //                    return
 //                }
+                
+
                 let updateChoices = (self.direction, self.selectedCounters)
                 switch updateChoices
                 {
@@ -239,7 +245,6 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 self.imMiles = imDdistanceInMiles
                 self.imKM = (imMeters/1000) * self.factor
             }
-//            print("\(self.factor) \(self.meters) \(self.km)")
 
             let elapsedTime = NSDate().timeIntervalSinceDate(self.startTime)
             var averageSpeed = 3600 * (miles/(elapsedTime))
@@ -247,7 +252,6 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
                 averageSpeed = 100
             }
             let course = location.course
-//            print(course)
             let userInfo = [
                 "locations":locations,
                 "currentLocation":location,
