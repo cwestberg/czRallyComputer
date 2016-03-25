@@ -38,7 +38,7 @@ class CZSegueViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         //Looks for single or multiple taps.
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(CZSegueViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
         super.viewWillAppear(animated)

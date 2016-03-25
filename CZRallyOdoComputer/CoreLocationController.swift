@@ -37,18 +37,18 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     
         
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reset:", name: "Reset", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetIM:", name: "ResetIM", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetBoth:", name: "ResetBoth", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "zeroIntervalTime:", name: "ZeroInterval", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "plusOne:", name: "PlusOne", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "minusOne:", name: "MinusOne", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "directionChanged:", name: "DirectionChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedCountersChanged:", name: "SelectedCountersChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "splitOM:", name: "SplitOM", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setMileage:", name: "SetMileage", object: nil)
-         NSNotificationCenter.defaultCenter().addObserver(self, selector: "milesFixForOc:", name: "MilesFixForOc", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.reset(_:)), name: "Reset", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.resetIM(_:)), name: "ResetIM", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.resetBoth(_:)), name: "ResetBoth", object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("zeroIntervalTime:"), name: "ZeroInterval", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.factorChanged(_:)), name: "FACTOR_CHANGED", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.plusOne(_:)), name: "PlusOne", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.minusOne(_:)), name: "MinusOne", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.directionChanged(_:)), name: "DirectionChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.selectedCountersChanged(_:)), name: "SelectedCountersChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.splitOM(_:)), name: "SplitOM", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.setMileage(_:)), name: "SetMileage", object: nil)
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreLocationController.milesFixForOc(_:)), name: "MilesFixForOc", object: nil)
         
         
     }
@@ -178,98 +178,112 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         print("didFailWithError \(error)")
     }
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-
-        if self.fromLocation.count > 0 {
-            var addDistance = true
-            let location:CLLocation = locations.last!
-            if location.speed < 1 {
-                addDistance = false
-            }
-            //print("horizontalAccuracy: \(location.horizontalAccuracy)")
-            if location.horizontalAccuracy > 40 || location.horizontalAccuracy < 0 {
-                //print("return: \(location.horizontalAccuracy), \(location.speed)")
-                addDistance = false
-            }
-            if abs(location.horizontalAccuracy - self.fromLocation.last!.horizontalAccuracy) > 20 {
-                //print("abs > 20")
-                addDistance = false
-            }
-            if location.verticalAccuracy < 0 {
-                print(location.verticalAccuracy)
-//                addDistance = false
-            }
-            if self.fromLocation.last!.speed < 0 {
-                //print("return: \(self.fromLocation.last!.speed)")
-                addDistance = false
-            }
-            if addDistance == true {
-                //let distance = location.distanceFromLocation(self.fromLocation.last!) * self.factor
-                let distance = location.distanceFromLocation(self.fromLocation.last!)
-                print("meters = \(self.meters) distance moved =  \(distance) \(location.speed)")
-//                print(abs(location.course - self.fromLocation.last!.course))
-//                if abs(location.course - self.fromLocation.last!.course) > 100 {
-//                    return
-//                }
-                
-
-                let updateChoices = (self.direction, self.selectedCounters)
-                switch updateChoices
-                {
-                case ("forward","both"):
-                    self.meters += distance // Actually meters
-                    self.imMeters += distance // Actually meters
-                case ("forward","om"):
-                    self.meters += distance // Actually meters
-                case ("forward","im"):
-                    self.imMeters += distance // Actually meters
-                case ("reverse","both"):
-                    self.meters -= distance // Actually meters
-                    self.imMeters -= distance // Actually meters
-                case ("reverse","om"):
-                    self.meters -= distance // Actually meters
-                case ("reverse","im"):
-                    self.imMeters -= distance // Actually meters
-                default:
-                    break;
-                }
-                if self.meters < 0.0 {
-                    self.meters = 0.0
-                }
-                if self.imMeters < 0.0 {
-                    self.imMeters = 0.0
-                }
-                self.km = (self.meters/1000) * self.factor
-                let distanceInMiles:Float64 = ((self.meters * 0.000621371) * self.factor)
-                self.miles = distanceInMiles
-                let imDdistanceInMiles:Float64 = ((self.imMeters * 0.000621371) * self.factor)
-                self.imMiles = imDdistanceInMiles
-                self.imKM = (imMeters/1000) * self.factor
-            }
-
-            let elapsedTime = NSDate().timeIntervalSinceDate(self.startTime)
-            var averageSpeed = 3600 * (miles/(elapsedTime))
-            if averageSpeed > 100 {
-                averageSpeed = 100
-            }
-            let course = location.course
-            let userInfo = [
-                "locations":locations,
-                "currentLocation":location,
-                "course":course,
-                "timestamp":location.timestamp,
-                "miles":self.miles,
-                "imMiles":self.imMiles,
-                "imKM":self.imKM,
-                "km":self.km,
-                "speed":Int(location.speed * 2.23694),
-                "latitude":location.coordinate.latitude,
-                "longitude":location.coordinate.longitude,
-                "horizontalAccuracy":location.horizontalAccuracy,
-                "averageSpeed":averageSpeed,
-                "et":elapsedTime]
-            
-            NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+        var prevLocation: CLLocation
+        if self.fromLocation.count == 0 {
+            self.fromLocation = locations
+            prevLocation = locations.first!
         }
+        else {
+            prevLocation = self.fromLocation.last!
+        }
+        
+//        if self.fromLocation.count > 0 {
+            for location in locations {
+                
+                var addDistance = true
+//                let location:CLLocation = locations.last!
+                if location.speed < 1 {
+                    addDistance = false
+                }
+                //print("horizontalAccuracy: \(location.horizontalAccuracy)")
+                if location.horizontalAccuracy > 40 || location.horizontalAccuracy < 0 {
+                    //print("return: \(location.horizontalAccuracy), \(location.speed)")
+                    addDistance = false
+                }
+                if abs(location.horizontalAccuracy - prevLocation.horizontalAccuracy) > 20 {
+                    //print("abs > 20")
+                    addDistance = false
+                }
+                if location.timestamp.timeIntervalSinceReferenceDate < prevLocation.timestamp.timeIntervalSinceReferenceDate {
+                    addDistance = false
+                }
+                if location.verticalAccuracy < 0 {
+                    print(location.verticalAccuracy)
+    //                addDistance = false
+                }
+                if location.speed < 0 {
+                    addDistance = false
+                }
+                if addDistance == true {
+                    let distance = location.distanceFromLocation(prevLocation)
+//                    print("meters = \(self.meters) distance moved =  \(distance) \(location.speed)")
+    //                print(abs(location.course - prevLocation.course))
+    //                if abs(location.course - prevLocation.course) > 100 {
+    //                    return
+    //                }
+                    
+
+                    let updateChoices = (self.direction, self.selectedCounters)
+                    switch updateChoices
+                    {
+                    case ("forward","both"):
+                        self.meters += distance // Actually meters
+                        self.imMeters += distance // Actually meters
+                    case ("forward","om"):
+                        self.meters += distance // Actually meters
+                    case ("forward","im"):
+                        self.imMeters += distance // Actually meters
+                    case ("reverse","both"):
+                        self.meters -= distance // Actually meters
+                        self.imMeters -= distance // Actually meters
+                    case ("reverse","om"):
+                        self.meters -= distance // Actually meters
+                    case ("reverse","im"):
+                        self.imMeters -= distance // Actually meters
+                    default:
+                        break;
+                    }
+                    if self.meters < 0.0 {
+                        self.meters = 0.0
+                    }
+                    if self.imMeters < 0.0 {
+                        self.imMeters = 0.0
+                    }
+                    self.km = (self.meters/1000) * self.factor
+                    let distanceInMiles:Float64 = ((self.meters * 0.000621371) * self.factor)
+                    self.miles = distanceInMiles
+                    let imDdistanceInMiles:Float64 = ((self.imMeters * 0.000621371) * self.factor)
+                    self.imMiles = imDdistanceInMiles
+                    self.imKM = (imMeters/1000) * self.factor
+                }
+
+                let elapsedTime = NSDate().timeIntervalSinceDate(self.startTime)
+                var averageSpeed = 3600 * (miles/(elapsedTime))
+                if averageSpeed > 100 {
+                    averageSpeed = 100
+                }
+                
+                let course = location.course
+                let userInfo = [
+                    "locations":locations,
+                    "currentLocation":location,
+                    "course":course,
+                    "timestamp":location.timestamp,
+                    "miles":self.miles,
+                    "imMiles":self.imMiles,
+                    "imKM":self.imKM,
+                    "km":self.km,
+                    "speed":Int(location.speed * 2.23694),
+                    "latitude":location.coordinate.latitude,
+                    "longitude":location.coordinate.longitude,
+                    "horizontalAccuracy":location.horizontalAccuracy,
+                    "averageSpeed":averageSpeed,
+                    "et":elapsedTime]
+                
+                NSNotificationCenter.defaultCenter().postNotificationName("LOCATION_AVAILABLE", object: nil, userInfo: userInfo as [NSObject : AnyObject])
+//            }
+        }
+        
         self.currentLocations = locations
         self.fromLocation = locations
     }

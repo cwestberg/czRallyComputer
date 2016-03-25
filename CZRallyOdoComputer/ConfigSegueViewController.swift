@@ -53,7 +53,7 @@ class ConfigSegueViewController: UIViewController {
         }
         
         //Looks for single or multiple taps.
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ConfigSegueViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
 
 

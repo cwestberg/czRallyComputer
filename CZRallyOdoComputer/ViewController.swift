@@ -37,6 +37,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var speedStepper: UIStepper!
     
+    @IBOutlet weak var hourStepper: UIStepper!
+    @IBOutlet weak var minuteStepper: UIStepper!
     @IBOutlet weak var timeUnitControl: UISegmentedControl!
     
     var speed: Int?
@@ -81,6 +83,8 @@ class ViewController: UIViewController {
         startDistance = 0.00
         distance = 0.00
         self.distanceLbl.text = "0.00"
+        self.startDistanceLbl.text = "\(startDistance!)"
+
         self.factorLbl.text = "\(self.factor)"
         self.speedStepper.value = self.speedd!
         switch timeUnit
@@ -93,15 +97,15 @@ class ViewController: UIViewController {
             break;
         }
         
-        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self,
-            selector: "updateTimeLabel", userInfo: nil, repeats: true)
+        self.todTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self,
+            selector: #selector(ViewController.updateTimeLabel), userInfo: nil, repeats: true)
         
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationAvailable:", name: "LOCATION_AVAILABLE", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.locationAvailable(_:)), name: "LOCATION_AVAILABLE", object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "factorChanged:", name: "FACTOR_CHANGED", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.factorChanged(_:)), name: "FACTOR_CHANGED", object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "controllerDidConnect:", name: "GCControllerDidConnectNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
         
 //        self.loadTestData()
 //        self.loadMileages()
@@ -122,6 +126,19 @@ class ViewController: UIViewController {
         splitBtn.layer.borderWidth = 1
         splitBtn.layer.cornerRadius = 20
         
+        let calendar = NSCalendar.currentCalendar()
+        let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(dateComponents.hour):\(dateComponents.minute):00")!
+        self.startTimeLbl.text = "\(dateComponents.hour):\(dateComponents.minute):00"
+
+        self.ctcDate = self.startTime
+        self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
+        self.hourStepper.value = Double(dateComponents.hour)
+        self.minuteStepper.value = Double(dateComponents.minute)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -129,6 +146,38 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func hourStepper(sender: UIStepper) {
+        let calendar = NSCalendar.currentCalendar()
+        let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
+        
+        let hourStr = String(format: "%02d", Int(sender.value))
+        self.startTimeLbl.text = "\(hourStr):\(dateComponents.minute):00"
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(hourStr):\(dateComponents.minute):00")!
+        
+        self.ctcDate = self.startTime
+        self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
+
+    }
+    @IBAction func minuteStepper(sender: UIStepper) {
+        let calendar = NSCalendar.currentCalendar()
+        let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: NSDate())
+        
+        let minStr = String(format: "%02d", Int(sender.value))
+        self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):00"
+
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        self.startTime = dateFormatter.dateFromString("\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day) \(dateComponents.hour):\(minStr):00")!
+        
+        self.ctcDate = self.startTime
+        self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
+    }
+    
     @IBAction func casBtn(sender: AnyObject) {
         self.setStartTimeToCTC()
         self.splitActions()
@@ -283,7 +332,7 @@ class ViewController: UIViewController {
 //        self.setStartToCurrentMinute()
 //    }
     func setStartTimeToCTC() {
-        print(self.ctcDate!)
+//        print(self.ctcDate!)
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: self.ctcDate!)
         
@@ -295,8 +344,8 @@ class ViewController: UIViewController {
         self.startTime = self.ctcDate!
         self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
 
-        print(self.startTime!)
-        print(self.startDistance!)
+//        print(self.startTime!)
+//        print(self.startDistance!)
     }
     
     func setStartToCurrentMinute() {
@@ -318,11 +367,11 @@ class ViewController: UIViewController {
         self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
         
         self.startTime = dateForCurrentMinute
-        print(self.startTime!)
+//        print(self.startTime!)
     }
     
     func setStartTimeToCTCPlusOne() {
-        print(self.ctcDate!)
+//        print(self.ctcDate!)
         let calendar = NSCalendar.currentCalendar()
         let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: self.ctcDate!)
         let secondsToAdd = 60 - dateComponents.second
@@ -339,8 +388,8 @@ class ViewController: UIViewController {
         self.startDistance = Double(self.distanceLbl.text!)
         self.selectedStartDistance =  self.startDistance!
         self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
-        print(self.startTime!)
-        print(self.startDistance!)
+//        print(self.startTime!)
+//        print(self.startDistance!)
     }
     
     func nextMinuteShortcut() {
@@ -363,7 +412,7 @@ class ViewController: UIViewController {
         self.startTimeLbl.text = "\(dateComponents.hour):\(minStr):\(secStr)"
         
         self.startTime = timePlusOneMinute
-        print(self.startTime!)
+//        print(self.startTime!)
     }
     
     func speedShortcut(direction: String){
@@ -375,7 +424,7 @@ class ViewController: UIViewController {
         if speedIndex == nil {
             speedIndex = 0
         }
-        print(speedIndex!)
+//        print(speedIndex!)
         if direction ==  "plus" {
             speedIndex = speedIndex! + 1
         } else {
@@ -387,7 +436,7 @@ class ViewController: UIViewController {
             speedIndex = controllerSpeedChoices.count - 1
         }
 
-        print(controllerSpeedChoices[speedIndex!])
+//        print(controllerSpeedChoices[speedIndex!])
         self.speedd = controllerSpeedChoices[speedIndex!]
         self.speedLbl.text = String(format: "%.1f",self.speedd! as Float64)
     }
@@ -395,9 +444,9 @@ class ViewController: UIViewController {
     func controllerDidConnect(notification: NSNotification) {
         
         let controller = notification.object as! GCController
-        print("controller is \(controller)")
-        print("game on ")
-        print("\(controller.gamepad!.buttonA.pressed)")
+//        print("controller is \(controller)")
+//        print("game on ")
+//        print("\(controller.gamepad!.buttonA.pressed)")
 
         controller.gamepad?.buttonA.pressedChangedHandler = { (element: GCControllerElement, value: Float, pressed: Bool) in
             if pressed {
@@ -798,7 +847,8 @@ class ViewController: UIViewController {
             } else {
                 self.speedDeltaLbl.textColor = UIColor.blackColor()
             }
-            self.speedDeltaLbl.text = "\((speedometer! - self.speedd!))"
+            self.speedDeltaLbl.text = "\((speedometer!))"
+//            self.speedDeltaLbl.text = "\((speedometer! - self.speedd!))"
         }
         
         switch distanceType
@@ -814,11 +864,13 @@ class ViewController: UIViewController {
         default:
             break;
         }
-        self.updateDelta()
+        print("location availabe")
+//        self.updateDelta()
     }
     
     
     func updateDelta() {
+//        print("update delta")
         
         if startTime != nil {
             if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
@@ -826,12 +878,12 @@ class ViewController: UIViewController {
                 delta = startTime!.timeIntervalSinceDate(NSDate())
 //                delta = startTime!.timeIntervalSinceDate(locationTimestamp!)
                 delta = delta + 1.0
-                print("\(startTime)  \(NSDate()) \(round(delta)) \(startTime!.timeIntervalSinceNow)")
+//                print("\(startTime)  \(NSDate()) \(round(delta)) \(startTime!.timeIntervalSinceNow)")
 
-                let ds = (delta % 60) * 100
-                let dc = (ds * 1.66667) / 100
-                print("dc \(Int(dc))")
-                print("Delta \(delta)")
+//                let ds = (delta % 60) * 100
+//                let dc = (ds * 1.66667) / 100
+//                print("dc \(Int(dc))")
+//                print("Delta \(delta)")
                 self.deltaLbl.textColor = UIColor.blackColor()
                 
                 switch timeUnit {
@@ -855,11 +907,12 @@ class ViewController: UIViewController {
 //                self.deltaLbl.text = ">\(deltaString())"
             }
             else if locationTimestamp == nil {
+                print("locationTimestamp is nil \(delta)")
+
                 delta = startTime!.timeIntervalSinceDate(NSDate())
-                let ds = (delta % 60) * 100
-                let dc = (ds * 1.66667) / 100
-                print("dc \(Int(dc))")
-                print("nil Delta \(delta)")
+//                let ds = (delta % 60) * 100
+//                let dc = (ds * 1.66667) / 100
+//                print("dc \(Int(dc))")
                 self.deltaLbl.textColor = UIColor.blackColor()
                 
                 switch timeUnit {
@@ -880,6 +933,7 @@ class ViewController: UIViewController {
 //                if locationTimestamp == nil {
 //                    locationTimestamp = NSDate()
 //                }
+//                print("startTime!.timeIntervalSince1970 \(startTime!.timeIntervalSince1970) < NSDate().timeIntervalSince1970 \(NSDate().timeIntervalSince1970)")
                 let speedFactor = 60.0/Double(speedd!)
                 
 //                let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
@@ -888,15 +942,49 @@ class ViewController: UIViewController {
                 //              Simple Accumulator
                 ctc = calcDistance * speedFactor
                 
-                
-                let ctcSecs = (ctc)! * 60
-                //                print("ctcSecs \(ctcSecs)")
+//                let ctcSecs = (ctc)! * 60
+//                print("ctc = \(ctc!) ctc mod \(ctc! % 1) ctcSecs is \(ctcSecs)")
+//                ctcDate = startTime!.dateByAddingTimeInterval(ctcSecs)
+                ctcDate = startTime!.dateByAddingTimeInterval(ctc! * 60)
                 let calendar = NSCalendar.currentCalendar()
+                let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: ctcDate!)
                 
-                ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
+                var modCtcUnit = ctc! % 1
+                switch timeUnit {
+                case "seconds":
+                    modCtcUnit = modCtcUnit * 0.6
+                    let minuteString = String(format: "%02d", dateComponents.minute)
+                    let secs = String(format: "%0.3f",modCtcUnit)
+                    var myArray = secs.componentsSeparatedByString(".")
+                    let secsString = myArray[1]
+                    self.ctcLbl.text = "\(dateComponents.hour):\(minuteString):\(secsString)"
+                case "cents":
+                    let minuteString = String(format: "%02d", dateComponents.minute)
+                    let cents = String(format: "%0.3f",modCtcUnit)
+                    var myArray = cents.componentsSeparatedByString(".")
+                    let centString = myArray[1]
+                    self.ctcLbl.text = "\(dateComponents.hour):\(minuteString).\(centString)"
+                default:
+                    break;
+                }
+
                 
-                self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
-                //                var delta = 0.0
+//                let centString = String(format: "%03d", ctc! % 1)
+//                let centString = String(format: "%0.3f",Double(dateComponents.minute) + modCtcUnit)
+//                let minuteString = String(format: "%02d", dateComponents.minute)
+//                self.ctcLbl.text = "\(dateComponents.hour):\(centString)"
+//                self.ctcLbl.text = "\(dateComponents.hour):\(minuteString).\(centString)"
+
+                
+
+                //                print("ctcSecs \(ctcSecs)")
+//                let calendar = NSCalendar.currentCalendar()
+                
+//                ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
+//                print("ctcDate \(ctcDate!)")
+                
+//                self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
+                
                 switch timeUnit {
                 case "seconds":
 //                    delta = ctcDate!.timeIntervalSinceDate(NSDate())
@@ -931,6 +1019,7 @@ class ViewController: UIViewController {
 //                    self.deltaLbl.text = "\(String(format: "%.0f",(deltaUnits)))"
 //                }
                 else if delta < 60.0 && delta > -60.0 && timeUnit == "seconds" {
+//                    print("delta < 60.0 && delta > -60.0")
 //                    if delta < 60.0 {self.deltaLbl.textColor = UIColor.redColor()}
 //                    else {self.deltaLbl.textColor = UIColor.greenColor()}
 //                    var deltaUnits = delta
@@ -941,6 +1030,7 @@ class ViewController: UIViewController {
                     self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
                 }
                 else if delta < 100.0 && delta > -100.0 && timeUnit == "cents" {
+//                    print("delta < 100.0 && delta > -100.0")
                     //                    if delta < 60.0 {self.deltaLbl.textColor = UIColor.redColor()}
                     //                    else {self.deltaLbl.textColor = UIColor.greenColor()}
 //                    var deltaUnits = delta
@@ -951,6 +1041,7 @@ class ViewController: UIViewController {
                     self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
                 }
                 else {
+//                    print("else \(delta)")
                     //                    self.deltaLbl.textColor = UIColor.blackColor()
 //                    if delta > 0.0 {self.deltaLbl.textColor = UIColor.redColor()}
 //                    else {self.deltaLbl.textColor = UIColor.greenColor()}
@@ -972,6 +1063,7 @@ class ViewController: UIViewController {
                 }
             }
             else {
+                print("wtf!")
 //                                self.distanceLbl.text = "NA"
             }
         }
@@ -1012,8 +1104,8 @@ class ViewController: UIViewController {
             break;
         }
 //        if delta called w/o location
-//        locationTimestamp = NSDate()
-
+        locationTimestamp = NSDate()
+//        print("update time")
         self.updateDelta()
     }
     //    utilities
