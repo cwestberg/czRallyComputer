@@ -389,7 +389,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
             "imMiles":self.imMiles,
             "km":self.km,
             "imKM": self.imKM,
-            "speed":45,
+            "speed":0,
             "latitude":44.875328,
             "longitude": -91.939003,
             "horizontalAccuracy":5]

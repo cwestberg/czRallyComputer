@@ -871,48 +871,37 @@ class ViewController: UIViewController {
     
     func updateDelta() {
 //        print("update delta")
-        
-        if startTime != nil {
-            if startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970 {
-                self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
-                delta = startTime!.timeIntervalSinceDate(NSDate())
-//                delta = startTime!.timeIntervalSinceDate(locationTimestamp!)
-                delta = delta + 1.0
-//                print("\(startTime)  \(NSDate()) \(round(delta)) \(startTime!.timeIntervalSinceNow)")
+        let calendar = NSCalendar.currentCalendar()
 
-//                let ds = (delta % 60) * 100
-//                let dc = (ds * 1.66667) / 100
-//                print("dc \(Int(dc))")
-//                print("Delta \(delta)")
-                self.deltaLbl.textColor = UIColor.blackColor()
-                
-                switch timeUnit {
-                case "seconds":
-                    let deltaMins = Int(delta / 60)
-                    let deltaUnits = Int(delta % 60)
-                    self.deltaLbl.text = ">\(deltaMins):\(String(format: "%02d", (deltaUnits)))"
-                case "cents":
-                    let deltaMins = Int(delta / 60)
-//                    let deltaUnits = Int(delta % 100)
-                    let ds = (delta % 60) * 100
-                    let deltaUnits = Int((ds * 1.66667) / 100)
-                    self.deltaLbl.text = ">\(deltaMins).\(String(format: "%02d",deltaUnits))"
-                default:
-                    break;
-                }
-//                else {self.deltaLbl.textColor = UIColor.greenColor()}
-//                let deltaMins = Int(delta / 60)
-//                let deltaSecs = Int(delta % 60)
-//                self.deltaLbl.text = ">\(deltaMins):\(String(format: "%02d", (deltaSecs)))"
-//                self.deltaLbl.text = ">\(deltaString())"
-            }
-            else if locationTimestamp == nil {
+        let startDateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: startTime!)
+        if startTime != nil {
+//            if true == false //startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970
+//            {
+//                self.ctcLbl.text = "\(self.strippedNSDate(startTime!))"
+//                delta = startTime!.timeIntervalSinceDate(NSDate())
+//                delta = delta + 1.0
+//                self.deltaLbl.textColor = UIColor.blackColor()
+//                
+//                switch timeUnit {
+//                case "seconds":
+//                    let deltaMins = Int(delta / 60)
+//                    let deltaUnits = Int(delta % 60)
+//                    self.deltaLbl.text = ">\(deltaMins):\(String(format: "%02d", (deltaUnits)))"
+//                case "cents":
+//                    let deltaMins = Int(delta / 60)
+//                    let ds = (delta % 60) * 100
+//                    let deltaUnits = Int((ds * 1.66667) / 100)
+//                    self.deltaLbl.text = ">\(deltaMins).\(String(format: "%02d",deltaUnits))"
+//                default:
+//                    break;
+//                }
+//
+//            }
+//            this If never called?
+            if locationTimestamp == nil {
                 print("locationTimestamp is nil \(delta)")
 
                 delta = startTime!.timeIntervalSinceDate(NSDate())
-//                let ds = (delta % 60) * 100
-//                let dc = (ds * 1.66667) / 100
-//                print("dc \(Int(dc))")
                 self.deltaLbl.textColor = UIColor.blackColor()
                 
                 switch timeUnit {
@@ -929,72 +918,52 @@ class ViewController: UIViewController {
                     break;
                 }
             }
-            else if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-//                if locationTimestamp == nil {
-//                    locationTimestamp = NSDate()
-//                }
-//                print("startTime!.timeIntervalSince1970 \(startTime!.timeIntervalSince1970) < NSDate().timeIntervalSince1970 \(NSDate().timeIntervalSince1970)")
+            else //if startTime!.timeIntervalSince1970 < NSDate().timeIntervalSince1970 
+            {
                 let speedFactor = 60.0/Double(speedd!)
-                
-//                let calcDistance = Double(distanceLbl.text!)! - selectedStartDistance
                 let calcDistance = distance! - selectedStartDistance
                 
                 //              Simple Accumulator
-                ctc = calcDistance * speedFactor
-                
-//                let ctcSecs = (ctc)! * 60
-//                print("ctc = \(ctc!) ctc mod \(ctc! % 1) ctcSecs is \(ctcSecs)")
-//                ctcDate = startTime!.dateByAddingTimeInterval(ctcSecs)
-                ctcDate = startTime!.dateByAddingTimeInterval(ctc! * 60)
-                let calendar = NSCalendar.currentCalendar()
-                let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: ctcDate!)
-                
-                var modCtcUnit = ctc! % 1
-                switch timeUnit {
-                case "seconds":
-                    modCtcUnit = modCtcUnit * 0.6
-                    let minuteString = String(format: "%02d", dateComponents.minute)
-                    let secs = String(format: "%0.3f",modCtcUnit)
-                    var myArray = secs.componentsSeparatedByString(".")
-                    let secsString = myArray[1]
-                    self.ctcLbl.text = "\(dateComponents.hour):\(minuteString):\(secsString)"
-                case "cents":
-                    let minuteString = String(format: "%02d", dateComponents.minute)
-                    let cents = String(format: "%0.3f",modCtcUnit)
-                    var myArray = cents.componentsSeparatedByString(".")
-                    let centString = myArray[1]
-                    self.ctcLbl.text = "\(dateComponents.hour):\(minuteString).\(centString)"
-                default:
-                    break;
+                if timeUnit == "cents" {
+                    ctc = calcDistance * speedFactor + ((Double(startDateComponents.second) * 1.6667) / 100)
+                } else {
+                    ctc = calcDistance * speedFactor
                 }
+                ctcDate = startTime!.dateByAddingTimeInterval(ctc! * 60)
+                let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: ctcDate!)
+                let ctcCents = ctc! % 1.0
+                let ctcCentsString = String(format: "%.3f", ctcCents)
+                let ctcCentsArray = ctcCentsString.componentsSeparatedByString(".")
+                let ctcCentString = ctcCentsArray[1]
+                
+//                print("startTime \(startTime!) ctcDate \(ctcDate!)")
 
-                
-//                let centString = String(format: "%03d", ctc! % 1)
-//                let centString = String(format: "%0.3f",Double(dateComponents.minute) + modCtcUnit)
-//                let minuteString = String(format: "%02d", dateComponents.minute)
-//                self.ctcLbl.text = "\(dateComponents.hour):\(centString)"
-//                self.ctcLbl.text = "\(dateComponents.hour):\(minuteString).\(centString)"
 
-                
-
-                //                print("ctcSecs \(ctcSecs)")
-//                let calendar = NSCalendar.currentCalendar()
-                
-//                ctcDate = calendar.dateByAddingUnit(.Second, value: Int(ctcSecs), toDate: startTime!, options: [])     // used to be `.CalendarUnitMinute`
-//                print("ctcDate \(ctcDate!)")
-                
-//                self.ctcLbl.text = "\(self.strippedNSDate(ctcDate!))"
-                
+                let minuteString = String(format: "%02d", dateComponents.minute)
+                var unitsString = ""
+                var unitSeparator = ":"
                 switch timeUnit {
                 case "seconds":
-//                    delta = ctcDate!.timeIntervalSinceDate(NSDate())
+                    unitsString = String(format: "%02d",dateComponents.second)
                     delta = round(ctcDate!.timeIntervalSinceDate(locationTimestamp!))
                 case "cents":
-//                    delta = (ctcDate!.timeIntervalSinceDate(NSDate())) * 1.66667
+                    unitsString = ctcCentString
+                    unitSeparator = "."
                     delta = round((ctcDate!.timeIntervalSinceDate(locationTimestamp!)) * 1.66667)
                 default:
                     break;
                 }
+                self.ctcLbl.text = "\(dateComponents.hour):\(minuteString)\(unitSeparator)\(unitsString)"
+
+                
+//                switch timeUnit {
+//                case "seconds":
+//                    delta = round(ctcDate!.timeIntervalSinceDate(locationTimestamp!))
+//                case "cents":
+//                    delta = round((ctcDate!.timeIntervalSinceDate(locationTimestamp!)) * 1.66667)
+//                default:
+//                    break;
+//                }
 //                locationTimestamp = nil
 //                print("delta in loc \(delta)")
                 if delta > 1200.0 {
@@ -1005,47 +974,16 @@ class ViewController: UIViewController {
                     self.deltaLbl.textColor = UIColor.blackColor()
                     self.deltaLbl.text = "LLLL"
                 }
-//                else if delta < 0.9 && delta > -0.9 {
-//                    self.deltaLbl.textColor = UIColor.blueColor()
-//                    self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
-//                }
-//                else if delta < 4.0 && delta > -4.0 {
-//                    if delta > 0.0 {self.deltaLbl.textColor = UIColor.redColor()}
-//                    else {self.deltaLbl.textColor = UIColor.greenColor()}
-//                    var deltaUnits = delta
-//                    if timeUnit == "cents" {
-//                        deltaUnits = delta * 1.66667
-//                    }
-//                    self.deltaLbl.text = "\(String(format: "%.0f",(deltaUnits)))"
-//                }
+
                 else if delta < 60.0 && delta > -60.0 && timeUnit == "seconds" {
-//                    print("delta < 60.0 && delta > -60.0")
-//                    if delta < 60.0 {self.deltaLbl.textColor = UIColor.redColor()}
-//                    else {self.deltaLbl.textColor = UIColor.greenColor()}
-//                    var deltaUnits = delta
-//                    if timeUnit == "cents" {
-////                        deltaUnits = delta * 1.66667
-//                        deltaUnits = delta
-//                    }
+
                     self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
                 }
                 else if delta < 100.0 && delta > -100.0 && timeUnit == "cents" {
-//                    print("delta < 100.0 && delta > -100.0")
-                    //                    if delta < 60.0 {self.deltaLbl.textColor = UIColor.redColor()}
-                    //                    else {self.deltaLbl.textColor = UIColor.greenColor()}
-//                    var deltaUnits = delta
-//                    if timeUnit == "cents" {
-//                        //                        deltaUnits = delta * 1.66667
-//                        deltaUnits = delta
-//                    }
+
                     self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
                 }
                 else {
-//                    print("else \(delta)")
-                    //                    self.deltaLbl.textColor = UIColor.blackColor()
-//                    if delta > 0.0 {self.deltaLbl.textColor = UIColor.redColor()}
-//                    else {self.deltaLbl.textColor = UIColor.greenColor()}
-                    
                     switch timeUnit {
                     case "seconds":
                         let deltaMins = Int(delta / 60)
@@ -1059,12 +997,7 @@ class ViewController: UIViewController {
                     default:
                         break;
                     }
-
                 }
-            }
-            else {
-                print("wtf!")
-//                                self.distanceLbl.text = "NA"
             }
         }
     }
