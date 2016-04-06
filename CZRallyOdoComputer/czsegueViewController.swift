@@ -48,7 +48,7 @@ class CZSegueViewController: UIViewController {
         
         speedStepper.maximumValue = 85
         speedStepper.minimumValue = 0
-        speedStepper.value = self.speedd
+        speedStepper.value = round(self.speedd)
 //        self.controlNumberLbl.text = "\(self.controlNumber)"
         self.startDistanceLbl.text = String(format: "%0.2f", self.startDistance)
         self.speedLbl.text = "\(self.speedd)"

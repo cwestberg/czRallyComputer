@@ -64,8 +64,10 @@ class ViewController: UIViewController {
     var delta = 0.0
     var oldStepper = 0.0
     var distance: Double?
+    
 
 
+    var keys = [UIKeyCommand]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,6 +109,7 @@ class ViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
         
+        
 //        self.loadTestData()
 //        self.loadMileages()
         startBtn.layer.borderColor = UIColor.blueColor().CGColor // Set border color
@@ -139,12 +142,33 @@ class ViewController: UIViewController {
         self.hourStepper.value = Double(dateComponents.hour)
         self.minuteStepper.value = Double(dateComponents.minute)
         
+        keys.append(UIKeyCommand(input: "w", modifierFlags: [], action:  #selector(ViewController.keyPressed(_:))))
+        
+    }
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        get {
+            return keys
+        }
+    }
+    
+    func keyPressed(command: UIKeyCommand) {
+
+        print("user pressed \(command.input)")
+        let userInfo = [
+            "action":"plusOne"]
+        NSNotificationCenter.defaultCenter().postNotificationName("PlusOne", object: nil, userInfo: userInfo)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
 
     @IBAction func hourStepper(sender: UIStepper) {
         let calendar = NSCalendar.currentCalendar()
@@ -444,7 +468,7 @@ class ViewController: UIViewController {
     func controllerDidConnect(notification: NSNotification) {
         
         let controller = notification.object as! GCController
-//        print("controller is \(controller)")
+        print("controller is \(controller)")
 //        print("game on ")
 //        print("\(controller.gamepad!.buttonA.pressed)")
 
@@ -839,17 +863,18 @@ class ViewController: UIViewController {
         
 //        self.course = userInfo!["course"]! as? Double
         let speedometer = userInfo!["speed"]! as? Double
-        if speedometer > 0 {
-            if speedometer! > self.speedd! {
-                self.speedDeltaLbl.textColor = UIColor.redColor()
-            } else if speedometer! < self.speedd! {
-                self.speedDeltaLbl.textColor = UIColor.greenColor()
-            } else {
-                self.speedDeltaLbl.textColor = UIColor.blackColor()
-            }
-            self.speedDeltaLbl.text = "\((speedometer!))"
-//            self.speedDeltaLbl.text = "\((speedometer! - self.speedd!))"
-        }
+        self.speedDeltaLbl.text = "\((speedometer!))"
+
+//        if speedometer > 0 {
+//            if speedometer! > self.speedd! {
+//                self.speedDeltaLbl.textColor = UIColor.redColor()
+//            } else if speedometer! < self.speedd! {
+//                self.speedDeltaLbl.textColor = UIColor.greenColor()
+//            } else {
+//                self.speedDeltaLbl.textColor = UIColor.blackColor()
+//            }
+//            self.speedDeltaLbl.text = "\((speedometer!))"
+//        }
         
         switch distanceType
         {
@@ -864,7 +889,7 @@ class ViewController: UIViewController {
         default:
             break;
         }
-        print("location availabe")
+//        print("location availabe")
 //        self.updateDelta()
     }
     

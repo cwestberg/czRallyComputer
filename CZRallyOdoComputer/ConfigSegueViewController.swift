@@ -18,6 +18,9 @@ class ConfigSegueViewController: UIViewController {
     
     @IBOutlet weak var carNumber: UITextField!
 
+
+    @IBOutlet weak var distanceTypeSegmentedControl: UISegmentedControl!
+
     @IBOutlet weak var factorStepper: UIStepper!
     let container = CKContainer.defaultContainer()
     var publicDatabase: CKDatabase?
@@ -56,7 +59,15 @@ class ConfigSegueViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ConfigSegueViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
 
-
+        switch distanceType
+        {
+        case "miles":
+            distanceTypeSegmentedControl.selectedSegmentIndex = 0
+        case "km":
+            distanceTypeSegmentedControl.selectedSegmentIndex = 1
+        default: break
+        }
+        
     }
     
     @IBAction func factorStepper(sender: UIStepper) {
