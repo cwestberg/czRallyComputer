@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var speedDeltaLbl: UILabel!
     @IBOutlet weak var omStepper: UIStepper!
     
+    @IBOutlet weak var microStepper: UIStepper!
     @IBOutlet weak var factorStepper: UIStepper!
     
     @IBOutlet weak var speedStepper: UIStepper!
@@ -64,6 +65,7 @@ class ViewController: UIViewController {
     var delta = 0.0
     var oldStepper = 0.0
     var distance: Double?
+    let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
     
 
 
@@ -73,6 +75,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
+        
+        delegate?.coreLocationController?.xgpsConnected = (delegate?.xgps160!.isConnected)!
         controlNumber = 0
 //        speed = 7
         omStepper.maximumValue = 999.99
@@ -109,6 +113,7 @@ class ViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.controllerDidConnect(_:)), name: "GCControllerDidConnectNotification", object: nil)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateUIWithNewPositionData(_:)), name: "PositionDataUpdated", object: nil)
         
 //        self.loadTestData()
 //        self.loadMileages()
@@ -145,6 +150,56 @@ class ViewController: UIViewController {
         keys.append(UIKeyCommand(input: "w", modifierFlags: [], action:  #selector(ViewController.keyPressed(_:))))
         
     }
+    
+//    xgps
+    func xgp160Connected(notification:NSNotification) {
+        print("xgp160Connected")
+    }
+    func deviceDataUpdated(notification:NSNotification) {
+        //        print("deviceDataUpdated")
+    }
+    
+    func updateUIWithNewPositionData(notification:NSNotification) {
+        //        print("updateUIWithNewPositionData")
+        //        print(delegate!.xgps160!.utc)
+        //        print(delegate!.xgps160!.lat)
+        //        print(delegate!.xgps160!.lon)
+        let latitude: CLLocationDegrees = Double(delegate!.xgps160!.lat)
+        let longitude: CLLocationDegrees = Double(delegate!.xgps160!.lon)
+        
+        let location: CLLocation = CLLocation(latitude: latitude,
+                                              longitude: longitude)
+        
+        //            print(delegate?.xgps160!.hdop)
+        guard let hdop = delegate?.xgps160!.hdop
+            
+            else {
+                
+                return
+        }
+//                let hdop = delegate?.xgps160!.hdop
+//                print("hdop \(hdop)")
+//        horrizontalAccuracy.text = String(hdop)
+        if Double((hdop)) > 1.0 {
+            print("hdop > 1 \(hdop)")
+        }
+        //        print(delegate!.xgps160!.waasInUse)
+//        print(delegate?.xgps160!.speedAndCourseIsValid)
+//        print(delegate?.xgps160!.fixType)
+        if ((delegate?.xgps160!.speedAndCourseIsValid) != nil) && delegate?.xgps160!.fixType == 3
+        {
+//            print("updateLocation \(hdop)")
+            if Double(hdop) > 2.0 {return}
+            if Double(hdop) < 0.0 {return}
+//            print("updateLocation speed \(delegate!.xgps160!.speedKph)")
+//            print("location \(location)")
+            if Double(delegate!.xgps160!.speedKph) < 1.5 {return}
+            delegate?.coreLocationController?.updateLocation([location],xgps: true)
+            
+        }
+        
+    }
+
     
     override func canBecomeFirstResponder() -> Bool {
         return true
@@ -244,6 +299,7 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().postNotificationName("FACTOR_CHANGED", object: nil, userInfo: userInfo)
     }
     
+
     @IBAction func omStepper(sender: UIStepper) {
         if sender.value < oldStepper{
             let userInfo = [
@@ -756,7 +812,7 @@ class ViewController: UIViewController {
             self.speedLbl.text = String(format: "%.1f",selectedSpeed as! Float64)
             
             let sm = selectedCZ.valueForKey("startDistance")!
-            let smStr = String(format: "%.2f", sm as! Float64)
+            let smStr = String(format: "%.3f", sm as! Float64)
             self.startDistanceLbl.text = "\(smStr)"
             
             let calendar = NSCalendar.currentCalendar()
@@ -854,7 +910,7 @@ class ViewController: UIViewController {
     func locationAvailable(notification:NSNotification) -> Void {
         let userInfo = notification.userInfo
         let m = userInfo!["miles"]!
-        self.distanceLbl.text = (String(format: "%.2f", m as! Float64))
+        self.distanceLbl.text = (String(format: "%.3f", m as! Float64))
         let lat = String(format: "%.6f", userInfo!["latitude"]! as! Float64)
         let lon = String(format: "%.6f", userInfo!["longitude"]! as! Float64)
         locationTimestamp = userInfo!["timestamp"]! as? NSDate
@@ -862,8 +918,11 @@ class ViewController: UIViewController {
         locationLongitude = lon
         
 //        self.course = userInfo!["course"]! as? Double
-        let speedometer = userInfo!["speed"]! as? Double
-        self.speedDeltaLbl.text = "\((speedometer!))"
+        var speedometer = userInfo!["speed"]! as? Double
+        if (delegate?.xgps160!.isConnected)! == true {
+            speedometer = Double(delegate!.xgps160!.speedKph) * 0.62
+        }
+        self.speedDeltaLbl.text = String(format: "%.1",speedometer!)
 
 //        if speedometer > 0 {
 //            if speedometer! > self.speedd! {
@@ -881,7 +940,7 @@ class ViewController: UIViewController {
         case "miles":
             let m = userInfo!["miles"]!
             self.distance = m as? Double
-            self.distanceLbl.text = (String(format: "%.2f", m as! Float64))
+            self.distanceLbl.text = (String(format: "%.3f", m as! Float64))
             case "km":
             let d = userInfo!["km"]!
             self.distance = d as? Double
@@ -890,7 +949,7 @@ class ViewController: UIViewController {
             break;
         }
 //        print("location availabe")
-//        self.updateDelta()
+        self.updateDelta()
     }
     
     
@@ -898,7 +957,7 @@ class ViewController: UIViewController {
 //        print("update delta")
         let calendar = NSCalendar.currentCalendar()
 
-        let startDateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: startTime!)
+//        let startDateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: startTime!)
         if startTime != nil {
 //            if true == false //startTime!.timeIntervalSince1970 > NSDate().timeIntervalSince1970
 //            {
@@ -927,6 +986,7 @@ class ViewController: UIViewController {
                 print("locationTimestamp is nil \(delta)")
 
                 delta = startTime!.timeIntervalSinceDate(NSDate())
+                print("Delta \(delta)")
                 self.deltaLbl.textColor = UIColor.blackColor()
                 
                 switch timeUnit {
@@ -949,21 +1009,29 @@ class ViewController: UIViewController {
                 let calcDistance = distance! - selectedStartDistance
                 
                 //              Simple Accumulator
-                if timeUnit == "cents" {
-                    ctc = calcDistance * speedFactor + ((Double(startDateComponents.second) * 1.6667) / 100)
-                } else {
-                    ctc = calcDistance * speedFactor
-                }
+                ctc = calcDistance * speedFactor
+
+//                if timeUnit == "cents" {
+//                    ctc = calcDistance * speedFactor + ((Double(startDateComponents.second) * 1.6667) / 100)
+//                } else {
+//                    ctc = calcDistance * speedFactor
+//                }
+
                 ctcDate = startTime!.dateByAddingTimeInterval(ctc! * 60)
+                print("calcDistance \(calcDistance) ctc \(ctc!) ctcDate \(ctcDate!)")
+
                 let dateComponents = calendar.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Nanosecond], fromDate: ctcDate!)
-                let ctcCents = ctc! % 1.0
-                let ctcCentsString = String(format: "%.3f", ctcCents)
-                let ctcCentsArray = ctcCentsString.componentsSeparatedByString(".")
-                let ctcCentString = ctcCentsArray[1]
                 
-//                print("startTime \(startTime!) ctcDate \(ctcDate!)")
+//                let ctcCents = Double(dateComponents.second) + (ctc! % 1.0)
+//                let ctcCents = (Double(dateComponents.second) * 1.6667) % 10.0
+//                let ctcCents = ctc! % 1.0
+//                let ctcCentsString = String(format: "%.3f", ctcCents)
+//                let ctcCentsArray = ctcCentsString.componentsSeparatedByString(".")
+//                let ctcCentString = ctcCentsArray[1]
+                
+                print("startTime \(startTime!) ctcDate \(ctcDate!)")
 
-
+                // Make CTC label and display
                 let minuteString = String(format: "%02d", dateComponents.minute)
                 var unitsString = ""
                 var unitSeparator = ":"
@@ -972,7 +1040,19 @@ class ViewController: UIViewController {
                     unitsString = String(format: "%02d",dateComponents.second)
                     delta = round(ctcDate!.timeIntervalSinceDate(locationTimestamp!))
                 case "cents":
-                    unitsString = ctcCentString
+//                    unitsString = ctcCentString
+                    print(Double(dateComponents.second) * 1.6667)
+                    print(ctc! % 1.0)
+                    print(startTime!)
+                    let calendar = NSCalendar.currentCalendar()
+                    let startCents = Double(calendar.component(.Second,fromDate: startTime!)) * 0.016667
+                    
+                    print(ctc!)
+                    print(startCents)
+                    print((ctc! + startCents) % 1.0)
+                    
+//                    unitsString = String(format: "%03d",Int(Double(dateComponents.second) * 16.667))
+                    unitsString = String(format: "%03d",Int(((ctc! + startCents) % 1.0) * 1000))
                     unitSeparator = "."
                     delta = round((ctcDate!.timeIntervalSinceDate(locationTimestamp!)) * 1.66667)
                 default:
@@ -980,7 +1060,6 @@ class ViewController: UIViewController {
                 }
                 self.ctcLbl.text = "\(dateComponents.hour):\(minuteString)\(unitSeparator)\(unitsString)"
 
-                
 //                switch timeUnit {
 //                case "seconds":
 //                    delta = round(ctcDate!.timeIntervalSinceDate(locationTimestamp!))
@@ -990,15 +1069,27 @@ class ViewController: UIViewController {
 //                    break;
 //                }
 //                locationTimestamp = nil
-//                print("delta in loc \(delta)")
-                if delta > 1200.0 {
+                
+//                delta = round(ctcDate!.timeIntervalSinceDate(locationTimestamp!))
+
+                print("delta in loc \(delta)")
+                
+                if delta > 600.0 {
                     self.deltaLbl.textColor = UIColor.blackColor()
                     self.deltaLbl.text = "EEEE"
                 }
-                else if delta < -1200.0{
+                else if delta < -600.0{
                     self.deltaLbl.textColor = UIColor.blackColor()
                     self.deltaLbl.text = "LLLL"
                 }
+//                else if delta < 60.0 && delta > -60.0 {
+//                    if timeUnit == "seconds" {
+//                        self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
+//                    }
+//                    else {
+//                        self.deltaLbl.text = "\(String(format: "%.0f",(delta * 1.6667)))"
+//                    }
+//                }
 
                 else if delta < 60.0 && delta > -60.0 && timeUnit == "seconds" {
 
@@ -1009,12 +1100,14 @@ class ViewController: UIViewController {
                     self.deltaLbl.text = "\(String(format: "%.0f",(delta)))"
                 }
                 else {
+                    print("else delta \(delta)")
                     switch timeUnit {
                     case "seconds":
                         let deltaMins = Int(delta / 60)
                         let deltaUnits = abs(Int(delta % 60))
                         self.deltaLbl.text = "\(deltaMins):\(String(format: "%02d", (deltaUnits)))"
                     case "cents":
+//                        delta = delta * 1.66667
                         let deltaMins = Int(delta / 100)
                         let deltaUnits = abs(Int(delta % 100))
 //                        self.deltaLbl.textAlignment = NSTextAlignment.Right

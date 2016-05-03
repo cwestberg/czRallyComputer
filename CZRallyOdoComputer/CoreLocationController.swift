@@ -22,6 +22,8 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     var factor = 1.0000
     var direction = "forward"
     var selectedCounters = "om"
+    var xgpsConnected = false
+
     
     var startTime = NSDate()
     override init() {
@@ -78,7 +80,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func updateLocation() {
+    func oldupdateLocation() {
         self.locationManager.requestLocation()
         print("update location")
 //        let location = self.locationManager.location
@@ -177,7 +179,16 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("didFailWithError \(error)")
     }
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        if xgpsConnected == false {
+            updateLocation(locations,xgps: false)
+        }
+    }
+    
+    func updateLocation(locations: [CLLocation],xgps: Bool) {
+        //        return
+        
         var prevLocation: CLLocation
         if self.fromLocation.count == 0 {
             self.fromLocation = locations
@@ -186,33 +197,40 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         else {
             prevLocation = self.fromLocation.last!
         }
+
         
 //        if self.fromLocation.count > 0 {
             for location in locations {
                 
                 var addDistance = true
 //                let location:CLLocation = locations.last!
-                if location.speed < 1 {
-                    addDistance = false
+                if xgps == true {
+                    
                 }
-                //print("horizontalAccuracy: \(location.horizontalAccuracy)")
-                if location.horizontalAccuracy > 40 || location.horizontalAccuracy < 0 {
-                    //print("return: \(location.horizontalAccuracy), \(location.speed)")
-                    addDistance = false
-                }
-                if abs(location.horizontalAccuracy - prevLocation.horizontalAccuracy) > 20 {
-                    //print("abs > 20")
-                    addDistance = false
-                }
-                if location.timestamp.timeIntervalSinceReferenceDate < prevLocation.timestamp.timeIntervalSinceReferenceDate {
-                    addDistance = false
-                }
-                if location.verticalAccuracy < 0 {
-                    print(location.verticalAccuracy)
-    //                addDistance = false
-                }
-                if location.speed < 0 {
-                    addDistance = false
+                else {
+                    
+                    if location.speed < 1 {
+                        addDistance = false
+                    }
+                    //print("horizontalAccuracy: \(location.horizontalAccuracy)")
+                    if location.horizontalAccuracy > 40 || location.horizontalAccuracy < 0 {
+                        //print("return: \(location.horizontalAccuracy), \(location.speed)")
+                        addDistance = false
+                    }
+                    if abs(location.horizontalAccuracy - prevLocation.horizontalAccuracy) > 20 {
+                        //print("abs > 20")
+                        addDistance = false
+                    }
+                    if location.timestamp.timeIntervalSinceReferenceDate < prevLocation.timestamp.timeIntervalSinceReferenceDate {
+                        addDistance = false
+                    }
+                    if location.verticalAccuracy < 0 {
+                        print(location.verticalAccuracy)
+        //                addDistance = false
+                    }
+                    if location.speed < 0 {
+                        addDistance = false
+                    }
                 }
                 if addDistance == true {
                     let distance = location.distanceFromLocation(prevLocation)

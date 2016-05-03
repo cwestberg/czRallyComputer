@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A1DF0711CD1684C00CBF09E /* XGPS160API.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A1DF0701CD1684C00CBF09E /* XGPS160API.m */; };
 		2A2AD9F41C3D637F0053B02F /* SplitsSequeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2AD9F31C3D637F0053B02F /* SplitsSequeViewController.swift */; };
 		2A749F101C318E60001F8C13 /* ConfigSegueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */; };
 		2AA2C0A21CAC67880060112C /* btPulseMileage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA2C0A11CAC67880060112C /* btPulseMileage.swift */; };
@@ -41,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A1DF06E1CD1684B00CBF09E /* CZRallyOdoComputer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CZRallyOdoComputer-Bridging-Header.h"; sourceTree = "<group>"; };
+		2A1DF06F1CD1684C00CBF09E /* XGPS160API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XGPS160API.h; path = "../../../Dropbox/SkyPro Sample App V 1.4.4.1/SkyproSampleApp/XGPS160API.h"; sourceTree = "<group>"; };
+		2A1DF0701CD1684C00CBF09E /* XGPS160API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XGPS160API.m; path = "../../../Dropbox/SkyPro Sample App V 1.4.4.1/SkyproSampleApp/XGPS160API.m"; sourceTree = "<group>"; };
 		2A2AD9F31C3D637F0053B02F /* SplitsSequeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitsSequeViewController.swift; sourceTree = "<group>"; };
 		2A6EEAE81C835DD2006AAE0E /* CZRallyOdoComputer copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "CZRallyOdoComputer copy-Info.plist"; path = "/Users/clarencewestberg/xcode_projects/CZRallyOdoComputer/CZRallyOdoComputer copy-Info.plist"; sourceTree = "<absolute>"; };
 		2A749F0F1C318E60001F8C13 /* ConfigSegueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigSegueViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 				2AB262FF1C472B3E00CDCEC1 /* CZRallyOdoComputer.entitlements */,
 				2AC4D2211C2F1DF400B2D76B /* AppDelegate.swift */,
 				2AC4D2231C2F1DF400B2D76B /* ViewController.swift */,
+				2A1DF06F1CD1684C00CBF09E /* XGPS160API.h */,
+				2A1DF0701CD1684C00CBF09E /* XGPS160API.m */,
 				2AA2C0A11CAC67880060112C /* btPulseMileage.swift */,
 				2AC4D2541C2F392200B2D76B /* CoreLocationController.swift */,
 				2AC4D2521C2F2D1D00B2D76B /* czsegueViewController.swift */,
@@ -129,6 +135,7 @@
 				2AC4D22D1C2F1DF400B2D76B /* LaunchScreen.storyboard */,
 				2AC4D2301C2F1DF400B2D76B /* Info.plist */,
 				2AC4D2281C2F1DF400B2D76B /* CZRallyOdoComputer.xcdatamodeld */,
+				2A1DF06E1CD1684B00CBF09E /* CZRallyOdoComputer-Bridging-Header.h */,
 			);
 			path = CZRallyOdoComputer;
 			sourceTree = "<group>";
@@ -213,7 +220,7 @@
 		2AC4D2161C2F1DF400B2D76B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Clarence Westberg";
 				TargetAttributes = {
@@ -299,6 +306,7 @@
 				2A2AD9F41C3D637F0053B02F /* SplitsSequeViewController.swift in Sources */,
 				2A749F101C318E60001F8C13 /* ConfigSegueViewController.swift in Sources */,
 				2AC4D2531C2F2D1D00B2D76B /* czsegueViewController.swift in Sources */,
+				2A1DF0711CD1684C00CBF09E /* XGPS160API.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +448,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CZRallyOdoComputer/CZRallyOdoComputer.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -449,6 +458,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyOdoComputer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "CZRallyOdoComputer/CZRallyOdoComputer-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -456,6 +467,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CZRallyOdoComputer/CZRallyOdoComputer.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -465,6 +477,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cwestberg.rally.CZRallyOdoComputer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "CZRallyOdoComputer/CZRallyOdoComputer-Bridging-Header.h";
 			};
 			name = Release;
 		};
