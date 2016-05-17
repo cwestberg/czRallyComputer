@@ -91,7 +91,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         if self.fromLocation.count == 0 {self.fromLocation = [location]}
 
         var addDistance = true
-        if location.speed < 1 {
+        if location.speed < 2 {
             addDistance = false
         }
         //print("horizontalAccuracy: \(location.horizontalAccuracy)")
@@ -376,6 +376,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate{
         self.makeLocationNotification()
     }
     
+    // used when doing mileage manipulation to dummy up location info
     func dummyLocationNotification() {
         print("dummy")
 //        let updateChoices = self.selectedCounters

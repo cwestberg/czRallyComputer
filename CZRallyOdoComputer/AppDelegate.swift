@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         self.coreLocationController = CoreLocationController()
         xgps160 = XGPS160API()
-        xgps160!.setLoggingUpdateRate(1)
+//        xgps160!.setLoggingUpdateRate(1)
         let app = UIApplication .sharedApplication()
         app.idleTimerDisabled = true
         return true
@@ -43,12 +43,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         xgps160!.xgps160_applicationWillEnterForeground()
+        print("applicationWillEnterForeground")
 
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         xgps160!.xgps160_applicationDidBecomeActive()
+        print("applicationDidBecomeActive")
     }
 
     func applicationWillTerminate(application: UIApplication) {
